@@ -1,7 +1,7 @@
 /* Editorial text for the site: the project description, the ten-step method and the selection rule.
    Kept apart from project.js because the review page's "Export public-safe data files" button rewrites project.js and p1.js to p5.js, never this file. */
 window.CONTENT = {
- "audio": ["Mini_M1", "Mini_M3", "Shridevi_M1", "Shridevi_M2", "Shridevi_M3", "Vailancelee_M2", "Vailancelee_M3"],
+ "audio": ["Mini_M1", "Mini_M2", "Mini_M3", "Shridevi_M1", "Shridevi_M2", "Shridevi_M3", "Vailancelee_M2", "Vailancelee_M3"],
  "interviews": {
   "1": {"acc": "DSP-OH-2026-01", "date": "25 July 2026", "lang": "English, with Kannada and Arabic", "format": "Audio, transcribed"},
   "2": {"acc": "DSP-OH-2026-02", "date": "2026", "lang": "English, with Malayalam and Hindi", "format": "Audio, transcript only"},
