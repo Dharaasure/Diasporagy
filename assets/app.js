@@ -242,7 +242,7 @@ function participants({P, A}) {
   <div class="roster">${P.participants.map(p => {
     const n = A.annotations.filter(a => a.participant === p.id).length;
     return `<a class="entry" href="participant.html?id=${esc(p.id)}"><span class="e-num">${String(p.number).padStart(2, '0')}</span>
-      <div><p class="e-name">${esc(nameOf(p))}</p><p class="e-meta">${esc(p.card_line || '')}</p>${record(p)}<p class="e-meta">${n} points compared</p></div>
+      <div><p class="e-name">${esc(nameOf(p))}</p><p class="e-meta">${esc(p.card_line || '')}</p><p class="e-meta">${n} points compared</p></div>
       <p class="e-quote">“${esc((p.portrait || [])[0] || '')}”</p>
       <ul class="e-moments">${p.moments.map(m => `<li><span class="mn">${m.n}</span>${m.site_status === 'public' ? `<span>${esc(m.title)}</span>` : '<span class="held">Withheld while under review</span>'}</li>`).join('')}</ul></a>`;
   }).join('')}</div>`;
