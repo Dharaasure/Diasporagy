@@ -125,10 +125,10 @@ const VOICE_ENV = [0.54, 0.55, 0.66, 0.68, 0.36, 0.59, 0.6, 0.56, 0.6, 0.4, 0.39
 function voiceMark() {
   const n = VOICE_ENV.length, W = 600, gap = W / n, bw = gap * 0.42;
   const bars = (vals, y, h, cls) => vals.map((v, i) => { const bh = Math.max(2, v * h); return `<rect class="${cls}" x="${(i * gap).toFixed(1)}" y="${(y - bh / 2).toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${(bw / 2).toFixed(1)}" style="--d:${i * 8}ms"/>`; }).join('');
-  return `<figure class="vh"><svg viewBox="0 0 ${W} 300" role="img" aria-label="The shape of Subramanya's recorded voice, and the flat shape of the AI version of the same moment">
-      <text class="vh-l" x="0" y="14">IN HIS VOICE</text>${bars(VOICE_ENV, 104, 150, 'vh-h')}
-      <text class="vh-l" x="0" y="224">THE AI VERSION</text>${bars(VOICE_ENV.map(() => 0.16), 262, 150, 'vh-m')}</svg>
-    <figcaption>The same moment twice: Subramanya describing the birth of his daughter at Sidra, as recorded, and as an AI rewrote it from five lines of facts. <a href="participant.html?id=p1#moment-1">Listen and compare</a></figcaption></figure>`;
+  return `<figure class="vh"><svg viewBox="0 0 ${W} 300" role="img" aria-label="The shape of a recorded voice, and the flat shape of the same moment retold by a machine">
+      <text class="vh-l" x="0" y="14">A VOICE</text>${bars(VOICE_ENV, 104, 150, 'vh-h')}
+      <text class="vh-l" x="0" y="224">ITS RETELLING BY A MACHINE</text>${bars(VOICE_ENV.map(() => 0.16), 262, 150, 'vh-m')}</svg>
+</figure>`;
 }
 function startVoiceMark() {}
 /* ---------- pages ---------- */
