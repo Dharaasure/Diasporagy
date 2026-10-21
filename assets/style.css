@@ -84,7 +84,7 @@ nav a.nl[aria-current]{color:var(--ink);border-bottom-color:var(--indigo)}
 .theme-btn svg{width:16px;height:16px}
 @media(max-width:760px){nav#nav{flex-wrap:wrap;padding:12px 0 10px;min-height:0;gap:10px 18px}nav .brand{flex-basis:calc(100% - 50px)}nav .brand span{display:none}.theme-btn{order:2}nav a.nl{order:3;font-size:13.5px}}
 footer.site-foot{margin-top:120px;border-top:1px solid var(--rule);background:var(--paper-2)}
-.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px;padding:48px 0 40px;font:14px/1.6 var(--sans);color:var(--muted)}
+.foot{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:32px;padding:48px 0 40px;font:14px/1.6 var(--sans);color:var(--muted)}
 .foot b{display:block;font:500 22px/1.2 var(--serif);color:var(--ink);margin-bottom:8px}
 .foot h4{font:500 11px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);margin:4px 0 10px}
 .foot ul{list-style:none;margin:0;padding:0}.foot li{margin:0 0 6px}

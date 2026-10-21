@@ -37,7 +37,7 @@ window.PROJECT = {
    "rationale": "The four types record what kind of thing went wrong but not where. In the first two participants, many divergences began before the model saw anything: in errors written into the facts, or in material never extracted. Under the original scheme these counted as the machine's failures, which overstated its losses and hid the losses of the researcher's own summary, the same kind of substitution the project examines. Adding origin is the only single change that alters what the counts mean while keeping the four types comparable across both passes.",
    "not_adopted": "Noted but not adopted: narrative shaping (tidy endings and aphorisms, currently coded emotional) and voice pastiche (invented Indian-English idioms, coded cultural/invented although the cultural type was defined as loss)."
   },
-  "applied": "Participants 1 and 2 were coded under the original scheme, then given a second pass under the amended scheme that added origin; no type or direction labels changed in that pass. The second pass was carried out by the same AI in the same session as the first, so it is not an independent check. Sujith and Participants 4 and 5 were coded under the amended scheme directly."
+  "applied": "Subramanya and Mini were coded under the original scheme, then given a second pass under the amended scheme that added origin; no type or direction labels changed in that pass. The second pass was carried out by the same AI in the same session as the first, so it is not an independent check. Sujith, Vailancelee and Shridevi were coded under the amended scheme directly."
  },
  "findings_draft": [
   "The machine adds and the summary removes. Most inventions began with the AI, and almost every omission began in the five-line summary it was given (Figure 2).",
@@ -50,10 +50,10 @@ window.PROJECT = {
   "One AI run was made per moment. The method document asked for two to three runs; I reduced that to one.",
   "Annotation was done as a first pass by an AI system and is reviewed and corrected by the researcher. There was no hand annotation.",
   "There was no return session with participants. Each participant reviews their own material privately, and can flag or withdraw any of it, before anything goes public.",
-  "Participant 5, Moment 1: the interview has neither an A Day You Won't Forget section nor an object story, so the Getting Settled question about first noticing something was used. The selection rule has no second fallback, so this is a deviation.",
-  "Participant 4, Moment 1: the interview has no A Day You Won't Forget section, so the object-story fallback was used, as the rule allows.",
+  "Shridevi, Moment 1: the interview has neither an A Day You Won't Forget section nor an object story, so the Getting Settled question about first noticing something was used. The selection rule has no second fallback, so this is a deviation.",
+  "Vailancelee, Moment 1: the interview has no A Day You Won't Forget section, so the object-story fallback was used, as the rule allows.",
   "Sujith, Moment 2 comes from a section headed “Work”, which is not one of the permitted sections. Sujith, Moment 1: the full story was told in the Background section, which is never extracted; the A Day You Won't Forget answer gives it a single line.",
-  "Participant 1, Moment 3 is a shared belief rather than a scene, and Participant 2, Moment 3 is a routine rather than a single story. Whether either is a “fully formed story” is open.",
+  "Subramanya, Moment 3 is a shared belief rather than a scene, and Mini, Moment 3 is a routine rather than a single story. Whether either is a “fully formed story” is open.",
   "Several facts in the prompts were the interviewer's own summaries or words rather than the participant's (for example “grandchildren” and a single “first call”). Each such case is flagged in the annotations as coming from extraction.",
   "The model name is not recorded for any run, and run dates are recorded for only three of fifteen."
  ],

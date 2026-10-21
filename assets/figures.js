@@ -178,7 +178,7 @@ const FIG = (() => {
       ${panel(x0 + pw + gapX, 'Hedges per 100 words', hd, Math.ceil(maxH), '', v => v.toFixed(1).replace('.0', ''), r => false)}</svg>`;
     const [d0, d1] = we(drop);
     return frame('fig-voice', `The AI dropped ${th - ah} of ${th} hedges and kept “we” overall (${pct(tw, tw + ti)}% to ${pct(aw, aw + ai)}%), except where “we” carried the story: ${d0}% to ${d1}%`,
-      `Hedges are words like “I think”, “maybe” and “or something”. Without them the AI's narrators sound surer than the people were. “We” barely moves on average, but in Participant ${drop.p}'s airport story the community's “we” became one man's “I”.`, svg,
+      `Hedges are words like “I think”, “maybe” and “or something”. Without them the AI's narrators sound surer than the people were. “We” barely moves on average, but in ${nameOf(C.label(drop.p, drop.n).p)}'s airport story the community's “we” became one man's “I”.`, svg,
       table(['Moment', '“We” share: their words', '“We” share: AI', 'Hedges: their words', 'Hedges: AI', 'Words: their words', 'Words: AI'], ms.map(r => [C.label(r.p, r.n).tag, we(r)[0] + '%', we(r)[1] + '%', r.t_hedge, r.a_hedge, r.t_words, r.a_words])),
       'Counts of we/us/our and I/me/my, and of thirteen hedge phrases, in the participant speech of each shown excerpt and in the AI version.');
   }

@@ -55,6 +55,7 @@ function chrome() {
   if (foot) foot.innerHTML = `<div class="wrap"><div class="foot">
     <div><b><svg class="logo logo-foot" viewBox="0 0 48 48" aria-hidden="true"><path d="M11 8h12a16 16 0 0 1 0 32H11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 24c1.6-4.4 3.2-4.4 4.8 0s3.2 4.4 4.8 0" fill="none" stroke="#2b3f7a" stroke-width="2.2" stroke-linecap="round"/><path d="M28 20h5M28 24h6M28 28h5" stroke="#8a8f96" stroke-width="2.2" stroke-linecap="round"/></svg>Diasporagy</b>${esc(C().tagline || '')}${C().director ? `<p style="margin-top:14px">${esc(C().director)}, ${esc(C().director_role)}</p>` : ''}</div>
     <div><h4>Read</h4><ul><li><a href="index.html">One moment, told twice</a></li><li><a href="participants.html">The five accounts</a></li><li><a href="findings.html">Findings</a></li><li><a href="report.html">The report</a></li></ul></div>
+    <div><h4>Contact</h4><ul><li>${C().director ? esc(C().director) : ''}</li><li><a href="mailto:${esc(C().email || '')}">${esc(C().email || '')}</a></li><li style="margin-top:8px">For questions about the project, the method, or your own material.</li></ul></div>
     <div><h4>How it was made</h4><ul><li><a href="method.html">Method</a></li><li><a href="method.html#prompt">The fixed prompt</a></li><li><a href="method.html#deviations">Recorded deviations</a></li><li><a href="about.html">About the project</a></li></ul></div>
     </div><div class="foot-base"><span>Participants are named only with their confirmed consent.</span><span>Every count on this site is computed from the annotation data as the page loads.</span></div></div>`;
 }
@@ -261,7 +262,7 @@ function participantPage({P, A}) {
   const btn = (a, label) => `<button class="omit t-${a.type}" data-id="${esc(a.id)}">${label}</button>`;
   const i = P.participants.indexOf(p), prev = P.participants[i - 1], next = P.participants[i + 1];
 
-  let h = `<header class="p-head"><div><p class="p-crumb"><a href="participants.html">The accounts</a> / Participant ${p.number}</p><h1>${esc(nameOf(p))}</h1>
+  let h = `<header class="p-head"><div><p class="p-crumb"><a href="participants.html">The accounts</a> / ${String(p.number).padStart(2, '0')}</p><h1>${esc(nameOf(p))}</h1>
     ${p.card_line ? `<p class="e-meta" style="margin-top:14px">${esc(p.card_line)}</p>` : ''}${record(p)}</div>
     <div class="p-portrait">${(p.portrait || []).map(q => `<blockquote>${fmt(esc(q))}</blockquote>`).join('')}${p.portrait_source ? `<p class="source">${esc(p.portrait_source)}</p>` : ''}</div></header>
   <div class="p-guide" aria-label="How to read this page">
@@ -348,7 +349,7 @@ function findings({P, A}) {
   app.innerHTML = `<header class="page-head"><p class="eyebrow">Findings</p><h1>The machine kept the facts and lost what they meant</h1>
     <p class="lede">Each moment was told once by the person and once by an AI working from a five-line summary. Every point where the two part was marked and coded. These are the patterns that hold across all five people.</p></header>
   <div class="stat-row">${stat(A.annotations.length, 'points compared, line by line')}${stat(div.length, 'divergences: places where the AI version departs from the person')}${stat(emo, 'of them about feeling, the largest single type')}${stat(fromExt, 'began in the researcher’s own summary, before the AI ran')}</div>
-  <p class="muted f-note">${A.annotations.some(a => !isVisible(P, a)) ? 'Counts include material withheld from the public site.' : 'Counts cover only the material shown on this site; the report gives the full totals.'} Every figure below is computed from the annotation data as the page loads.</p>
+  <p class="muted f-note">${A.annotations.some(a => !isVisible(P, a)) ? 'Counts include material withheld from the public site.' : 'Counts cover all the material on this site.'} Every figure below is computed from the annotation data as the page loads.</p>
   <div class="f-layout"><aside class="f-toc" aria-label="Contents"><p>Contents</p><ol>${list.map(f => `<li><a href="#${f.id}">${esc(f.short)}</a></li>`).join('')}
     <li><a href="#patterns">Patterns</a></li><li><a href="#counts">Full counts</a></li><li><a href="#browse">Browse every note</a></li></ol></aside>
   <div>${figs}
@@ -448,7 +449,8 @@ function about({P}) {
     <div class="outputs">${c.outputs.map(o => `<div><h3>${esc(o.name)}</h3><p>${esc(o.text)}</p></div>`).join('')}</div></section>` : ''}
   <section class="section"><div class="section-head"><p class="num">Consent and review</p><div><h2>Published in two stages</h2></div></div>
     <div class="ethics">${(c.ethics || []).map((t, i) => `<div><span class="i">${String(i + 1).padStart(2, '0')}</span><p>${esc(t)}</p></div>`).join('')}</div>
-    <p class="cta"><a class="btn" href="index.html#story">Start with one moment ${arrow}</a><a class="btn ghost" href="method.html">Read the method</a></p></section>`;
+    <p class="cta"><a class="btn" href="index.html#story">Start with one moment ${arrow}</a><a class="btn ghost" href="method.html">Read the method</a></p></section>
+  ${c.email ? `<section class="section" id="contact"><div class="section-head"><p class="num">Contact</p><div><h2>Get in touch</h2><p>For questions about the project or its method, or if you appear in it and want to discuss your material, write to ${esc(c.director)} at <a href="mailto:${esc(c.email)}">${esc(c.email)}</a>.</p></div></div></section>` : ''}`;
 }
 
 /* The report, typeset as a paper (assets/report.js). */
