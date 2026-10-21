@@ -264,6 +264,7 @@ function participantPage({P, A}) {
     const hasConn = typeof FIG !== 'undefined';
     const counts = [...TYPES, 'match'].map(t => [t, anns.filter(a => a.type === t).length]).filter(x => x[1]);
     h += `<div class="m-count">${counts.map(([t, n]) => `<span><i class="sw sw-${t}"></i>${n} ${LABEL[t].toLowerCase()}</span>`).join('')}</div></div>
+      ${(C().audio || []).includes(nameOf(p) + '_M' + m.n) ? `<div class="m-audio"><span class="kicker">Listen · the recorded passage</span><audio controls preload="none" src="assets/audio/${esc(nameOf(p))}_M${m.n}.mp3"></audio></div>` : ''}
       <div class="m-tools"><div class="views" role="group" aria-label="How to show this moment"><button class="view" data-v="pair" aria-pressed="true">Annotated</button>${hasConn ? '<button class="view" data-v="conn" aria-pressed="false">Joined line by line</button>' : ''}</div>
       ${m.facts ? `<details class="facts"><summary>The five lines the AI was given</summary><div class="story-card facts panel-facts">${factsHTML(m.facts)}</div></details>` : ''}</div>
       <div class="v-pair"><div class="pair">
