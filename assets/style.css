@@ -650,3 +650,17 @@ body[data-page="home"] main.wrap{max-width:none;padding:0}
 .stat-row .stat .l{color:#a59a87}
 .stat-row .stat:first-child .v{color:#a9b9ec}
 .f-note{margin-top:22px}
+
+/* voice-prints */
+.vprint{display:block;width:100%;max-width:28rem;height:auto;margin:18px 0 6px}.vprint .vb{fill:var(--ink);opacity:.75}
+.entry .vprint{max-width:16rem;margin-top:12px}.entry:hover .vprint .vb{fill:var(--indigo);opacity:1}
+/* tape player */
+.m-audio{padding:14px 18px;gap:10px 18px}
+.tape{display:flex;align-items:center;gap:16px;flex:1 1 22rem;min-width:0}
+.tp-btn{flex:none;width:42px;height:42px;border-radius:50%;border:0;background:var(--ink);color:var(--paper);display:grid;place-items:center;cursor:pointer;padding:0}
+.tp-btn:hover{background:var(--indigo)}.tp-btn svg{width:16px;height:16px;fill:currentColor}
+.tp-pause{display:none}.tape.playing .tp-pause{display:block}.tape.playing .tp-play{display:none}
+.tp-wave{flex:1;min-width:0;cursor:pointer;height:44px}.tp-wave svg{width:100%;height:44px;display:block}
+.tb{fill:var(--rule-2)}.tb.on{fill:var(--ink)}
+.tp-time{flex:none;font:500 12px var(--mono);color:var(--muted);min-width:5.5rem;text-align:right}
+@media(max-width:560px){.tp-time{min-width:0}}

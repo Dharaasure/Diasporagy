@@ -132,6 +132,39 @@ function voiceMark() {
 </figure>`;
 }
 function startVoiceMark() {}
+/* Voice-prints: the loudness envelope of each recorded moment (data/content.js), drawn as bars. */
+const vp = key => (C().voiceprints || {})[key];
+function vpBars(vals, w, h, cls) {
+  const g = w / vals.length, bw = Math.max(1, g * .5);
+  return vals.map((v, i) => { const bh = Math.max(1.5, v * h); return `<rect class="${cls}" x="${(i * g).toFixed(1)}" y="${((h - bh) / 2).toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${(bw / 2).toFixed(1)}"/>`; }).join('');
+}
+function personPrint(p, h) {
+  const all = p.moments.flatMap(m => vp(nameOf(p) + '_M' + m.n) || []), k = Math.max(1, Math.ceil(all.length / (h > 40 ? 120 : 64)));
+  const vals = []; for (let i = 0; i < all.length; i += k) vals.push(Math.max(...all.slice(i, i + k)));
+  return vals.length ? `<svg class="vprint" viewBox="0 0 600 ${h}" preserveAspectRatio="none" aria-hidden="true">${vpBars(vals, 600, h, 'vb')}</svg>` : '';
+}
+/* A player drawn as the moment's own waveform: it fills as the person speaks, and a click seeks. */
+function tapePlayer(src, key) {
+  const vals = vp(key); if (!vals) return `<audio controls preload="none" src="${src}"></audio>`;
+  return `<div class="tape" data-src="${src}"><button type="button" class="tp-btn" aria-label="Play recording"><svg viewBox="0 0 20 20" aria-hidden="true"><path class="tp-play" d="M6 4l10 6-10 6z"/><g class="tp-pause"><rect x="5" y="4" width="3.5" height="12"/><rect x="11.5" y="4" width="3.5" height="12"/></g></svg></button>
+    <div class="tp-wave" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><svg viewBox="0 0 600 44" preserveAspectRatio="none">${vpBars(vals, 600, 44, 'tb')}<clipPath id="c-${key}"><rect class="tp-clip" width="0" height="44"/></clipPath><g clip-path="url(#c-${key})">${vpBars(vals, 600, 44, 'tb on')}</g></svg></div>
+    <span class="tp-time">0:00</span><audio preload="none" src="${src}"></audio></div>`;
+}
+function wireTapes() {
+  const fmtT = s => isFinite(s) ? Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0') : '0:00';
+  document.querySelectorAll('.tape').forEach(t => {
+    const au = t.querySelector('audio'), clip = t.querySelector('.tp-clip'), wave = t.querySelector('.tp-wave'), time = t.querySelector('.tp-time'), btn = t.querySelector('.tp-btn');
+    btn.onclick = () => { document.querySelectorAll('.tape audio').forEach(o => o !== au && o.pause()); au.paused ? au.play() : au.pause(); };
+    au.onplay = () => { t.classList.add('playing'); btn.setAttribute('aria-label', 'Pause recording'); };
+    au.onpause = () => { t.classList.remove('playing'); btn.setAttribute('aria-label', 'Play recording'); };
+    au.onloadedmetadata = () => { time.textContent = fmtT(au.duration); };
+    au.ontimeupdate = () => { const f = au.currentTime / (au.duration || 1); clip.setAttribute('width', 600 * f); wave.setAttribute('aria-valuenow', Math.round(100 * f)); time.textContent = fmtT(au.currentTime) + ' / ' + fmtT(au.duration); };
+    const seek = f => { if (au.readyState < 1) { au.addEventListener('loadedmetadata', () => { au.currentTime = f * au.duration; au.play(); }, {once: true}); au.load(); } else { au.currentTime = f * au.duration; if (au.paused) au.play(); } };
+    wave.onclick = e => { const r = wave.getBoundingClientRect(); seek((e.clientX - r.left) / r.width); };
+    wave.onkeydown = e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); au.currentTime = Math.max(0, au.currentTime + (e.key === 'ArrowRight' ? 5 : -5)); } };
+  });
+}
+
 /* ---------- pages ---------- */
 
 /* The front page opens on one exchanged sentence, then walks a first-time visitor through that moment in four stages:
@@ -253,7 +286,7 @@ function participants({P, A}) {
   <div class="roster">${P.participants.map(p => {
     const n = A.annotations.filter(a => a.participant === p.id).length;
     return `<a class="entry" href="participant.html?id=${esc(p.id)}"><span class="e-num">${String(p.number).padStart(2, '0')}</span>
-      <div><p class="e-name">${esc(nameOf(p))}</p><p class="e-meta">${esc(p.card_line || '')}</p><p class="e-meta">${n} points compared</p></div>
+      <div><p class="e-name">${esc(nameOf(p))}</p><p class="e-meta">${esc(p.card_line || '')}</p><p class="e-meta">${n} points compared</p>${personPrint(p, 26)}</div>
       <p class="e-quote">“${esc((p.portrait || [])[0] || '')}”</p>
       <ul class="e-moments">${p.moments.map(m => `<li><span class="mn">${m.n}</span>${m.site_status === 'public' ? `<span>${esc(m.title)}</span>` : '<span class="held">Withheld while under review</span>'}</li>`).join('')}</ul></a>`;
   }).join('')}</div>`;
@@ -269,7 +302,7 @@ function participantPage({P, A}) {
   const i = P.participants.indexOf(p), prev = P.participants[i - 1], next = P.participants[i + 1];
 
   let h = `<header class="p-head"><div><p class="p-crumb"><a href="participants.html">The accounts</a> / ${String(p.number).padStart(2, '0')}</p><h1>${esc(nameOf(p))}</h1>
-    ${p.card_line ? `<p class="e-meta" style="margin-top:14px">${esc(p.card_line)}</p>` : ''}${record(p)}</div>
+    ${p.card_line ? `<p class="e-meta" style="margin-top:14px">${esc(p.card_line)}</p>` : ''}${personPrint(p, 56)}${record(p)}</div>
     <div class="p-portrait">${(p.portrait || []).map(q => `<blockquote>${fmt(esc(q))}</blockquote>`).join('')}${p.portrait_source ? `<p class="source">${esc(p.portrait_source)}</p>` : ''}</div></header>
   <div class="p-guide" aria-label="How to read this page">
     <div><b>1</b> Listen to the recorded passage, or read it on the left.</div>
@@ -292,7 +325,7 @@ function participantPage({P, A}) {
     const hasConn = typeof FIG !== 'undefined';
     const counts = [...TYPES, 'match'].map(t => [t, anns.filter(a => a.type === t).length]).filter(x => x[1]);
     h += `<div class="m-count">${counts.map(([t, n]) => `<span><i class="sw sw-${t}"></i>${n} ${LABEL[t].toLowerCase()}</span>`).join('')}</div></div>
-      ${(C().audio || []).includes(nameOf(p) + '_M' + m.n) ? `<div class="m-audio"><span class="kicker">Listen · the recorded passage</span><audio controls preload="none" src="assets/audio/${esc(nameOf(p))}_M${m.n}.mp3"></audio></div>` : ''}
+      ${(C().audio || []).includes(nameOf(p) + '_M' + m.n) ? `<div class="m-audio"><span class="kicker">Listen · the recorded passage</span>${tapePlayer(`assets/audio/${esc(nameOf(p))}_M${m.n}.mp3`, nameOf(p) + '_M' + m.n)}</div>` : ''}
       <div class="m-tools"><span class="lab-s">View</span><div class="views" role="group" aria-label="How to show this moment"><button class="view" data-v="pair" aria-pressed="true">Annotated</button>${hasConn ? '<button class="view" data-v="conn" aria-pressed="false">Joined line by line</button>' : ''}</div>
       ${m.facts ? `<details class="facts"><summary>The five lines the AI was given</summary><div class="story-card facts panel-facts">${factsHTML(m.facts)}</div></details>` : ''}</div>
       <div class="v-pair"><div class="pair">
@@ -306,6 +339,7 @@ function participantPage({P, A}) {
   h += `<nav class="p-next" aria-label="Other participants">${prev ? `<a href="participant.html?id=${esc(prev.id)}"><div class="tn">← Previous</div><div class="tt">${esc(nameOf(prev))}</div></a>` : '<span></span>'}
     ${next ? `<a href="participant.html?id=${esc(next.id)}"><div class="tn">Next →</div><div class="tt">${esc(nameOf(next))}</div></a>` : `<a href="findings.html"><div class="tn">Next →</div><div class="tt">Findings across all five</div></a>`}</nav>`;
   app.innerHTML = h;
+  wireTapes();
   const sw = app.querySelector('select.who'); if (sw) sw.onchange = () => { location.href = 'participant.html?id=' + encodeURIComponent(sw.value); };
   if (typeof FIG !== 'undefined') { window.__A = A; FIG.wireConnectors(A); }
   app.querySelectorAll('.views').forEach(g => g.addEventListener('click', e => {
@@ -455,7 +489,7 @@ function method({P, A}) {
 function about({P}) {
   const c = C(), pr = P.project;
   app.innerHTML = `<header class="page-head"><p class="tc"><b>00</b> · About</p><h1>${esc(pr.title)}</h1><p class="lede">${esc(pr.subtitle)}</p>
-    ${c.director ? `<div class="byline"><span class="mono">${esc(c.director[0])}</span><span><b>${esc(c.director)}</b>${esc(c.director_role)}</span></div>` : ''}</header>
+    ${c.director ? `<div class="byline"><span><b>${esc(c.director)}</b>${esc(c.director_role)}</span></div>` : ''}</header>
   <section class="section two-col"><div class="prose">${(c.overview || []).map(t => `<p class="lede" style="font-size:1.2rem">${esc(t)}</p>`).join('')}</div>
     <div class="prose">${(c.lineage || []).map(t => `<p>${esc(t)}</p>`).join('')}</div></section>
   <section class="section bleed white qband"><span class="wm-quote" aria-hidden="true">“</span><p class="tc"><b>02</b> · The question</p>
