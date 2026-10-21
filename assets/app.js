@@ -195,36 +195,52 @@ function home({P, A}) {
     ['Return', 'Each person reviews their own material before anything is public.']];
 
   app.innerHTML = `
-  <header class="hero">
-    <div><p class="eyebrow">An oral history project · Doha</p>
-      <h1>What gets lost when a machine <em>tells your story</em></h1>
-      <p class="lede">${esc(pr.summary)}</p>
-      <div class="hero-meta"><span>${P.participants.length} people</span><span>${pub.length} moments</span><span>1 fixed prompt</span><span>${A.annotations.length} points compared</span></div></div>
-    ${voiceMark(P)}
+  <header class="hero band">
+    <div class="inner hero-grid">
+      <div><p class="eyebrow">An oral history project · Doha · 2026</p>
+        <h1>What gets lost when a machine <em>tells your story</em></h1>
+        <p class="lede">${esc(pr.summary)}</p>
+        <p class="cta"><a class="btn" href="participants.html">Read the accounts ${arrow}</a><a class="btn ghost" href="report.html">Read the report</a></p>
+        <div class="hero-meta"><span>${P.participants.length} people</span><span>${pub.length} moments</span><span>1 fixed prompt</span><span>${A.annotations.length} points compared</span></div></div>
+      ${voiceMark(P)}
+    </div>
+    <a class="scroll-cue" href="#q">Listen <span aria-hidden="true">↓</span></a>
   </header>
 
-  <section class="section question"><p class="num">The question</p>
-    <div><blockquote>${esc(pr.core_question)}</blockquote>${(C().lineage || []).slice(0, 1).map(t => `<p class="q-body">${esc(t)}</p>`).join('')}</div></section>
+  <section class="band white" id="q"><div class="inner">
+    <span class="wm-quote" aria-hidden="true">“</span>
+    <p class="tc"><b>01</b> · 00:00 · The question</p>
+    <blockquote class="big-q">${esc(pr.core_question)}</blockquote>
+    ${(C().lineage || []).slice(0, 1).map(t => `<p class="q-after">${esc(t)}</p>`).join('')}
+  </div></section>
 
-  <section class="section"><div class="section-head"><p class="num">The process</p><div><h2>How each moment was made</h2>
-    <p>The same steps for every person, fixed before the first interview.</p></div></div>
+  <section class="band"><div class="inner">
+    <p class="tc"><b>02</b> · 04:12 · The process</p>
+    <div class="band-head"><h2>How each moment was made</h2><p>The same steps for every person, fixed before the first interview.</p></div>
     <ol class="pipeline">${steps.map(([b, d, c], i) => `<li${c ? ` class="${c}"` : ''}><span class="pn">${String(i + 1).padStart(2, '0')}</span><b>${b}</b><span class="d">${d}</span></li>`).join('')}</ol>
     <div class="compress" role="img" aria-label="Average words per moment: ${aT} in the person's words, ${aF} in the facts, ${aA} in the AI version">
       ${[['Their words', aT, 'b-h'], ['The five lines of facts', aF, 'b-f'], ['The AI version', aA, 'b-a']].map(([l, v, c]) => `<div class="row"><span class="lab">${l}</span><span class="bar ${c}" style="width:${100 * v / aMax}%"></span><span class="n">${v}</span></div>`).join('')}</div>
     <p class="compress-note">Average words per moment. The AI wrote more than it was given.</p>
-    <p class="cta"><a class="btn ghost" href="method.html">The full method ${arrow}</a></p></section>
+    <p class="cta"><a class="btn ghost" href="method.html">The full method ${arrow}</a></p>
+  </div></section>
 
-  <section class="section"><div class="section-head"><p class="num">Across every moment</p><div><h2>The same patterns run through all five accounts</h2>
-    <p>${div.length} places where the AI version departs from the person, each traced to where it began.</p></div></div>
-    <div class="claims">
-      <div class="claim"><div class="v">${inv.filter(a => a.origin === 'model').length}<small>of ${inv.length}</small></div><h3>inventions came from the AI</h3><p>Relatives, speeches, fears and endings that no one described.</p></div>
-      <div class="claim"><div class="v">${om.filter(a => a.origin === 'extraction').length}<small>of ${om.length}</small></div><h3>omissions began in the summary</h3><p>What went missing was mostly gone before the AI ran.</p></div>
-      <div class="claim"><div class="v">${kindPct('F')}<small>%</small></div><h3>of feelings came through intact</h3><p>Against ${kindPct('N')}% of numbers, dates and times.</p></div>
+  <section class="band dark"><div class="inner">
+    <svg class="wm-wave" viewBox="0 0 600 120" aria-hidden="true">${VOICE_ENV.map((v, k) => `<rect x="${k * 6.25}" y="${60 - v * 55}" width="2.6" height="${Math.max(2, v * 110)}" rx="1.3"/>`).join('')}</svg>
+    <p class="tc"><b>03</b> · 11:40 · Across every moment</p>
+    <div class="band-head"><h2>The same patterns run through all five accounts</h2><p>${div.length} places where the AI version departs from the person, each traced to where it began.</p></div>
+    <div class="dcards">
+      <div class="dcard hot"><span class="dn">01</span><div class="v">${inv.filter(a => a.origin === 'model').length}<small> of ${inv.length}</small></div><h3>inventions came from the AI</h3><p>Relatives, speeches, fears and endings that no one described.</p></div>
+      <div class="dcard"><span class="dn">02</span><div class="v">${om.filter(a => a.origin === 'extraction').length}<small> of ${om.length}</small></div><h3>omissions began in the summary</h3><p>What went missing was mostly gone before the AI ran.</p></div>
+      <div class="dcard"><span class="dn">03</span><div class="v">${kindPct('F')}<small>%</small></div><h3>of feelings came through intact</h3><p>Against ${kindPct('N')}% of numbers, dates and times.</p></div>
     </div>
-    <p class="cta"><a class="btn" href="findings.html">See all seven figures ${arrow}</a></p></section>
+    <p class="cta"><a class="btn light" href="findings.html">See all seven figures ${arrow}</a></p>
+  </div></section>
 
-  <section class="section"><div class="section-head"><p class="num">The accounts</p><div><h2>Five people, in their own words</h2></div></div>
-    <div class="people">${people}</div></section>`;
+  <section class="band"><div class="inner">
+    <p class="tc"><b>04</b> · 18:05 · The accounts</p>
+    <div class="band-head"><h2>Five people, in their own words</h2></div>
+    <div class="people">${people}</div>
+  </div></section>`;
 
   startVoiceMark(P);
   if (typeof FIG !== 'undefined') { window.__A = A; FIG.wireConnectors(A); }
