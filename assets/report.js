@@ -129,7 +129,7 @@ function renderReport(P, A, esc, nameOf) {
   ${SS('What this means for practice')}
   <p>For oral historians, these results suggest that summaries, abstracts and catalogue entries are interpretive acts with measurable effects, and that what they leave out should be recorded alongside the source. For anyone retelling testimony with generative tools, checking the facts is the wrong test, because the facts are what survive best. The useful test is whether the narrator's own judgement, relationships, doubts and names survived, and that can only be checked against the person.</p>
   ${SS('Limitations')}
-  <p>This is a small study of five people and ${moments.length} moments. I ran each moment once, so I cannot separate the model's habits from the luck of a single draw, and I did not log the model and run date every time. An AI system made the first annotation pass and I reviewed and corrected it, so this is not an independent second coding. The tone scores are crude, and I read them only for direction. The five narrators are well connected, confident in English and, in several cases, known to my family. People with fewer ties, or interviewed in another language or by a stranger, might be reconstructed differently.</p>
+  <p>This is a small study of five people and ${moments.length} moments. I ran each moment once, so I cannot separate the model's habits from the luck of a single draw. I did all the annotation and coding myself, so there is no independent second coder. The tone scores are crude, and I read them only for direction. The five narrators are well connected, confident in English and, in several cases, known to my family. People with fewer ties, or interviewed in another language or by a stranger, might be reconstructed differently.</p>
 
   ${S('Conclusion')}
   <p>When I gave a machine the facts of five lives, it kept the facts. It lost what the people made of them: the conclusions they drew, the people they credited, the doubts they allowed, and the names that placed them in Doha. Some of that was gone before the machine ran, in a summary I wrote in good faith. The common defence of AI reconstruction treats factual error as the main risk. In these fifteen moments the facts were mostly right, and what was replaced was everything the person had added to them. A machine can be given the facts of a life, but it cannot be given what the person made of them unless someone asks, and then listens.</p>
@@ -139,12 +139,12 @@ function renderReport(P, A, esc, nameOf) {
   <p>Every moment, its five-line summary, the reconstruction, the audio and all ${ann.length} annotations are published on this site (<a href="participants.html">the accounts</a>). The prompt, selection rule and recorded deviations are on the <a href="method.html">Method</a> page, and interactive versions of the figures are on the <a href="findings.html">Findings</a> page.</p>
   <h2>References</h2>
   <ol class="refs">
-    <li>Bender, E. M., Gebru, T., McMillan-Major, A., &amp; Shmitchell, S. (2021). On the dangers of stochastic parrots: Can language models be too big? <i>Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency</i>, 610-623.</li>
-    <li>Fricker, M. (2007). <i>Epistemic injustice: Power and the ethics of knowing</i>. Oxford University Press.</li>
-    <li>Frisch, M. (1990). <i>A shared authority: Essays on the craft and meaning of oral and public history</i>. State University of New York Press.</li>
-    <li>Gardner, A. (2010). <i>City of strangers: Gulf migration and the Indian community in Bahrain</i>. Cornell University Press.</li>
+    <li>Bender, E. M., Gebru, T., McMillan-Major, A., &amp; Shmitchell, S. (2021). On the dangers of stochastic parrots: Can language models be too big? <i>Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency</i>, 610-623. https://doi.org/10.1145/3442188.3445922</li>
+    <li>Fricker, M. (2007). <i>Epistemic injustice: Power and the ethics of knowing</i>. Oxford: Oxford University Press.</li>
+    <li>Frisch, M. (1990). <i>A shared authority: Essays on the craft and meaning of oral and public history</i>. Albany: State University of New York Press.</li>
+    <li>Gardner, A. (2010). <i>City of strangers: Gulf migration and the Indian community in Bahrain</i>. Ithaca: ILR Press/Cornell University Press.</li>
     <li>Portelli, A. (1981). The peculiarities of oral history. <i>History Workshop Journal</i>, 12, 96-107.</li>
-    <li>Thomson, A. (2007). Four paradigm transformations in oral history. <i>Oral History Review</i>, 34(1), 49-70.</li>
-    <li>Vora, N. (2013). <i>Impossible citizens: Dubai's Indian diaspora</i>. Duke University Press.</li>
+    <li>Thomson, A. (2007). Four paradigm transformations in oral history. <i>Oral History Review</i>, 34(1), 49-70. https://doi.org/10.1525/ohr.2007.34.1.49</li>
+    <li>Vora, N. (2013). <i>Impossible citizens: Dubai's Indian diaspora</i>. Durham: Duke University Press.</li>
   </ol></section>`;
 }

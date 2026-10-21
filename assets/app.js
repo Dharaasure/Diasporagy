@@ -48,9 +48,9 @@ function chrome() {
   const here = page === 'participant' ? 'participants' : page;
   const nav = document.getElementById('nav');
   nav.innerHTML = `<a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><path d="M11 8h12a16 16 0 0 1 0 32H11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 24c1.6-4.4 3.2-4.4 4.8 0s3.2 4.4 4.8 0" fill="none" stroke="#2b3f7a" stroke-width="2.2" stroke-linecap="round"/><path d="M28 20h5M28 24h6M28 28h5" stroke="#8a8f96" stroke-width="2.2" stroke-linecap="round"/></svg><b>Diasporagy</b><span>An oral history project</span></a>` +
-    NAV.map(([h, l, k]) => `<a class="nl${k === 'report' ? ' nl-report' : ''}" href="${h}"${k === here ? ' aria-current="page"' : ''}>${l}</a>`).join('') +
-    `<button class="theme-btn" type="button" aria-label="Switch between light and dark">${isDark() ? ICON_SUN : ICON_MOON}</button>`;
-  nav.querySelector('.theme-btn').onclick = e => { toggleTheme(); e.currentTarget.innerHTML = isDark() ? ICON_SUN : ICON_MOON; };
+    NAV.map(([h, l, k]) => k === 'participants'
+      ? `<span class="nd"><a class="nl" href="${h}"${k === here ? ' aria-current="page"' : ''} aria-haspopup="true">${l} <span aria-hidden="true">▾</span></a><span class="nd-menu">${(window.PARTICIPANT_LIST || []).slice().sort((a, b) => a.number - b.number).map(p => `<a href="participant.html?id=${esc(p.id)}">${esc(nameOf(p))}</a>`).join('')}<a class="nd-all" href="participants.html">All five accounts</a></span></span>`
+      : `<a class="nl${k === 'report' ? ' nl-report' : ''}" href="${h}"${k === here ? ' aria-current="page"' : ''}>${l}</a>`).join('') ;
   const foot = document.getElementById('foot');
   if (foot) foot.innerHTML = `<div class="wrap"><div class="foot">
     <div><b><svg class="logo logo-foot" viewBox="0 0 48 48" aria-hidden="true"><path d="M11 8h12a16 16 0 0 1 0 32H11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 24c1.6-4.4 3.2-4.4 4.8 0s3.2 4.4 4.8 0" fill="none" stroke="#2b3f7a" stroke-width="2.2" stroke-linecap="round"/><path d="M28 20h5M28 24h6M28 28h5" stroke="#8a8f96" stroke-width="2.2" stroke-linecap="round"/></svg>Diasporagy</b>${esc(C().tagline || '')}${C().director ? `<p style="margin-top:14px">${esc(C().director)}, ${esc(C().director_role)}</p>` : ''}</div>
@@ -202,7 +202,6 @@ function home({P, A}) {
       <div class="hero-meta"><span>${P.participants.length} people</span><span>${pub.length} moments</span><span>1 fixed prompt</span><span>${A.annotations.length} points compared</span></div></div>
     ${voiceMark(P)}
   </header>
-  <section class="section exhibit-wrap">${exhibit}</section>
 
   <section class="section question"><p class="num">The question</p>
     <div><blockquote>${esc(pr.core_question)}</blockquote>${(C().lineage || []).slice(0, 1).map(t => `<p class="q-body">${esc(t)}</p>`).join('')}</div></section>
@@ -214,10 +213,6 @@ function home({P, A}) {
       ${[['Their words', aT, 'b-h'], ['The five lines of facts', aF, 'b-f'], ['The AI version', aA, 'b-a']].map(([l, v, c]) => `<div class="row"><span class="lab">${l}</span><span class="bar ${c}" style="width:${100 * v / aMax}%"></span><span class="n">${v}</span></div>`).join('')}</div>
     <p class="compress-note">Average words per moment across the ${pub.length} moments on this site. The person's words are the excerpt shown, already shortened. The machine wrote more than it was given: what it added did not come from the person.</p>
     <p class="cta"><a class="btn ghost" href="method.html">The full method ${arrow}</a></p></section>
-
-  <section class="section" id="story"><div class="section-head"><p class="num">One moment, told twice</p><div><h2>The birth at Sidra</h2>
-    <p>Follow one moment through every stage: what he said, what the AI was given, what it wrote, and where the two part.</p></div></div>
-    ${story}</section>
 
   <section class="section"><div class="section-head"><p class="num">Across every moment</p><div><h2>The same patterns run through all five accounts</h2>
     <p>${div.length} places where the AI version departs from the person, each traced to where it began.</p></div></div>
@@ -430,9 +425,9 @@ function method({P, A}) {
     <p>Kept as a record, so that every finding can be read against how it was actually produced.</p></div></div>
     <ol class="ledger">${P.method_notes.map(n => `<li><span>${esc(n)}</span></li>`).join('')}</ol></section>` : ''}
 
-  <section class="section"><div class="section-head"><p class="num">Run log</p><div><h2>Every AI run</h2><p>One run per moment, the same prompt each time.</p></div></div>
-  <div class="table-scroll"><table><thead><tr><th>Participant</th><th class="n">Moment</th><th>Model</th><th>Date</th><th>Note</th></tr></thead><tbody>
-  ${P.run_log.map(r => { const rp = findP(P, r.participant); return `<tr><td>${esc(rp ? nameOf(rp) : r.participant)}</td><td class="n">${r.moment}</td><td>${esc(r.model)}</td><td>${esc(r.date)}</td><td>${esc(r.note || '')}</td></tr>`; }).join('')}
+  <section class="section"><div class="section-head"><p class="num">Run log</p><div><h2>Every AI run</h2><p>One run per moment, the same prompt each time, with any note on how the moment was selected.</p></div></div>
+  <div class="table-scroll"><table><thead><tr><th>Participant</th><th class="n">Moment</th><th>Note</th></tr></thead><tbody>
+  ${P.run_log.map(r => { const rp = findP(P, r.participant); return `<tr><td>${esc(rp ? nameOf(rp) : r.participant)}</td><td class="n">${r.moment}</td><td>${esc(r.note || '')}</td></tr>`; }).join('')}
   </tbody></table></div></section>`;
   if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) setTimeout(() => t.scrollIntoView(), 50); }
 }
@@ -449,7 +444,7 @@ function about({P}) {
     <div class="outputs">${c.outputs.map(o => `<div><h3>${esc(o.name)}</h3><p>${esc(o.text)}</p></div>`).join('')}</div></section>` : ''}
   <section class="section"><div class="section-head"><p class="num">Consent and review</p><div><h2>Published in two stages</h2></div></div>
     <div class="ethics">${(c.ethics || []).map((t, i) => `<div><span class="i">${String(i + 1).padStart(2, '0')}</span><p>${esc(t)}</p></div>`).join('')}</div>
-    <p class="cta"><a class="btn" href="index.html#story">Start with one moment ${arrow}</a><a class="btn ghost" href="method.html">Read the method</a></p></section>
+    <p class="cta"><a class="btn" href="participants.html">Read the accounts ${arrow}</a><a class="btn ghost" href="method.html">Read the method</a></p></section>
   ${c.email ? `<section class="section" id="contact"><div class="section-head"><p class="num">Contact</p><div><h2>Get in touch</h2><p>For questions about the project or its method, or if you appear in it and want to discuss your material, write to ${esc(c.director)} at <a href="mailto:${esc(c.email)}">${esc(c.email)}</a>.</p></div></div></section>` : ''}`;
 }
 
@@ -511,7 +506,6 @@ function review({P, A}) {
   };
 }
 
-applyStoredTheme();
 chrome();
 try {
   const d = load();

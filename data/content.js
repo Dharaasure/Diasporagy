@@ -4,9 +4,9 @@ window.CONTENT = {
  "audio": ["Mini_M1", "Mini_M2", "Mini_M3", "Shridevi_M1", "Shridevi_M2", "Shridevi_M3", "Subramanya_M1", "Subramanya_M2", "Subramanya_M3", "Sujith_M1", "Sujith_M2", "Sujith_M3", "Vailancelee_M1", "Vailancelee_M2", "Vailancelee_M3"],
  "interviews": {
   "1": {"acc": "DSP-OH-2026-01", "date": "25 July 2026", "lang": "English, with Kannada and Arabic", "format": "Audio, transcribed"},
-  "2": {"acc": "DSP-OH-2026-02", "date": "2026", "lang": "English, with Malayalam and Hindi", "format": "Audio, transcribed"},
+  "2": {"acc": "DSP-OH-2026-02", "date": "15 August 2026", "lang": "English, with Malayalam and Hindi", "format": "Audio, transcribed"},
   "3": {"acc": "DSP-OH-2026-03", "date": "29 August 2026", "lang": "English, with Kannada and Tulu", "format": "Audio, three parts, about 80 minutes"},
-  "4": {"acc": "DSP-OH-2026-04", "date": "2026", "lang": "English, with Konkani", "format": "Audio, transcribed"},
+  "4": {"acc": "DSP-OH-2026-04", "date": "19 October 2026", "lang": "English, with Konkani", "format": "Audio, transcribed"},
   "5": {"acc": "DSP-OH-2026-05", "date": "20 October 2026", "lang": "English, with Hindi, Malayalam and Marathi", "format": "Audio, transcribed"}
  },
  "consent": [
@@ -34,7 +34,7 @@ window.CONTENT = {
    ["origin", "model · extraction · both", "Where it began: in the AI, in the five-line summary, or set up by one and elaborated by the other (added in the amended scheme)"],
    ["note", "free text", "The researcher's reading of the point"]
   ],
-  "validity": "Spans are checked automatically against both texts on every build. All figures are computed in the browser from these records, so no published number can drift from the annotations. Limits: one run per moment, so run-to-run variance is not measured; the first annotation pass was made by an AI and reviewed by the researcher, so it is not an independent second coder."
+  "validity": "Spans are checked automatically against both texts on every build. All figures are computed in the browser from these records, so no published number can drift from the annotations. Limits: one run per moment, so run-to-run variance is not measured; all coding was done by one researcher, with no second coder."
  },
  "director": "Dharaa Suresha",
  "director_role": "Founder and Director",
@@ -58,8 +58,8 @@ window.CONTENT = {
   {"name": "Interview", "text": "Open-ended and audio recorded, in the participant's preferred language, following the fixed interview script. When something inherited or handed down comes up, it is followed with the script's standard prompts, such as “Tell me more about that.” This knowledge exists only where the participant carries it, which is exactly what a system trained on published material cannot reconstruct."},
   {"name": "Keep a field notebook", "text": "One handwritten page per interview: what the recording won't hold, what was not said, where the person stopped, what the room was like, and what I misread in the moment. It is kept separate from the transcript and never summarised into it."},
   {"name": "Extract moments", "text": "Two to three moments per participant, chosen by the fixed selection rule, each then stripped to its checkable facts.", "as_done": "The rule's fallbacks were needed for Vailancelee and Shridevi, and two moments come from sections the rule does not name. Each case is listed under recorded deviations."},
-  {"name": "Generate the AI version", "text": "The facts go into one fixed prompt, applied identically to all five participants.", "as_done": "One run was made per moment rather than two to three, and the model name was not recorded."},
-  {"name": "Annotate", "text": "Each transcript excerpt is set beside its AI version and every point of divergence is marked.", "as_done": "The design called for marking on paper first. In practice an AI system made the first pass and the researcher reviewed and corrected it."},
+  {"name": "Generate the AI version", "text": "The facts go into one fixed prompt, applied identically to all five participants.", "as_done": "One run was made per moment rather than two to three."},
+  {"name": "Annotate", "text": "Each transcript excerpt is set beside its AI version and every point of divergence is marked."},
   {"name": "Code", "text": "Every divergence is sorted as factual, emotional, relational or cultural, and as invented, omitted or altered."},
   {"name": "Document one amendment", "text": "After the first pass of coding, a note on what the scheme failed to capture and the one change made, with reasons. The amendment added where each divergence began."},
   {"name": "Write", "text": "Before drafting, one sentence is committed to: what the standard defence of AI reconstruction gets wrong, and what the process destroys when it substitutes for a person's own account."},

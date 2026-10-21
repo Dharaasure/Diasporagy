@@ -16,27 +16,6 @@
   --measure:40rem;--wide:74rem;
   color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --paper:#15120e;--paper-2:#1d1914;--card:#211c16;--rule:#382f26;--rule-2:#4d4235;
-  --ink:#efe7d8;--ink-2:#d9cfbe;--muted:#a99c88;--faint:#7c705f;
-  --indigo:#9fb1e6;--indigo-2:#b9c6ee;--indigo-wash:rgba(159,177,230,.12);--indigo-line:rgba(159,177,230,.4);
-  --machine-bg:#1c2125;--machine-card:#22282d;--machine-ink:#cbd3da;--machine-rule:#343c43;--machine:#93a1ad;
-  --factual:#e0845f;--emotional:#b994d9;--relational:#4fbca9;--cultural:#d8a63c;--match:#8a806f;
-  --w-factual:rgba(224,132,95,.16);--w-emotional:rgba(185,148,217,.16);--w-relational:rgba(79,188,169,.16);--w-cultural:rgba(216,166,60,.18);
-  --kept:#6f675b;--both:#5d6f9f;--lightgrey:#3a332a;--source:#4a3f1c;--source-line:#d8a63c;
-  --shadow:0 1px 0 rgba(0,0,0,.2),0 12px 30px -18px rgba(0,0,0,.7);color-scheme:dark;
-}}
-:root[data-theme="dark"]{
-  --paper:#15120e;--paper-2:#1d1914;--card:#211c16;--rule:#382f26;--rule-2:#4d4235;
-  --ink:#efe7d8;--ink-2:#d9cfbe;--muted:#a99c88;--faint:#7c705f;
-  --indigo:#9fb1e6;--indigo-2:#b9c6ee;--indigo-wash:rgba(159,177,230,.12);--indigo-line:rgba(159,177,230,.4);
-  --machine-bg:#1c2125;--machine-card:#22282d;--machine-ink:#cbd3da;--machine-rule:#343c43;--machine:#93a1ad;
-  --factual:#e0845f;--emotional:#b994d9;--relational:#4fbca9;--cultural:#d8a63c;--match:#8a806f;
-  --w-factual:rgba(224,132,95,.16);--w-emotional:rgba(185,148,217,.16);--w-relational:rgba(79,188,169,.16);--w-cultural:rgba(216,166,60,.18);
-  --kept:#6f675b;--both:#5d6f9f;--lightgrey:#3a332a;--source:#4a3f1c;--source-line:#d8a63c;
-  --shadow:0 1px 0 rgba(0,0,0,.2),0 12px 30px -18px rgba(0,0,0,.7);color-scheme:dark;
-}
-
 /* ---------- base ---------- */
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-padding-top:84px}
@@ -590,3 +569,11 @@ nav a.nl-report:hover,nav a.nl-report[aria-current]{border-color:var(--indigo);c
 .exhibit-wrap{max-width:40rem;margin-left:auto;margin-right:auto}
 nav .brand .logo{width:30px;height:30px;color:var(--ink);align-self:center;margin-right:-2px}
 .logo-foot{width:34px;height:34px;color:var(--ink);vertical-align:middle;margin:-4px 6px 0 -4px}
+
+/* accounts menu */
+.nd{position:relative;display:inline-flex}
+.nd-menu{display:none;position:absolute;top:100%;left:-14px;min-width:13rem;padding:8px 0;background:var(--card);border:1px solid var(--rule);box-shadow:var(--shadow);z-index:40}
+.nd:hover .nd-menu,.nd:focus-within .nd-menu{display:block}
+.nd-menu a{display:block;padding:8px 16px;font:15px var(--serif);color:var(--ink);text-decoration:none}
+.nd-menu a:hover{background:var(--paper-2);color:var(--indigo)}
+.nd-menu .nd-all{border-top:1px solid var(--rule);margin-top:6px;padding-top:10px;font:13px var(--sans);color:var(--muted)}
