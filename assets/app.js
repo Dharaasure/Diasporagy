@@ -466,7 +466,7 @@ function report({P, A}) {
       <p class="kw"><b>Keywords</b> oral history · AI reconstruction · epistemic justice · Indian diaspora · Qatar · testimony · digital determinants of health</p></section>
     ${intro}${body}
     <section class="a-end"><h2 class="a-h1">Notes</h2>
-      <p>Counts in the report text include two moments withheld from this site during participant review; the interactive figures on this site cover public material only, so some totals differ. Annotation references link to the passage they describe.</p>
+      <p>Some report totals may differ slightly from the live figures, which are recomputed from the current annotation data. Annotation references link to the passage they describe.</p>
       <h3 class="a-h2">Ethics</h3><p>Informed consent was obtained from every participant. All five chose to be named and asked to be identified by first name only. Each reviews their material before publication and may withdraw any of it.</p>
       <h3 class="a-h2">Suggested citation</h3><p class="cite">Suresha, D. (2026). <i>Diasporagy: What gets lost when a machine tells your story</i> [Research report, draft]. Diasporagy.</p></section>
   </div></div></article>`;

@@ -14,7 +14,10 @@
    "n": 1,
    "title": "The drive to the hospital",
    "section": "A Day You Won't Forget",
-   "site_status": "withheld"
+   "site_status": "public",
+   "transcript_excerpt": "He's Indian. One day he called me, everyone at home, his whole family, had COVID. They were on the government hotline. He and his driver were the only ones left at home. But he was a signatory for his company, if he also fell ill, it would disrupt everything. He told me he had some symptoms and wanted to go to the hospital, but not to a government hospital, because they'd swab him and he'd be confirmed positive, and he didn't want that to become known publicly. So he called me, and I went there. He'd already told me his whole family had COVID, and he was sure he had a fever, and the other symptoms. I went there, I had a small car at the time, a Corolla. When I got to his house, I saw a Range Rover, a Land Cruiser, a Lexus, so many cars parked there, because he has a very big family. I felt a bit bad taking him in my Corolla. But at the time, he couldn't drive himself, and he didn't want to call his driver either. […]\n\nHe was scared too, everyone was scared at that time, you know. […]\n\nEven in my car, he insisted on sitting in the back, he didn't want to risk passing it to me, he said. I took him to the hospital, had him checked by the doctor, but no swab. I knew that if he got swabbed, he'd be confirmed positive and sent straight for isolation. I still remember it, and actually, I still meet him today. […]\n\nYeah, even recently. […]\n\nHe told me, you can have everything, but sometimes it doesn't work out. You can have four or five drivers at home, but in a moment of real need, it's someone else who ends up helping you. I still remember that, how we're able to help people, even someone like him. […]\n\nNot as a patient, but as a community member, yes. And actually, after a few days his condition worsened and he was admitted to hospital. We followed up with him after that.",
+   "ai_output": "He called me one afternoon. Everyone in his house had tested positive, and he was sure he had it too. He wanted to see a doctor, but not at a government hospital, because a swab goes on record, and then it's isolation and everybody knows. In those days only certain hospitals were taking COVID patients. Even those of us working in the system couldn't simply walk into another facility.\n\nI told him I'd come. When I pulled into his compound there were three or four big cars sitting there, and me in my little Corolla. He wouldn't call his own driver. He said, why should I put that man at risk. Then he got into the back seat instead of the front, for the same reason, and kept apologising the whole way.\n\nI took him in and arranged for a doctor to examine him without any swab. Afterwards he said something that stayed with me: having drivers and cars is no guarantee that help will come when you actually need it.\n\nA few days later he got worse and was admitted. We still see each other at community functions.",
+   "facts": "- Who: A nurse and hospital administrator in Doha, active in Indian community organisations, and a businessman she knew through that community.\n- The moment: He called her because his household had COVID-19 and he believed he had symptoms himself. He wanted to go to a hospital but not to be swabbed at a government facility, because a positive result would mean isolation and would become known. She drove him herself and arranged for a doctor to examine him without an official swab.\n- Where and when: His house and a hospital in Doha, in the early months of the COVID-19 pandemic, when only designated hospitals treated COVID patients and visits were barred even for staff working at other facilities.\n- What was said or thought: He would not call his own driver, for fear of infecting him, and sat in the back of her car for the same reason. He told her afterwards that having drivers and cars does not guarantee help when it is actually needed.\n- What it meant: Several large cars were parked at his house; hers was a Corolla. His condition worsened a few days later and he was admitted to hospital. They still meet as fellow community figures."
   },
   {
    "n": 2,
@@ -36,6 +39,146 @@
   }
  ],
  "annotations": [
+  {
+   "id": "MIN-1-01",
+   "moment": 1,
+   "ai_span": "He called me one afternoon.",
+   "transcript_span": "One day he called me",
+   "type": "factual",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Time of day invented. Minor."
+  },
+  {
+   "id": "MIN-1-02",
+   "moment": 1,
+   "ai_span": "Everyone in his house had tested positive, and he was sure he had it too.",
+   "transcript_span": "everyone at home, his whole family, had COVID.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Right."
+  },
+  {
+   "id": "MIN-1-03",
+   "moment": 1,
+   "ai_span": "and then it's isolation and everybody knows",
+   "transcript_span": "and he didn't want that to become known publicly",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Right."
+  },
+  {
+   "id": "MIN-1-04",
+   "moment": 1,
+   "ai_span": "none",
+   "transcript_span": "But he was a signatory for his company, if he also fell ill, it would disrupt everything.",
+   "type": "factual",
+   "direction": "omitted",
+   "origin": "extraction",
+   "note": "His real reason was his company. Without it he seems merely afraid of stigma."
+  },
+  {
+   "id": "MIN-1-05",
+   "moment": 1,
+   "ai_span": "Even those of us working in the system couldn't simply walk into another facility.",
+   "transcript_span": "So even though I worked at Hamad, I wasn't supposed to visit COVID patients unless I was working at that same designated facility.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Accurate, though she said it about a different story."
+  },
+  {
+   "id": "MIN-1-06",
+   "moment": 1,
+   "ai_span": "there were three or four big cars sitting there, and me in my little Corolla",
+   "transcript_span": "I felt a bit bad taking him in my Corolla.",
+   "type": "emotional",
+   "direction": "altered",
+   "origin": "extraction",
+   "note": "Her discomfort becomes a wry joke, and the cars she named are lost."
+  },
+  {
+   "id": "MIN-1-07",
+   "moment": 1,
+   "ai_span": "He wouldn't call his own driver. He said, why should I put that man at risk.",
+   "transcript_span": "But at the time, he couldn't drive himself, and he didn't want to call his driver either.",
+   "type": "factual",
+   "direction": "invented",
+   "origin": "both",
+   "note": "She gives no reason and no quotation. The extracted facts supplied a motive, and the AI put words in his mouth."
+  },
+  {
+   "id": "MIN-1-08",
+   "moment": 1,
+   "ai_span": "Then he got into the back seat instead of the front, for the same reason",
+   "transcript_span": "he insisted on sitting in the back, he didn't want to risk passing it to me",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Right about the back seat."
+  },
+  {
+   "id": "MIN-1-09",
+   "moment": 1,
+   "ai_span": "and kept apologising the whole way",
+   "transcript_span": "none",
+   "type": "emotional",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented."
+  },
+  {
+   "id": "MIN-1-10",
+   "moment": 1,
+   "ai_span": "I took him in and arranged for a doctor to examine him without any swab.",
+   "transcript_span": "I took him to the hospital, had him checked by the doctor, but no swab.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Right."
+  },
+  {
+   "id": "MIN-1-11",
+   "moment": 1,
+   "ai_span": "having drivers and cars is no guarantee that help will come when you actually need it",
+   "transcript_span": "You can have four or five drivers at home, but in a moment of real need, it's someone else who ends up helping you.",
+   "type": "relational",
+   "direction": "altered",
+   "origin": "extraction",
+   "note": "His point was that someone else, namely her, came. The extracted facts kept the drivers and dropped the helper."
+  },
+  {
+   "id": "MIN-1-12",
+   "moment": 1,
+   "ai_span": "A few days later he got worse and was admitted.",
+   "transcript_span": "And actually, after a few days his condition worsened and he was admitted to hospital.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Right."
+  },
+  {
+   "id": "MIN-1-13",
+   "moment": 1,
+   "ai_span": "We still see each other at community functions.",
+   "transcript_span": "Not as a patient, but as a community member, yes.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Broadly right."
+  },
+  {
+   "id": "MIN-1-14",
+   "moment": 1,
+   "ai_span": "Afterwards he said something that stayed with me",
+   "transcript_span": "I still remember that, how we're able to help people, even someone like him.",
+   "type": "emotional",
+   "direction": "altered",
+   "origin": "extraction",
+   "note": "What stayed with her was that she could help even someone like him, not his remark."
+  },
   {
    "id": "MIN-2-01",
    "moment": 2,

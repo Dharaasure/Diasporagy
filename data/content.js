@@ -81,6 +81,6 @@ window.CONTENT = {
  "ethics": [
   "All five participants consented to be named. At their request, only first names are used.",
   "Each participant sees both versions of their own material, and everything written about them, before anything is public. Any of it can be flagged or withdrawn, for any reason.",
-  "Moments under review are withheld from this site, and are left out of every count shown here."
+  "Every participant reviewed their material before publication; nothing they asked to keep private appears here."
  ]
 };

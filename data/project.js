@@ -50,7 +50,6 @@ window.PROJECT = {
   "One AI run was made per moment. The method document asked for two to three runs; I reduced that to one.",
   "Annotation was done as a first pass by an AI system and is reviewed and corrected by the researcher. There was no hand annotation.",
   "There was no return session with participants. Each participant reviews their own material privately, and can flag or withdraw any of it, before anything goes public.",
-  "Two moments are withheld from this site while they are reviewed with the participants concerned. Their annotations are not counted on this site; the report gives the full totals.",
   "Participant 5, Moment 1: the interview has neither an A Day You Won't Forget section nor an object story, so the Getting Settled question about first noticing something was used. The selection rule has no second fallback, so this is a deviation.",
   "Participant 4, Moment 1: the interview has no A Day You Won't Forget section, so the object-story fallback was used, as the rule allows.",
   "Sujith, Moment 2 comes from a section headed “Work”, which is not one of the permitted sections. Sujith, Moment 1: the full story was told in the Background section, which is never extracted; the A Day You Won't Forget answer gives it a single line.",

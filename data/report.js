@@ -1,4 +1,4 @@
-/* The report, set as an article. Public-safe: withheld moments removed, first names only. */
+/* The report, set as an article. First names only. */
 window.REPORT = [
 [
 "p",
@@ -110,7 +110,7 @@ window.REPORT = [
 ],
 [
 "p",
-"There was no return session. Each participant reviews their own material privately and can withdraw any of it. Two moments, and one line about a cause of death, are withheld from the public site but counted here. Subramanya's recording ends mid-sentence, before the closing questions. Three of the five are community figures linked to their embassy, and two are friends. All are professionals or homemakers; no blue-collar worker speaks for themselves here, although several appear as people others helped. One run per moment cannot separate the model's habits from a single draw."
+"There was no return session. Each participant reviews their own material privately and can withdraw any of it. One line about a cause of death is withheld from the public site but counted here. Subramanya's recording ends mid-sentence, before the closing questions. Three of the five are community figures linked to their embassy, and two are friends. All are professionals or homemakers; no blue-collar worker speaks for themselves here, although several appear as people others helped. One run per moment cannot separate the model's habits from a single draw."
 ],
 [
 "h1",
@@ -198,7 +198,7 @@ window.REPORT = [
 ],
 [
 "p",
-"Her other two moments are in Appendix E.Karate days ends on the AI's joke instead of her \"favourite time\" (MIN-3-12)."
+"Her other two moments are in Appendix E. The drive to the hospital lost both the man's real reason and what the episode meant to her, and both losses began in my facts (MIN-1-04, MIN-1-14). Karate days ends on the AI's joke instead of her \"favourite time\" (MIN-3-12)."
 ],
 [
 "p",
@@ -326,7 +326,7 @@ window.REPORT = [
 ],
 [
 "p",
-"Her other two moments are in Appendix E. In the call from school, the AI gave her son an invented name and lost the school and district she named (SHR-2-02, SHR-2-10)."
+"Her other two moments are in Appendix E. In the call from school, the AI gave her son an invented name and lost the school and district she named (SHR-2-02, SHR-2-10). The story of the friend who took her in ends on a span of time instead of her \"some friendships are for life\" (SHR-3-11)."
 ],
 [
 "p",
@@ -338,7 +338,7 @@ window.REPORT = [
 ],
 [
 "p",
-"Four patterns hold across all five participants, and a fifth is a strong lead. Every number here is computed from the coded data and includes the withheld moments."
+"Four patterns hold across all five participants, and a fifth is a strong lead. Every number here is computed from the coded data."
 ],
 [
 "h2",
@@ -550,6 +550,22 @@ window.REPORT = [
 ],
 [
 "h3",
+"Moment 1: the drive to the hospital"
+],
+[
+"p",
+"I describe it here without his details."
+],
+[
+"p",
+"Early in the pandemic, a member of the community whose household had fallen ill asked for her help to see a doctor without the consequences an official test would bring. She drove him herself. The AI version kept the outline well: seven of its fourteen annotations are matches, including the household's illness (MIN-1-02), the back seat (MIN-1-08) and the examination without a test (MIN-1-10)."
+],
+[
+"p",
+"What it lost was the reason and the meaning, and both losses began with me. His real reason was his responsibility to his company, which I left out of the facts (MIN-1-04). Without it, he reads as a man avoiding stigma. His remark afterwards was about who helps when it counts, and his point was that it was someone else, namely her; the facts kept his remark and dropped her (MIN-1-11). And what stayed with her was not his remark at all, but that she could help \"even someone like him\" (MIN-1-14). Her discomfort at arriving in a small car became a wry joke (MIN-1-06), and the AI gave him a reason, a line of dialogue and an apology she never reported (MIN-1-07, MIN-1-09)."
+],
+[
+"h3",
 "Moment 3: karate days"
 ],
 [
@@ -667,5 +683,25 @@ window.REPORT = [
 [
 "p",
 "The driving lessons are where my extraction shaped the story most. She said this call \"contributed to my decision to learn driving\", one reason among several; my facts made it the only one (SHR-2-13). She said \"seven tests or something\" and that she got the hang of it within seven days; my facts tidied that into a clean sequence (SHR-2-14). Her own explanation, the characteristic \"I close my brain\", never reached the AI (SHR-2-15)."
+],
+[
+"h3",
+"Moment 3: the friend who took her in"
+],
+[
+"p",
+"I describe it without detail."
+],
+[
+"p",
+"Alone in a new country, unsure what the hospital's approach meant, she reached a Malayali Christian woman connected to her building in Bombay. For weeks that woman's family took her in by day and sent her home with dinner. Nearly thirty years later, visiting Doha, the woman has been in touch again."
+],
+[
+"p",
+"The AI was accurate on much of this: six matches, including the daily care (SHR-3-07) and her own admission that she took it for granted (SHR-3-09), though her \"kind of\" softened it. The losses are cultural and relational. The hospital she named and the referral that brought her there became \"The government hospital\" (SHR-3-02). Her sense that the Malayali nurses were what made the hospital bearable is absent (SHR-3-06). The AI called her \"frightened and confused\" where she described not knowing what to do (SHR-3-03)."
+],
+[
+"p",
+"It reversed who suggested meeting (SHR-3-10). And it ended on a span of time, \"It's been almost thirty years.\", where she ended by affirming the friendship: \"So some friendships are for life.\" (SHR-3-11)."
 ]
 ];
