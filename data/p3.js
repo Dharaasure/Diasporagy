@@ -1,7 +1,7 @@
 (window.PARTICIPANT_LIST ||= []).push({
  "id": "sujith",
  "number": 3,
- "full_name": "Sujith Kumar Hosdurga",
+ "full_name": "Sujith",
  "identification": "full",
  "card_line": "From Mangalore · in Doha since 2017 · education",
  "portrait": [
