@@ -5,7 +5,7 @@ const TYPES = ['factual', 'emotional', 'relational', 'cultural'];
 const DIRS = ['invented', 'omitted', 'altered'];
 const LABEL = {factual:'Factual', emotional:'Emotional', relational:'Relational', cultural:'Cultural', match:'Match'};
 const ORIGIN = {model:'Introduced by the AI', extraction:'Came from the extracted facts', both:'Set up by the facts, elaborated by the AI'};
-const NAV = [['participants.html','The accounts','participants'],['findings.html','Findings','findings'],['method.html','Method','method'],['about.html','About','about']];
+const NAV = [['participants.html','The accounts','participants'],['report.html','Report','report'],['findings.html','Findings','findings'],['method.html','Method','method'],['about.html','About','about']];
 const page = document.body.dataset.page;
 const app = document.getElementById('app');
 const qs = new URLSearchParams(location.search);
@@ -54,7 +54,7 @@ function chrome() {
   const foot = document.getElementById('foot');
   if (foot) foot.innerHTML = `<div class="wrap"><div class="foot">
     <div><b>Diasporagy</b>${esc(C().tagline || '')}${C().director ? `<p style="margin-top:14px">${esc(C().director)}, ${esc(C().director_role)}</p>` : ''}</div>
-    <div><h4>Read</h4><ul><li><a href="index.html">One moment, told twice</a></li><li><a href="participants.html">The five accounts</a></li><li><a href="findings.html">Findings</a></li></ul></div>
+    <div><h4>Read</h4><ul><li><a href="index.html">One moment, told twice</a></li><li><a href="participants.html">The five accounts</a></li><li><a href="report.html">The report</a></li><li><a href="findings.html">Findings</a></li></ul></div>
     <div><h4>How it was made</h4><ul><li><a href="method.html">Method</a></li><li><a href="method.html#prompt">The fixed prompt</a></li><li><a href="method.html#deviations">Recorded deviations</a></li><li><a href="about.html">About the project</a></li></ul></div>
     </div><div class="foot-base"><span>Participants are named only with their confirmed consent.</span><span>Every count on this site is computed from the annotation data as the page loads.</span></div></div>`;
 }
@@ -427,6 +427,52 @@ function about({P}) {
     <p class="cta"><a class="btn" href="index.html#story">Start with one moment ${arrow}</a><a class="btn ghost" href="method.html">Read the method</a></p></section>`;
 }
 
+/* The report as a research article: numbered sections, abstract, figures linked to their live versions. */
+function report({P, A}) {
+  const R = window.REPORT || [], c = C(); let n1 = 0, n2 = 0, n3 = 0, appx = false, toc = '', body = '';
+  const div = A.annotations.filter(a => a.type !== 'match');
+  for (const [t, s] of R) {
+    if (t === 'h1') {
+      appx = s === 'Appendices'; n2 = 0;
+      if (appx) { body += `<h2 class="a-h1" id="appendices">Appendices</h2>`; toc += `<li><a href="#appendices">Appendices</a></li>`; continue; }
+      if (s === 'Opening') continue;
+      n1++; const id = 's' + n1; body += `<h2 class="a-h1" id="${id}"><span>${n1}</span>${esc(s)}</h2>`; toc += `<li><a href="#${id}"><span>${n1}</span>${esc(s)}</a></li>`;
+    } else if (t === 'h2') {
+      const lab = appx ? s.replace(/^([A-E])\. /, '$1 ') : `${n1 || 1}.${++n2}`; n3 = 0;
+      body += `<h3 class="a-h2" id="s${n1}-${n2}">${appx ? esc(s) : `<span>${lab}</span>${esc(s.replace(/^\d\. /, ''))}`}</h3>`;
+    } else if (t === 'h3') body += `<h4 class="a-h3">${esc(s)}</h4>`;
+    else if (t === 'fig') { const m = s.match(/^Figure (\d)\. (.*)$/); body += `<figure class="a-fig"><div><b>Figure ${m[1]}</b> ${esc(m[2])}</div><a class="btn ghost" href="findings.html#fig-${m[1]}">Open the interactive figure ${arrow}</a></figure>`; }
+    else if (s.startsWith('A. ') || /^You are writing/.test(s)) body += `<p><a href="method.html#prompt">The prompt, in full, is on the Method page.</a></p>`;
+    else body += `<p>${withRefs(s, P, A)}</p>`;
+  }
+  if (!n1) body = body.replace('', '');
+  /* The opening paragraphs sit under section 1 Introduction. */
+  const intro = '<h2 class="a-h1" id="s0"><span>1</span>Introduction</h2>';
+  body = body.replace(/<h2 class="a-h1" id="s(\d+)"><span>(\d+)<\/span>/g, (_, a, b) => `<h2 class="a-h1" id="s${a}"><span>${+b + 1}</span>`);
+  toc = `<li><a href="#s0"><span>1</span>Introduction</a></li>` + toc.replace(/<span>(\d+)<\/span>/g, (_, b) => `<span>${+b + 1}</span>`);
+  const [lead, ...rest] = R.filter(x => x[0] === 'p');
+  app.innerHTML = `<article class="article">
+  <header class="a-head"><p class="eyebrow">Research report · Draft 1 · 2026</p><h1>What gets lost when a machine tells your story</h1>
+    <p class="a-sub">An oral history comparison of five Indian migrants' accounts in Doha and their AI reconstructions</p>
+    <p class="a-auth"><b>${esc(c.director || '')}</b><br>${esc(c.director_role || '')}, Diasporagy</p></header>
+  <div class="a-grid"><aside class="a-toc"><p>Contents</p><ol>${toc}</ol>
+    <dl class="record"><dt>Type</dt><dd>Research report</dd><dt>Status</dt><dd>Draft, under participant review</dd><dt>Data</dt><dd>${P.participants.length} interviews, ${A.annotations.length} public annotations</dd></dl></aside>
+  <div class="a-body">
+    <section class="abstract"><h2>Abstract</h2>
+      <p><b>Background.</b> AI systems are increasingly asked to stand in for people's accounts of their own lives. The usual defence is that they get the facts right and only the voice a little wrong.</p>
+      <p><b>Method.</b> Five Indian migrants in Doha gave open-ended oral history interviews. Fifteen moments, chosen by a rule fixed in advance, were each reduced to five lines of checkable facts and given to an AI system through one fixed prompt. Every point where the AI account departs from the person's words was coded by type (factual, emotional, relational, cultural), direction (invented, omitted, altered) and origin (the model, the extracted facts, or both).</p>
+      <p><b>Results.</b> On the ${A.annotations.length} public points compared, ${div.length} are divergences. Inventions came mostly from the model; omissions came almost entirely from the five-line summary, before the model ran. Numbers, dates and times largely survived; feelings rarely did.</p>
+      <p><b>Conclusion.</b> ${esc(lead ? lead[1] : '')}</p>
+      <p class="kw"><b>Keywords</b> oral history · AI reconstruction · epistemic justice · Indian diaspora · Qatar · testimony · digital determinants of health</p></section>
+    ${intro}${body}
+    <section class="a-end"><h2 class="a-h1">Notes</h2>
+      <p>Counts in the report text include two moments withheld from this site during participant review; the interactive figures on this site cover public material only, so some totals differ. Annotation references link to the passage they describe.</p>
+      <h3 class="a-h2">Ethics</h3><p>Informed consent was obtained from every participant. All five chose to be named and asked to be identified by first name only. Each reviews their material before publication and may withdraw any of it.</p>
+      <h3 class="a-h2">Suggested citation</h3><p class="cite">Suresha, D. (2026). <i>Diasporagy: What gets lost when a machine tells your story</i> [Research report, draft]. Diasporagy.</p></section>
+  </div></div></article>`;
+  if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) setTimeout(() => t.scrollIntoView(), 50); }
+}
+
 /* Researcher-only. Do not publish review.html. */
 function review({P, A}) {
   const KEY = 'diasporagy-grades', g = JSON.parse(localStorage.getItem(KEY) || '{}');
@@ -483,7 +529,7 @@ applyStoredTheme();
 chrome();
 try {
   const d = load();
-  ({home, participants, participant:participantPage, findings, method, about, review})[page](d);
+  ({home, participants, participant:participantPage, findings, method, about, report, review})[page](d);
 } catch (e) {
   app.innerHTML = `<p class="placeholder" style="margin-top:48px">Something went wrong: ${esc(e.message)}. Press F12 and open the Console tab for details.</p>`;
   console.error(e);
