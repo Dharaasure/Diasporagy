@@ -1,9 +1,9 @@
 (window.PARTICIPANT_LIST ||= []).push({
  "id": "p1",
  "number": 1,
- "full_name": "",
- "identification": "pending",
- "card_line": "",
+ "full_name": "Subramanya",
+ "identification": "full",
+ "card_line": "From Udupi district, Karnataka · in Doha since 2007 · construction",
  "portrait": [
   "Like for us, Qatar is a second home. We always say that, karma bhoomi [the land where one's work and duty are performed].",
   "Just as India is important to us, of our two eyes, one eye is India, and the other eye is Qatar."

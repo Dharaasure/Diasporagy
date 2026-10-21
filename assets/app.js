@@ -12,7 +12,8 @@ const qs = new URLSearchParams(location.search);
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt = h => h.replace(/\n{2,}/g, '<br><br>').replace(/\[passage removed\]/g, '<span class="removed">[passage removed]</span>');
-const nameOf = p => p.identification === 'full' ? p.full_name : `Participant ${p.number}`;
+/* First names only, as every participant asked. */
+const nameOf = p => p.identification === 'full' && p.full_name ? p.full_name.trim().split(/\s+/)[0] : `Participant ${p.number}`;
 const findP = (P, id) => P.participants.find(p => p.id === id);
 const findM = (P, a) => { const p = findP(P, a.participant); return p && p.moments.find(m => String(m.n) === String(a.moment)); };
 const isVisible = (P, a) => a.public !== false && (findM(P, a) || {}).site_status === 'public';
@@ -108,6 +109,13 @@ function reveal(sel, after) {
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); after && after(e.target); } }), {threshold: .12});
     els.forEach(s => io.observe(s));
   } catch { els.forEach(s => { s.classList.add('in'); after && after(s); }); }
+}
+
+/* Catalogue record for an interview, in the manner of an oral history accession sheet. */
+function record(p) {
+  const r = (C().interviews || {})[p.number]; if (!r) return '';
+  const f = [['Accession', r.acc], ['Recorded', r.date], ['Language', r.lang], ['Format', r.format], ['Consent', 'Named, first name only']];
+  return `<dl class="record">${f.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`;
 }
 
 /* ---------- pages ---------- */
@@ -223,7 +231,7 @@ function participants({P, A}) {
   <div class="roster">${P.participants.map(p => {
     const n = A.annotations.filter(a => a.participant === p.id).length;
     return `<a class="entry" href="participant.html?id=${esc(p.id)}"><span class="e-num">${String(p.number).padStart(2, '0')}</span>
-      <div><p class="e-name">${esc(nameOf(p))}</p><p class="e-meta">${esc(p.identification === 'full' ? p.card_line : 'Name withheld until consent is confirmed')}</p><p class="e-meta">${n} points compared</p></div>
+      <div><p class="e-name">${esc(nameOf(p))}</p><p class="e-meta">${esc(p.card_line || '')}</p>${record(p)}<p class="e-meta">${n} points compared</p></div>
       <p class="e-quote">“${esc((p.portrait || [])[0] || '')}”</p>
       <ul class="e-moments">${p.moments.map(m => `<li><span class="mn">${m.n}</span>${m.site_status === 'public' ? `<span>${esc(m.title)}</span>` : '<span class="held">Withheld while under review</span>'}</li>`).join('')}</ul></a>`;
   }).join('')}</div>`;
@@ -239,7 +247,7 @@ function participantPage({P, A}) {
   const i = P.participants.indexOf(p), prev = P.participants[i - 1], next = P.participants[i + 1];
 
   let h = `<header class="p-head"><div><p class="p-crumb"><a href="participants.html">The accounts</a> / Participant ${p.number}</p><h1>${esc(nameOf(p))}</h1>
-    ${p.identification === 'full' && p.card_line ? `<p class="e-meta" style="margin-top:14px">${esc(p.card_line)}</p>` : ''}</div>
+    ${p.card_line ? `<p class="e-meta" style="margin-top:14px">${esc(p.card_line)}</p>` : ''}${record(p)}</div>
     <div class="p-portrait">${(p.portrait || []).map(q => `<blockquote>${fmt(esc(q))}</blockquote>`).join('')}${p.portrait_source ? `<p class="source">${esc(p.portrait_source)}</p>` : ''}</div></header>
   <nav class="toc" aria-label="Moments">${p.moments.map(m => `<a href="#moment-${m.n}"${m.site_status !== 'public' ? ' class="held"' : ''}><div class="tn">Moment ${m.n}</div><div class="tt">${m.site_status === 'public' ? esc(m.title) : 'Withheld'}</div><div class="ts">${esc(shortSection(m.section))}</div></a>`).join('')}</nav>
   <div class="legend" role="group" aria-label="Show or hide annotation types"><span class="lab">Show</span>` +
@@ -370,7 +378,15 @@ function method({P, A}) {
 
   ${c.script ? `<section class="section"><div class="section-head"><p class="num">The interview</p><div><h2>One script for every person</h2><p>${esc(c.script.intro)}</p></div></div>
     <ul class="script">${c.script.sections.map(x => `<li${usedP.has(x) ? '' : ' class="x"'}>${esc(x)}</li>`).join('')}</ul>
-    <p class="muted" style="margin-top:12px">Solid outlines mark the sections that moments on this site come from.</p></section>` : ''}
+    <p class="muted" style="margin-top:12px">Solid outlines mark the sections that moments on this site come from.</p>
+    ${c.script.adapted ? `<p class="protect">${esc(c.script.adapted)}</p>` : ''}
+    ${c.script.boundary ? `<div class="rules" style="margin-top:20px">${c.script.boundary.map(r => `<div><b>${esc(r.n)}</b><p>${esc(r.text)}</p></div>`).join('')}</div>` : ''}</section>
+  ${c.spec ? `<section class="section" id="spec"><div class="section-head"><p class="num">Technical specification</p><div><h2>The pipeline as a data model</h2><p>${esc(c.spec.intro)}</p></div></div>
+    <div class="table-scroll"><table><thead><tr><th>Stage</th><th>Input</th><th>Operation</th><th>Output, and what is logged</th></tr></thead><tbody>${c.spec.rows.map(r => `<tr>${r.map(x => `<td>${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+    <h3 style="margin-top:36px">Annotation record</h3><div class="table-scroll"><table><thead><tr><th>Field</th><th>Values</th><th>Meaning</th></tr></thead><tbody>${c.spec.fields.map(r => `<tr><td><code>${esc(r[0])}</code></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table></div>
+    <p class="muted" style="margin-top:14px">${esc(c.spec.validity)}</p></section>` : ''}
+  ${c.consent ? `<section class="section"><div class="section-head"><p class="num">Consent</p><div><h2>What each participant agreed to</h2></div></div>
+    <ol class="ledger consent">${c.consent.map(t => `<li><span>${esc(t)}</span></li>`).join('')}</ol></section>` : ''}` : ''}
 
   <section class="section" id="prompt"><div class="section-head"><p class="num">The fixed prompt</p><div><h2>The same words, every time</h2>
     <p>Only the five fact fields change between runs. Personal names are stripped from them; hospitals, organisations and places are kept where the person named them.</p></div></div>

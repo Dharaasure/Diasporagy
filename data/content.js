@@ -1,6 +1,40 @@
 /* Editorial text for the site: the project description, the ten-step method and the selection rule.
    Kept apart from project.js because the review page's "Export public-safe data files" button rewrites project.js and p1.js to p5.js, never this file. */
 window.CONTENT = {
+ "interviews": {
+  "1": {"acc": "DSP-OH-2026-01", "date": "25 July 2026", "lang": "English, with Kannada and Arabic", "format": "Audio, transcribed"},
+  "2": {"acc": "DSP-OH-2026-02", "date": "2026", "lang": "English, with Malayalam and Hindi", "format": "Audio, transcript only"},
+  "3": {"acc": "DSP-OH-2026-03", "date": "29 August 2026", "lang": "English, with Kannada and Tulu", "format": "Audio, three parts, about 80 minutes"},
+  "4": {"acc": "DSP-OH-2026-04", "date": "2026", "lang": "English, with Konkani", "format": "Audio, transcribed"},
+  "5": {"acc": "DSP-OH-2026-05", "date": "20 October 2026", "lang": "English, with Hindi, Malayalam and Marathi", "format": "Audio, transcribed"}
+ },
+ "consent": [
+  "One audio-recorded conversation of about 60 to 90 minutes, in the language the participant is most comfortable in.",
+  "Facts extracted from the account are entered into an AI system through one fixed, unedited prompt; the model and date are to be logged for each case.",
+  "Each participant chose whether to be named or anonymous, and could change that choice at any time before publication. All five chose to be named; the site uses first names only.",
+  "Nothing is sold, used for advertising, used to train an AI model beyond generating the one narrative, or shared outside the project without separate permission.",
+  "Participation is voluntary; any question can be skipped and the interview stopped at any time, without explanation.",
+  "Material can be withdrawn at any time before publication, and removal will be attempted on request after it. Each participant may review the AI version and the annotations first."
+ ],
+ "spec": {
+  "intro": "Each moment passes through the same five stages. Every stage has a fixed input and output, so any divergence can be traced to the stage where it was introduced.",
+  "rows": [
+   ["1 · Elicitation", "Semi-structured interview, fixed section order", "Open questions, then standard probes (“Tell me more about that”) until an answer becomes a specific, tellable moment", "Audio and verbatim transcript; candidate moments flagged “MOMENT” in real time, not chosen afterwards"],
+   ["2 · Selection", "Transcript, section headings", "Deterministic rule: one moment per slot, with ordered fallbacks", "Transcript excerpt; any fallback or deviation recorded"],
+   ["3 · Extraction", "Excerpt", "Reduction to five fields (Who, The moment, Where and when, What was said or thought, What it meant); personal names stripped, places and institutions kept", "Five-line fact record, the only input the model sees"],
+   ["4 · Generation", "Fact record", "One fixed prompt, 150 to 200 words, first person, fresh context per run", "AI account; model and date logged per run"],
+   ["5 · Comparison", "Excerpt and AI account", "Span-level alignment: each annotation links a span in one text to a span, or to nothing, in the other", "Typed annotation record (below)"]
+  ],
+  "fields": [
+   ["ai_span", "verbatim substring, or none", "Where in the AI account the point sits; none marks an omission"],
+   ["transcript_span", "verbatim substring, or none", "The person's corresponding words; none marks an invention"],
+   ["type", "factual · emotional · relational · cultural · match", "What kind of thing diverged, or that it matched"],
+   ["direction", "invented · omitted · altered", "What the divergence did"],
+   ["origin", "model · extraction · both", "Where it began: in the AI, in the five-line summary, or set up by one and elaborated by the other (added in the amended scheme)"],
+   ["note", "free text", "The researcher's reading of the point"]
+  ],
+  "validity": "Spans are checked automatically against both texts on every build. All figures are computed in the browser from these records, so no published number can drift from the annotations. Limits: one run per moment, so run-to-run variance is not measured; the first annotation pass was made by an AI and reviewed by the researcher, so it is not an independent second coder."
+ },
  "director": "Dharaa Suresha",
  "director_role": "Founder and Director",
  "tagline": "An independent oral history project testing where AI reconstruction departs from lived experience.",
@@ -40,10 +74,12 @@ window.CONTENT = {
  },
  "script": {
   "intro": "Every interview follows the same script: a short background section, then six sections, closing with reflective questions on what a summary might miss. Each section offers a few question options rather than a fixed sequence. Inherited knowledge has no section of its own; it is drawn out wherever it surfaces.",
+  "adapted": "The script was a guide, not a questionnaire. Each section offers several questions, and in each interview the order, wording and follow-ups were adapted to the person: their personality, how much they wanted to say, and where their answers led. The selection rule for moments stayed fixed throughout.",
+  "boundary": [{"n": "Story sections", "text": "Getting Settled to Distance and Home ask for specific, tellable moments. Only these are ever extracted for the AI."}, {"n": "What gets left out", "text": "The closing questions stay reflective on purpose: they ask the person to think about the project's own question, and go to the report, never into the pipeline."}, {"n": "Moment flags", "text": "A story was marked as a candidate moment while it was being told, so the choice could not be made later by listening back for the best one."}],
   "sections": ["Background", "Getting Settled", "A Day You Won't Forget", "Daily Life", "Community", "Language", "Distance and Home", "What a summary would miss"]
  },
  "ethics": [
-  "A participant is named only where they have confirmed that they want to be. Everyone else appears by number.",
+  "All five participants consented to be named. At their request, only first names are used.",
   "Each participant sees both versions of their own material, and everything written about them, before anything is public. Any of it can be flagged or withdrawn, for any reason.",
   "Moments under review are withheld from this site, and are left out of every count shown here."
  ]

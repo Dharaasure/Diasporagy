@@ -478,3 +478,11 @@ path.cl{fill:none;stroke-width:1.5;opacity:.55}path.cl.t-match{stroke:var(--kept
 @media(max-width:640px){.v-conn{padding:16px 12px}}
 
 @media print{header.site,footer.site-foot,.legend,.views,.theme-btn{display:none}body{background:#fff}body::before{display:none}.js-anim .step:not(.in) .step-main{opacity:1;transform:none}}
+
+/* accession record */
+.record{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:18px 0 0;padding:12px 14px;border:1px solid var(--rule);background:var(--paper-2);font:12px/1.5 var(--mono);max-width:28rem}
+.record dt{color:var(--faint);text-transform:uppercase;letter-spacing:.08em;font-size:10.5px;padding-top:1px}.record dd{margin:0;color:var(--ink-2)}
+code{font:12.5px var(--mono);background:var(--paper-2);padding:1px 5px}
+/* oral-history texture: transcript speech set like a typed interview leaf with a margin rule */
+.panel-human{background-image:linear-gradient(90deg,transparent 14px,color-mix(in srgb,var(--factual) 22%,transparent) 14px 15px,transparent 15px)}
+.panel-label{font-family:var(--mono)}

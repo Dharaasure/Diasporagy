@@ -1,9 +1,9 @@
 (window.PARTICIPANT_LIST ||= []).push({
  "id": "p2",
  "number": 2,
- "full_name": "",
- "identification": "pending",
- "card_line": "",
+ "full_name": "Mini",
+ "identification": "full",
+ "card_line": "From Kerala · in Qatar since 2010 · nursing and hospital administration",
  "portrait": [
   "Here there are more associations, more get-togethers. In India, it's mostly relatives, but here, everyone becomes your friend, and you're invited to everything.",
   "Not me, I never have to prepare, because I'm always invited."
