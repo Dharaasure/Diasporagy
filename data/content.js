@@ -52,6 +52,7 @@ window.CONTENT = {
   {"name": "Field notebook", "text": "The handwritten, session-by-session record kept alongside each interview. Not published in full, but quoted in the report where it shapes a finding."},
   {"name": "This site", "text": "The transcript, the AI version and the annotations for each participant, released after private delivery."}
  ],
+ "audio_note": "Each recording is the passage shown, cut from the full interview and joined where the transcript skips with […]. Lightly cleaned: low rumble removed, mild noise reduction, loudness evened across clips. Nothing within a passage is edited, and removed passages are cut from the audio too.",
  "steps": [
   {"name": "Recruit", "text": "Five Indian migrant adults in Doha, reached through three or four independent community channels rather than a single point of contact, with informed consent."},
   {"name": "Interview", "text": "Open-ended and audio recorded, in the participant's preferred language, following the fixed interview script. When something inherited or handed down comes up, it is followed with the script's standard prompts, such as “Tell me more about that.” This knowledge exists only where the participant carries it, which is exactly what a system trained on published material cannot reconstruct."},

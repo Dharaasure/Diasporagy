@@ -378,6 +378,7 @@ function method({P, A}) {
     <p class="protect">${esc(c.selection.protected)}</p></section>` : ''}
 
   ${c.script ? `<section class="section"><div class="section-head"><p class="num">The interview</p><div><h2>One script for every person</h2><p>${esc(c.script.intro)}</p></div></div>
+    ${c.audio_note ? `<p class="protect">${esc(c.audio_note)}</p>` : ''}
     <ul class="script">${c.script.sections.map(x => `<li${usedP.has(x) ? '' : ' class="x"'}>${esc(x)}</li>`).join('')}</ul>
     <p class="muted" style="margin-top:12px">Solid outlines mark the sections that moments on this site come from.</p>
     ${c.script.adapted ? `<p class="protect">${esc(c.script.adapted)}</p>` : ''}
