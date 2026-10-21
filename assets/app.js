@@ -248,7 +248,7 @@ function home({P, A}) {
 }
 
 function participants({P, A}) {
-  app.innerHTML = `<header class="page-head"><p class="eyebrow">The accounts</p><h1>Five people, fifteen moments</h1>
+  app.innerHTML = `<header class="page-head"><p class="tc"><b>00</b> · The accounts</p><h1>Five people, fifteen moments</h1>
     <p class="lede">Each moment appears twice: in the person's words, and as an AI retold it. First names are used with each person's consent.</p></header>
   <div class="roster">${P.participants.map(p => {
     const n = A.annotations.filter(a => a.participant === p.id).length;
@@ -352,7 +352,7 @@ function findings({P, A}) {
   const stat = (v, l) => `<div class="stat"><div class="v">${v}</div><div class="l">${l}</div></div>`;
   const figs = typeof FIG !== 'undefined' ? FIG.render(P, A, nameOf) : '';
   const list = typeof FIG !== 'undefined' ? FIG.drawn() : [];
-  app.innerHTML = `<header class="page-head"><p class="eyebrow">Findings</p><h1>The machine kept the facts and lost what they meant</h1>
+  app.innerHTML = `<header class="page-head"><p class="tc"><b>00</b> · Findings</p><h1>The machine kept the facts and lost what they meant</h1>
     <p class="lede">Each moment was told once by the person and once by an AI working from a five-line summary. Every point where the two part was marked and coded. These are the patterns that hold across all five people.</p></header>
   <div class="stat-row">${stat(A.annotations.length, 'points compared, line by line')}${stat(div.length, 'divergences: places where the AI version departs from the person')}${stat(emo, 'of them about feeling, the largest single type')}${stat(fromExt, 'began in the researcher’s own summary, before the AI ran')}</div>
   <p class="muted f-note">${A.annotations.some(a => !isVisible(P, a)) ? 'Counts include material withheld from the public site.' : 'Counts cover all the material on this site.'} Every figure below is computed from the annotation data as the page loads.</p>
@@ -404,7 +404,7 @@ function method({P, A}) {
   const s = A.schemes, c = C(), pr = P.project;
   const prompt = esc(pr.prompt).replace(/\[([^\]]+)\]/g, '<span class="slot">[$1]</span>');
   const usedP = new Set(P.participants.flatMap(p => p.moments.map(m => shortSection(m.section))));
-  app.innerHTML = `<header class="page-head"><p class="eyebrow">Method</p><h1>How each moment was told twice</h1>
+  app.innerHTML = `<header class="page-head"><p class="tc"><b>00</b> · Method</p><h1>How each moment was told twice</h1>
     <p class="lede">${esc(pr.method_summary)}</p><p class="muted">${esc(A.disclosure)}</p></header>
 
   <section class="section"><div class="section-head"><p class="num">The design</p><div><h2>Ten steps, fixed in advance</h2>
@@ -454,12 +454,12 @@ function method({P, A}) {
 
 function about({P}) {
   const c = C(), pr = P.project;
-  app.innerHTML = `<header class="page-head"><p class="eyebrow">About</p><h1>${esc(pr.title)}</h1><p class="lede">${esc(pr.subtitle)}</p>
+  app.innerHTML = `<header class="page-head"><p class="tc"><b>00</b> · About</p><h1>${esc(pr.title)}</h1><p class="lede">${esc(pr.subtitle)}</p>
     ${c.director ? `<div class="byline"><span class="mono">${esc(c.director[0])}</span><span><b>${esc(c.director)}</b>${esc(c.director_role)}</span></div>` : ''}</header>
   <section class="section two-col"><div class="prose">${(c.overview || []).map(t => `<p class="lede" style="font-size:1.2rem">${esc(t)}</p>`).join('')}</div>
     <div class="prose">${(c.lineage || []).map(t => `<p>${esc(t)}</p>`).join('')}</div></section>
-  <section class="section question"><p class="num">The question</p>
-    <div><blockquote>${esc(pr.core_question)}</blockquote></div></section>
+  <section class="section bleed white qband"><span class="wm-quote" aria-hidden="true">“</span><p class="tc"><b>02</b> · The question</p>
+    <blockquote class="big-q">${esc(pr.core_question)}</blockquote></section>
   ${(c.outputs || []).length ? `<section class="section"><div class="section-head"><p class="num">Outputs</p><div><h2>Outputs</h2></div></div>
     <div class="outputs">${c.outputs.map(o => `<div><h3>${esc(o.name)}</h3><p>${esc(o.text)}</p></div>`).join('')}</div></section>` : ''}
   <section class="section"><div class="section-head"><p class="num">Consent and review</p><div><h2>Reviewed by the people in it</h2></div></div>
