@@ -1,10 +1,11 @@
 'use strict';
-/* Diasporagy site script. It reads window.PROJECT and window.PARTICIPANT_LIST from data/project.js and data/p1.js to p5.js, so the site opens by double-click. */
+/* Diasporagy site script. It reads window.PROJECT and window.PARTICIPANT_LIST from data/project.js and data/p1.js to p5.js,
+   and the editorial text from data/content.js, so the site opens by double-click. */
 const TYPES = ['factual', 'emotional', 'relational', 'cultural'];
 const DIRS = ['invented', 'omitted', 'altered'];
 const LABEL = {factual:'Factual', emotional:'Emotional', relational:'Relational', cultural:'Cultural', match:'Match'};
 const ORIGIN = {model:'Introduced by the AI', extraction:'Came from the extracted facts', both:'Set up by the facts, elaborated by the AI'};
-const NAV = [['index.html','Home','home'],['participants.html','Participants','participants'],['findings.html','Findings','findings'],['method.html','Method','method']];
+const NAV = [['participants.html','The accounts','participants'],['findings.html','Findings','findings'],['method.html','Method','method'],['about.html','About','about']];
 const page = document.body.dataset.page;
 const app = document.getElementById('app');
 const qs = new URLSearchParams(location.search);
@@ -15,6 +16,12 @@ const nameOf = p => p.identification === 'full' ? p.full_name : `Participant ${p
 const findP = (P, id) => P.participants.find(p => p.id === id);
 const findM = (P, a) => { const p = findP(P, a.participant); return p && p.moments.find(m => String(m.n) === String(a.moment)); };
 const isVisible = (P, a) => a.public !== false && (findM(P, a) || {}).site_status === 'public';
+const words = s => s ? s.trim().split(/\s+/).length : 0;
+const pct = (a, b) => b ? Math.round(100 * a / b) : 0;
+const arrow = '<span class="arr" aria-hidden="true">→</span>';
+const C = () => window.CONTENT || {};
+/* Section names in the data carry notes in brackets ("Getting Settled (fallback: …)"); the short form is for labels. */
+const shortSection = s => String(s || '').replace(/\s*\(.*\)\s*$/, '');
 
 function load() {
   const proj = window.PROJECT, list = window.PARTICIPANT_LIST;
@@ -24,9 +31,44 @@ function load() {
   return {P: {...proj, participants}, A: {disclosure: proj.disclosure, schemes: proj.schemes, annotations}};
 }
 
-function nav() {
-  document.getElementById('nav').innerHTML = '<a class="brand" href="index.html">Diasporagy</a>' +
-    NAV.map(([h, l, k]) => `<a href="${h}"${(k === page || (page === 'participant' && k === 'participants')) ? ' aria-current="page"' : ''}>${l}</a>`).join('');
+/* ---------- theme ---------- */
+const THEME_KEY = 'diasporagy-theme';
+function applyStoredTheme() { try { const t = localStorage.getItem(THEME_KEY); if (t) document.documentElement.dataset.theme = t; } catch {} }
+function isDark() { const t = document.documentElement.dataset.theme; return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
+function toggleTheme() {
+  const t = isDark() ? 'light' : 'dark'; document.documentElement.dataset.theme = t;
+  try { localStorage.setItem(THEME_KEY, t); } catch {}
+  if (typeof FIG !== 'undefined' && window.__A) FIG.drawConnectors(window.__A);
+}
+const ICON_SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+const ICON_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>';
+
+function chrome() {
+  const here = page === 'participant' ? 'participants' : page;
+  const nav = document.getElementById('nav');
+  nav.innerHTML = `<a class="brand" href="index.html"><b>Diasporagy</b><span>An oral history project</span></a>` +
+    NAV.map(([h, l, k]) => `<a class="nl" href="${h}"${k === here ? ' aria-current="page"' : ''}>${l}</a>`).join('') +
+    `<button class="theme-btn" type="button" aria-label="Switch between light and dark">${isDark() ? ICON_SUN : ICON_MOON}</button>`;
+  nav.querySelector('.theme-btn').onclick = e => { toggleTheme(); e.currentTarget.innerHTML = isDark() ? ICON_SUN : ICON_MOON; };
+  const foot = document.getElementById('foot');
+  if (foot) foot.innerHTML = `<div class="wrap"><div class="foot">
+    <div><b>Diasporagy</b>${esc(C().tagline || '')}${C().director ? `<p style="margin-top:14px">${esc(C().director)}, ${esc(C().director_role)}</p>` : ''}</div>
+    <div><h4>Read</h4><ul><li><a href="index.html">One moment, told twice</a></li><li><a href="participants.html">The five accounts</a></li><li><a href="findings.html">Findings</a></li></ul></div>
+    <div><h4>How it was made</h4><ul><li><a href="method.html">Method</a></li><li><a href="method.html#prompt">The fixed prompt</a></li><li><a href="method.html#deviations">Recorded deviations</a></li><li><a href="about.html">About the project</a></li></ul></div>
+    </div><div class="foot-base"><span>Participants are named only with their confirmed consent.</span><span>Every count on this site is computed from the annotation data as the page loads.</span></div></div>`;
+}
+
+/* Turns "(SUJ-1-09, SHR-2-05)" into links that name the participant by number and moment, and "(Figure 2)" into a link.
+   The ids themselves are not shown: their prefixes come from participants' names. */
+function withRefs(text, P, A) {
+  const byId = Object.fromEntries(A.annotations.map(a => [a.id, a]));
+  return esc(text)
+    .replace(/\s*\(((?:[A-Z]{3}-\d-\d{2}(?:,\s*)?)+)\)/g, (_, ids) => ' ' + ids.split(/,\s*/).map(id => {
+      const a = byId[id]; if (!a || !isVisible(P, a)) return '';
+      const p = findP(P, a.participant);
+      return `<a class="ref" href="participant.html?id=${esc(p.id)}#${esc(id)}" title="${esc(nameOf(p))}, Moment ${a.moment}">P${p.number} · ${a.moment}</a>`;
+    }).join(' '))
+    .replace(/\(Figure (\d)\)/g, (_, n) => `(<a href="findings.html#fig-${n}">Figure ${n}</a>)`);
 }
 
 /* Wraps non-overlapping ai_spans in <mark>. Spans that are not found, or that overlap an earlier one, come back in `unplaced`. */
@@ -57,81 +99,177 @@ function transcriptHTML(text, span) {
   return fmt(esc(text));
 }
 
+/* The five fact lines, with each field name set apart like a filled-in form. */
+const factsHTML = f => f.split('\n').map(l => { const m = l.match(/^-\s*([^:]+):\s*(.*)$/); return m ? `<p><span class="fk">${esc(m[1])}:</span> ${esc(m[2])}</p>` : `<p>${esc(l)}</p>`; }).join('');
+
+function reveal(sel, after) {
+  const els = app.querySelectorAll(sel);
+  try {
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); after && after(e.target); } }), {threshold: .12});
+    els.forEach(s => io.observe(s));
+  } catch { els.forEach(s => { s.classList.add('in'); after && after(s); }); }
+}
+
 /* ---------- pages ---------- */
 
-/* The front page walks a first-time visitor through one moment in three stages: the person, the summary, the machine. */
-const STORY = {number: 1, moment: 1, personLine: 'SUB-1-12', aiLines: ['SUB-1-02', 'SUB-1-04', 'SUB-1-11']};
+/* The front page opens on one exchanged sentence, then walks a first-time visitor through that moment in four stages:
+   the person, the summary, the machine, and the two joined. */
+const STORY = {number: 1, moment: 1, personLine: 'SUB-1-12', aiLine: 'SUB-1-04', aiLines: ['SUB-1-02', 'SUB-1-04', 'SUB-1-11']};
 function home({P, A}) {
   const pr = P.project, p = P.participants.find(x => x.number === STORY.number), m = p && p.moments.find(x => x.n === STORY.moment);
   const byId = Object.fromEntries(A.annotations.map(a => [a.id, a]));
   const hi = (text, spans) => { let h = esc(text); for (const s of spans) if (s && s !== 'none') h = h.replace(esc(s), `<mark class="story-hi">${esc(s)}</mark>`); return h.replace(/\n{2,}/g, '<br><br>'); };
-  const div = A.annotations.filter(a => a.type !== 'match'), emo = div.filter(a => a.type === 'emotional').length, ext = div.filter(a => a.origin !== 'model').length;
+  const pub = P.participants.flatMap(x => x.moments.filter(mm => mm.site_status === 'public' && mm.ai_output));
+  const div = A.annotations.filter(a => a.type !== 'match');
+  const inv = div.filter(a => a.direction === 'invented'), om = div.filter(a => a.direction === 'omitted');
+  const K = (window.MEASURES || {}).content_kind || {};
+  const kindPct = k => { const xs = A.annotations.filter(a => K[a.id] === k); return pct(xs.filter(a => a.type === 'match').length, xs.length); };
+  const avg = f => Math.round(pub.reduce((s, x) => s + words(f(x)), 0) / Math.max(1, pub.length));
+  const aT = avg(x => x.transcript_excerpt), aF = avg(x => x.facts), aA = avg(x => x.ai_output), aMax = Math.max(aT, aF, aA);
+
+  /* The exhibit: his sentence, and the sentence the AI wrote where his would have been. */
+  const human = byId[STORY.personLine], machine = byId[STORY.aiLine];
+  let machineText = machine ? machine.ai_span : '';
+  /* Start one sentence earlier than the annotated span, so the AI's "No family, no aunties, nobody." leads into it. */
+  if (machine && m) {
+    const i = m.ai_output.indexOf(machine.ai_span), end = (t, k) => Math.max(t.lastIndexOf('? ', k), t.lastIndexOf('. ', k));
+    const j1 = end(m.ai_output, i - 2), j2 = j1 > 0 ? end(m.ai_output, j1 - 1) : -1;
+    if (i > 0 && j2 > 0) machineText = m.ai_output.slice(j2 + 2, i + machine.ai_span.length).trim();
+  }
+  const exhibit = human && machine ? `<figure class="exhibit" aria-label="One sentence, exchanged">
+      <div class="ex-card ex-human panel-human"><span class="panel-label">What he said</span><p>“${esc(human.transcript_span)}”</p></div>
+      <div class="ex-bridge"><svg viewBox="0 0 16 46" aria-hidden="true"><path d="M8 0v40M2 34l6 7 6-7" fill="none" stroke="currentColor" stroke-width="1.4"/></svg><span>Reduced to five lines of facts.<br>Given to an AI with one fixed prompt.</span></div>
+      <div class="ex-card ex-machine panel-machine"><span class="panel-label">What the AI wrote</span><p>${esc(machineText)}</p></div>
+      <p class="ex-lacuna">His sentence was not among the five lines. The AI turned the absence of family into the source of fear.</p>
+      <figcaption>${esc(nameOf(p))}, on the birth of his daughter in Doha. <a href="#story">Read the whole moment below</a>.</figcaption></figure>` : '';
+
   const story = m && m.ai_output && m.facts ? `
-  <section class="step"><p class="step-n">1 · What he said</p><h2>A father describes the birth of his daughter in Doha.</h2>
-    <div class="story-card transcript">${hi(m.transcript_excerpt, [byId[STORY.personLine]?.transcript_span])}</div>
-    <p class="step-note">The line that matters most to him: with his parents far away in India, he never felt their absence.</p></section>
-  <section class="step"><p class="step-n">2 · What the AI was given</p><h2>The researcher reduced it to five lines of facts.</h2>
-    <div class="story-card facts"><p class="kicker">Facts</p>${m.facts.split('\n').map(l => `<p>${esc(l)}</p>`).join('')}</div>
-    <p class="step-note">Every line is accurate. His sentence about his parents is not among them.</p></section>
-  <section class="step"><p class="step-n">3 · What the AI wrote</p><h2>From those five lines, it wrote this in his voice.</h2>
-    <div class="story-card ai">${hi(m.ai_output, STORY.aiLines.map(id => byId[id]?.ai_span))}</div>
-    <p class="step-note">It reads well. The houseful of relatives and the speech to his daughter are invented, and his worry has become months of fear.</p></section>
-  <section class="step wide"><p class="step-n">4 · Where they part</p><h2>Line by line, the two accounts joined.</h2>
-    ${typeof FIG !== 'undefined' ? FIG.pairLegend() + FIG.pairBlock(p, m, A.annotations.filter(a => a.participant === p.id && a.moment === m.n && a.public !== false)) : ''}</section>` : '';
-  app.innerHTML = `<header class="hero"><p class="kicker">An oral history project</p><h1>${esc(pr.subtitle)}</h1>
-  <p class="lede">${esc(pr.core_question)}</p>${pr.anchoring_sentence ? `<p class="lede"><em>${esc(pr.anchoring_sentence)}</em></p>` : ''}
-  <p class="prose">${esc(pr.summary)}</p><p class="scroll-cue">One moment, told twice ↓</p></header>
-  ${story}
-  <section class="step wide"><p class="step-n">5 · Across all fifteen moments</p><h2>The same patterns run through all five accounts.</h2>
-    <div class="stat-row"><div class="stat"><div class="v">${div.length}</div><div class="l">places where the AI version departs from the person</div></div>
-    <div class="stat"><div class="v">${emo}</div><div class="l">of them about feeling, the largest kind</div></div>
-    <div class="stat"><div class="v">${ext}</div><div class="l">began in the summary, before the AI ran</div></div></div>
-    <p class="cta"><a class="btn" href="findings.html">See the findings</a> <a class="btn ghost" href="participants.html">Read the five accounts</a> <a class="btn ghost" href="method.html">How it was done</a></p></section>`;
-  if (typeof FIG !== 'undefined') FIG.wireConnectors(A);
-  try {
-    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); if (e.target.querySelector('.conn')) FIG.drawConnectors(A); } }), {threshold: .15});
-    app.querySelectorAll('.step').forEach(s => io.observe(s));
-  } catch { app.querySelectorAll('.step').forEach(s => s.classList.add('in')); }
+  <div class="story">
+  <section class="step"><div class="step-side"><p class="step-n">01 · The person</p><h3>A father describes the birth of his daughter in Doha.</h3></div>
+    <div class="step-main"><div class="story-card panel-human voice-human"><span class="panel-label">In his words</span>${hi(m.transcript_excerpt, [byId[STORY.personLine]?.transcript_span])}</div>
+    <p class="step-note">The line that matters most to him: <b>with his parents far away in India, he never felt their absence.</b></p></div></section>
+  <section class="step"><div class="step-side"><p class="step-n">02 · The summary</p><h3>The researcher reduced it to five lines of facts.</h3></div>
+    <div class="step-main"><div class="story-card facts panel-facts"><span class="panel-label">The facts the AI was given</span>${factsHTML(m.facts)}<span class="lacuna-slot">Not here: “${esc(byId[STORY.personLine]?.transcript_span || '')}”</span></div>
+    <p class="step-note">Every line is accurate. <b>His sentence about his parents is not among them.</b> Before the machine saw anything, the summary had already decided what it could not know.</p></div></section>
+  <section class="step"><div class="step-side"><p class="step-n">03 · The machine</p><h3>From those five lines, it wrote this in his voice.</h3></div>
+    <div class="step-main"><div class="story-card panel-machine voice-machine"><span class="panel-label">The AI version</span>${hi(m.ai_output, STORY.aiLines.map(id => byId[id]?.ai_span))}</div>
+    <p class="step-note">It reads well. <b>The houseful of relatives and the speech to his daughter are invented, and his worry has become months of fear.</b></p></div></section>
+  <section class="step wide"><div class="step-side"><p class="step-n">04 · Where they part</p><h3>Line by line, the two accounts joined.</h3>
+    <p class="step-note">Hover or tap any highlight. A line joins it to its partner; a double underline means it has none.</p></div>
+    <div class="step-main">${typeof FIG !== 'undefined' ? '<div class="v-conn">' + FIG.pairLegend() + FIG.pairBlock(p, m, A.annotations.filter(a => a.participant === p.id && a.moment === m.n && a.public !== false)) + '</div>' : ''}</div></section>
+  </div>` : '';
+
+  const people = P.participants.map(x => {
+    const q = (x.portrait || [])[0] || '', short = q.length > 150 ? q.slice(0, q.lastIndexOf(' ', 146)) + '…' : q;
+    const shown = x.moments.filter(mm => mm.site_status === 'public').length;
+    return `<a class="person" href="participant.html?id=${esc(x.id)}"><span class="pn">${String(x.number).padStart(2, '0')} · ${shown} moment${shown === 1 ? '' : 's'}</span><span class="who">${esc(nameOf(x))}</span>${short ? `<q>${esc(short)}</q>` : '<span></span>'}<span class="go">Read the account ${arrow}</span></a>`;
+  }).join('');
+  const steps = [
+    ['Interview', 'Five Indian migrants in Doha, in the language they chose.'],
+    ['Select', 'Three moments each, fixed in advance by a rule.'],
+    ['Reduce', 'Each moment stripped to five lines of checkable facts.', 'loss'],
+    ['Generate', 'One fixed prompt, the same for every person.', 'm'],
+    ['Compare', 'The two accounts set side by side, every divergence marked.'],
+    ['Return', 'Each person reviews their own material before anything is public.']];
+
+  app.innerHTML = `
+  <header class="hero">
+    <div><p class="eyebrow">An oral history project · Doha</p>
+      <h1>What gets lost when a machine <em>tells your story</em></h1>
+      <p class="lede">${esc(pr.summary)}</p>
+      <div class="hero-meta"><span>${P.participants.length} people</span><span>${pub.length} moments</span><span>1 fixed prompt</span><span>${A.annotations.length} points compared</span></div></div>
+    ${exhibit}
+  </header>
+
+  <section class="section question"><p class="num">The question</p>
+    <div><blockquote>${esc(pr.core_question)}</blockquote>${(C().lineage || []).slice(0, 1).map(t => `<p class="q-body">${esc(t)}</p>`).join('')}</div></section>
+
+  <section class="section"><div class="section-head"><p class="num">The process</p><div><h2>How a life becomes five lines, and five lines become a story</h2>
+    <p>The same steps for every person, fixed before any interview took place, so that nothing could be chosen afterwards for how well it turned out.</p></div></div>
+    <ol class="pipeline">${steps.map(([b, d, c], i) => `<li${c ? ` class="${c}"` : ''}><span class="pn">${String(i + 1).padStart(2, '0')}</span><b>${b}</b><span class="d">${d}</span></li>`).join('')}</ol>
+    <div class="compress" role="img" aria-label="Average words per moment: ${aT} in the person's words, ${aF} in the facts, ${aA} in the AI version">
+      ${[['Their words', aT, 'b-h'], ['The five lines of facts', aF, 'b-f'], ['The AI version', aA, 'b-a']].map(([l, v, c]) => `<div class="row"><span class="lab">${l}</span><span class="bar ${c}" style="width:${100 * v / aMax}%"></span><span class="n">${v}</span></div>`).join('')}</div>
+    <p class="compress-note">Average words per moment across the ${pub.length} moments on this site. The person's words are the excerpt shown, already shortened. The machine wrote more than it was given: what it added did not come from the person.</p>
+    <p class="cta"><a class="btn ghost" href="method.html">The full method ${arrow}</a></p></section>
+
+  <section class="section" id="story"><div class="section-head"><p class="num">One moment, told twice</p><div><h2>The birth at Sidra</h2>
+    <p>Follow one moment through every stage: what he said, what the AI was given, what it wrote, and where the two part.</p></div></div>
+    ${story}</section>
+
+  <section class="section"><div class="section-head"><p class="num">Across every moment</p><div><h2>The same patterns run through all five accounts</h2>
+    <p>${div.length} places where the AI version departs from the person, each traced to where it began.</p></div></div>
+    <div class="claims">
+      <div class="claim"><div class="v">${inv.filter(a => a.origin === 'model').length}<small>of ${inv.length}</small></div><h3>inventions came from the AI</h3><p>Relatives, speeches, fears and endings that no one described. The machine fills silence with plausible detail.</p></div>
+      <div class="claim"><div class="v">${om.filter(a => a.origin === 'extraction').length}<small>of ${om.length}</small></div><h3>omissions began in the summary</h3><p>What went missing was mostly gone before the AI ran. The five-line summary is itself a reconstruction.</p></div>
+      <div class="claim"><div class="v">${kindPct('F')}<small>%</small></div><h3>of feelings came through intact</h3><p>Against ${kindPct('N')}% of numbers, dates and times. The facts largely survive; what the person made of them does not.</p></div>
+    </div>
+    <p class="cta"><a class="btn" href="findings.html">See all seven figures ${arrow}</a></p></section>
+
+  <section class="section"><div class="section-head"><p class="num">The accounts</p><div><h2>Five people, in their own words</h2>
+    <p>${esc(pr.participants_intro)}</p></div></div>
+    <div class="people">${people}</div></section>
+
+  <section class="section"><div class="section-head"><p class="num">Consent and review</p><div><h2>Published in two stages</h2>
+    <p>The people in this project see everything written about them first.</p></div></div>
+    <div class="ethics">${(C().ethics || []).map((t, i) => `<div><span class="i">${String(i + 1).padStart(2, '0')}</span><p>${esc(t)}</p></div>`).join('')}</div></section>`;
+
+  if (typeof FIG !== 'undefined') { window.__A = A; FIG.wireConnectors(A); }
+  reveal('.step', s => { if (s.querySelector('.conn') && typeof FIG !== 'undefined') FIG.drawConnectors(A); });
 }
 
-function participants({P}) {
-  app.innerHTML = `<h1>Participants</h1><p class="prose">${esc(P.project.participants_intro)}</p><div class="cards">` +
-    P.participants.map(p => `<a class="card" href="participant.html?id=${esc(p.id)}"><p class="kicker">Participant ${p.number}</p>
-      <div class="name">${esc(nameOf(p))}</div><div class="meta">${esc(p.identification === 'full' ? p.card_line : 'Name withheld until consent is confirmed')}</div></a>`).join('') + '</div>';
+function participants({P, A}) {
+  app.innerHTML = `<header class="page-head"><p class="eyebrow">The accounts</p><h1>Five people, fifteen moments</h1>
+    <p class="lede">${esc(P.project.participants_intro)} Each moment appears twice: once in the person's words, once as the machine reconstructed it.</p></header>
+  <div class="roster">${P.participants.map(p => {
+    const n = A.annotations.filter(a => a.participant === p.id).length;
+    return `<a class="entry" href="participant.html?id=${esc(p.id)}"><span class="e-num">${String(p.number).padStart(2, '0')}</span>
+      <div><p class="e-name">${esc(nameOf(p))}</p><p class="e-meta">${esc(p.identification === 'full' ? p.card_line : 'Name withheld until consent is confirmed')}</p><p class="e-meta">${n} points compared</p></div>
+      <p class="e-quote">“${esc((p.portrait || [])[0] || '')}”</p>
+      <ul class="e-moments">${p.moments.map(m => `<li><span class="mn">${m.n}</span>${m.site_status === 'public' ? `<span>${esc(m.title)}</span>` : '<span class="held">Withheld while under review</span>'}</li>`).join('')}</ul></a>`;
+  }).join('')}</div>`;
 }
 
 function participantPage({P, A}) {
   const p = findP(P, qs.get('id'));
-  if (!p) { app.innerHTML = '<p>Participant not found. <a href="participants.html">Back to participants</a></p>'; return; }
+  if (!p) { app.innerHTML = '<header class="page-head"><h1>Participant not found</h1><p><a href="participants.html">Back to the accounts</a></p></header>'; return; }
   document.title = `${nameOf(p)} · Diasporagy`;
   const active = new Set(qs.get('type') ? [qs.get('type')] : [...TYPES, 'match']);
   const byId = Object.fromEntries(A.annotations.map(a => [a.id, a]));
-  const btn = (a, label) => `<button class="omit t-${a.type}" data-id="${esc(a.id)}"><span class="sw sw-${a.type}"></span>${label}</button>`;
-  let h = `<p class="kicker">Participant ${p.number}</p><h1>${esc(nameOf(p))}</h1>`;
-  h += (p.portrait || []).map(q => `<blockquote class="portrait">${fmt(esc(q))}</blockquote>`).join('');
-  if (p.portrait_source) h += `<p class="source">${esc(p.portrait_source)}</p>`;
-  h += `<div class="legend" role="group" aria-label="Show or hide annotation types"><span class="lab">Show</span>` +
-    [...TYPES, 'match'].map(t => `<button class="chip" data-type="${t}" aria-pressed="${active.has(t)}"><span class="sw sw-${t}"></span>${LABEL[t]}</button>`).join('') + '</div>';
+  const btn = (a, label) => `<button class="omit t-${a.type}" data-id="${esc(a.id)}">${label}</button>`;
+  const i = P.participants.indexOf(p), prev = P.participants[i - 1], next = P.participants[i + 1];
+
+  let h = `<header class="p-head"><div><p class="p-crumb"><a href="participants.html">The accounts</a> / Participant ${p.number}</p><h1>${esc(nameOf(p))}</h1>
+    ${p.identification === 'full' && p.card_line ? `<p class="e-meta" style="margin-top:14px">${esc(p.card_line)}</p>` : ''}</div>
+    <div class="p-portrait">${(p.portrait || []).map(q => `<blockquote>${fmt(esc(q))}</blockquote>`).join('')}${p.portrait_source ? `<p class="source">${esc(p.portrait_source)}</p>` : ''}</div></header>
+  <nav class="toc" aria-label="Moments">${p.moments.map(m => `<a href="#moment-${m.n}"${m.site_status !== 'public' ? ' class="held"' : ''}><div class="tn">Moment ${m.n}</div><div class="tt">${m.site_status === 'public' ? esc(m.title) : 'Withheld'}</div><div class="ts">${esc(shortSection(m.section))}</div></a>`).join('')}</nav>
+  <div class="legend" role="group" aria-label="Show or hide annotation types"><span class="lab">Show</span>` +
+    [...TYPES, 'match'].map(t => `<button class="chip" data-type="${t}" aria-pressed="${active.has(t)}"><span class="sw sw-${t}"></span>${LABEL[t]}</button>`).join('') +
+    `<span class="help">Select any highlight to see what the person actually said.</span></div>`;
+
   for (const m of p.moments) {
-    h += `<section class="moment" id="moment-${m.n}"><p class="kicker">Moment ${m.n} · ${esc(m.section)}</p><h2>${esc(m.title)}</h2>`;
-    if (m.site_status === 'withheld') { h += '<p class="withheld">This moment is withheld from the public site while it is reviewed with the participant.</p></section>'; continue; }
-    if (!m.ai_output) { h += '<p class="withheld">This moment is not yet on the site.</p></section>'; continue; }
+    h += `<section class="moment" id="moment-${m.n}"><div class="m-head"><div><p class="m-tag"><b>Moment ${m.n}</b> · ${esc(m.section)}</p><h2>${m.site_status === 'public' ? esc(m.title) : 'Withheld'}</h2></div>`;
+    if (m.site_status === 'withheld') { h += '</div><p class="withheld">This moment is withheld from the public site while it is reviewed with the participant. It is not counted anywhere on this site.</p></section>'; continue; }
+    if (!m.ai_output) { h += '</div><p class="withheld">This moment is not yet on the site.</p></section>'; continue; }
     const anns = A.annotations.filter(a => a.participant === p.id && String(a.moment) === String(m.n) && a.public !== false);
     const placed = markSpans(m.ai_output, anns);
     const omitted = anns.filter(a => a.ai_span === 'none');
     const hasConn = typeof FIG !== 'undefined';
-    h += `<div class="views" role="group" aria-label="How to show this moment"><button class="view" data-v="pair" aria-pressed="true">Annotated</button>${hasConn ? '<button class="view" data-v="conn" aria-pressed="false">Joined line by line</button>' : ''}</div>
-      ${m.facts ? `<details class="facts"><summary>The five lines the AI was given</summary><div class="story-card facts">${m.facts.split('\n').map(l => `<p>${esc(l)}</p>`).join('')}</div></details>` : ''}
+    const counts = [...TYPES, 'match'].map(t => [t, anns.filter(a => a.type === t).length]).filter(x => x[1]);
+    h += `<div class="m-count">${counts.map(([t, n]) => `<span><i class="sw sw-${t}"></i>${n} ${LABEL[t].toLowerCase()}</span>`).join('')}</div></div>
+      <div class="m-tools"><div class="views" role="group" aria-label="How to show this moment"><button class="view" data-v="pair" aria-pressed="true">Annotated</button>${hasConn ? '<button class="view" data-v="conn" aria-pressed="false">Joined line by line</button>' : ''}</div>
+      ${m.facts ? `<details class="facts"><summary>The five lines the AI was given</summary><div class="story-card facts panel-facts">${factsHTML(m.facts)}</div></details>` : ''}</div>
       <div class="v-pair"><div class="pair">
-      <div class="col"><h3>In their words</h3><div class="text transcript">${transcriptHTML(m.transcript_excerpt)}</div></div>
-      <div class="col"><h3>The AI version</h3><div class="text ai">${placed.html}</div>
-      ${omitted.length ? `<div class="omissions"><p class="kicker">Not carried into the AI version</p>${omitted.map(a => btn(a, esc(a.transcript_span))).join('')}</div>` : ''}
+      <div class="col"><div class="text transcript panel-human voice-human"><span class="panel-label">In their words · ${words(m.transcript_excerpt)} words</span>${transcriptHTML(m.transcript_excerpt)}</div>
+        ${omitted.length ? `<div class="omissions"><p class="kicker">Not carried into the AI version</p>${omitted.map(a => btn(a, '“' + esc(a.transcript_span) + '”')).join('')}</div>` : ''}</div>
+      <div class="col"><div class="text ai panel-machine"><span class="panel-label">The AI version · ${words(m.ai_output)} words</span>${placed.html}</div>
       ${placed.unplaced.length ? `<div class="omissions"><p class="kicker">Also noted in the AI version</p>${placed.unplaced.map(a => btn(a, 'AI: “' + esc(a.ai_span) + '”')).join('')}</div>` : ''}
       <div class="note" aria-live="polite"><p class="muted">Select a highlight to read the note and see the matching passage.</p></div></div></div></div>
       ${hasConn ? `<div class="v-conn" hidden>${FIG.pairLegend()}${FIG.pairBlock(p, m, anns)}</div>` : ''}</section>`;
   }
+  h += `<nav class="p-next" aria-label="Other participants">${prev ? `<a href="participant.html?id=${esc(prev.id)}"><div class="tn">← Previous</div><div class="tt">${esc(nameOf(prev))}</div></a>` : '<span></span>'}
+    ${next ? `<a href="participant.html?id=${esc(next.id)}"><div class="tn">Next →</div><div class="tt">${esc(nameOf(next))}</div></a>` : `<a href="findings.html"><div class="tn">Next →</div><div class="tt">Findings across all five</div></a>`}</nav>`;
   app.innerHTML = h;
-  if (typeof FIG !== 'undefined') FIG.wireConnectors(A);
+  if (typeof FIG !== 'undefined') { window.__A = A; FIG.wireConnectors(A); }
   app.querySelectorAll('.views').forEach(g => g.addEventListener('click', e => {
     const b = e.target.closest('button.view'); if (!b) return; const sec = g.closest('.moment');
     g.querySelectorAll('button.view').forEach(x => x.setAttribute('aria-pressed', x === b));
@@ -147,16 +285,20 @@ function participantPage({P, A}) {
   const show = el => {
     const a = byId[el.dataset.id], sec = el.closest('.moment'), m = p.moments.find(x => `moment-${x.n}` === sec.id);
     sec.querySelectorAll('.active').forEach(x => x.classList.remove('active')); el.classList.add('active');
-    const tr = sec.querySelector('.transcript'); tr.innerHTML = transcriptHTML(m.transcript_excerpt, a.transcript_span);
+    const tr = sec.querySelector('.transcript');
+    tr.innerHTML = tr.querySelector('.panel-label').outerHTML + transcriptHTML(m.transcript_excerpt, a.transcript_span);
     const src = tr.querySelector('.t-source'); if (src) src.scrollIntoView({block:'nearest', behavior:'smooth'});
     const where = a.transcript_span === 'none' ? '<p class="muted">Nothing in the transcript corresponds to this.</p>'
-      : (src ? '' : `<p class="muted">The matching words come from elsewhere in the interview: “${esc(a.transcript_span)}”</p>`);
-    sec.querySelector('.note').innerHTML = `<p class="tag"><span class="sw sw-${a.type}"></span>${LABEL[a.type]}${a.direction ? ' · ' + esc(a.direction) : ''}${a.origin ? ' · ' + esc(ORIGIN[a.origin]) : ''}</p><p>${esc(a.note)}</p>${where}`;
+      : (src ? '<p class="muted">The matching words are highlighted in their account.</p>' : `<p class="muted">The matching words come from elsewhere in the interview: “${esc(a.transcript_span)}”</p>`);
+    sec.querySelector('.note').innerHTML = `<p class="tag"><span><span class="sw sw-${a.type}"></span>${LABEL[a.type]}</span>${a.direction ? `<span>${esc(a.direction)}</span>` : ''}${a.origin ? `<span>${esc(ORIGIN[a.origin])}</span>` : ''}</p><p>${esc(a.note)}</p>${where}`;
   };
   app.addEventListener('click', e => { const el = e.target.closest('mark[data-id],button.omit'); if (el) show(el); });
   app.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('mark[data-id]')) { e.preventDefault(); show(e.target); } });
   applyFilter();
-  if (location.hash) { const t = app.querySelector(`[data-id="${CSS.escape(location.hash.slice(1))}"]`); if (t) { t.scrollIntoView({block:'center'}); show(t); } }
+  if (location.hash) {
+    const t = app.querySelector(`[data-id="${CSS.escape(location.hash.slice(1))}"]`) || app.querySelector(location.hash.replace(/[^#\w-]/g, ''));
+    if (t) { t.scrollIntoView({block:'center'}); if (t.dataset.id) show(t); }
+  }
 }
 
 function findings({P, A}) {
@@ -167,73 +309,118 @@ function findings({P, A}) {
       match:mine.filter(a => a.type === 'match').length,
       o:Object.fromEntries(['model','extraction','both'].map(o => [o, mine.filter(a => a.origin === o).length]))};
   });
-  const max = Math.max(1, ...rows.flatMap(r => TYPES.map(t => r.c[t])));
-  const W = 760, H = 320, L = 30, gw = (W - L * 2) / rows.length, bw = (gw - 28) / 4;
-  let bars = '';
-  rows.forEach((r, i) => {
-    TYPES.forEach((t, j) => {
-      const bh = (H - 90) * r.c[t] / max, x = L + i * gw + 14 + j * bw, y = H - 46 - bh;
-      bars += `<rect class="b-${t}" x="${x}" y="${y}" width="${bw - 4}" height="${bh}"><title>${esc(nameOf(r.p))}: ${r.c[t]} ${t}</title></rect><text class="v" x="${x + (bw - 4) / 2}" y="${y - 5}">${r.c[t]}</text>`;
-    });
-    bars += `<text class="lbl" x="${L + i * gw + gw / 2}" y="${H - 24}">${esc(nameOf(r.p))}</text>`;
-  });
-  const legend = TYPES.map((t, i) => `<rect class="b-${t}" x="${L + i * 120}" y="6" width="10" height="10"/><text x="${L + i * 120 + 16}" y="15" font-size="12">${LABEL[t]}</text>`).join('');
-  const dirTable = `<table><thead><tr><th>Type</th>${DIRS.map(d => `<th>${d}</th>`).join('')}</tr></thead><tbody>${TYPES.map(t => `<tr><td>${LABEL[t]}</td>${DIRS.map(d => `<td>${div.filter(a => a.type === t && a.direction === d).length}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  const dirTable = `<table><thead><tr><th>Type</th>${DIRS.map(d => `<th class="n">${d}</th>`).join('')}<th class="n">Total</th></tr></thead><tbody>${TYPES.map(t => `<tr><td><span class="sw sw-${t}"></span>${LABEL[t]}</td>${DIRS.map(d => `<td class="n">${div.filter(a => a.type === t && a.direction === d).length}</td>`).join('')}<td class="n">${div.filter(a => a.type === t).length}</td></tr>`).join('')}</tbody></table>`;
   const fromExt = div.filter(a => a.origin !== 'model').length, emo = div.filter(a => a.type === 'emotional').length;
   const stat = (v, l) => `<div class="stat"><div class="v">${v}</div><div class="l">${l}</div></div>`;
-  app.innerHTML = `<p class="kicker">Findings</p><h1>The machine kept the facts and lost what they meant</h1>
-  <div class="prose"><p class="lede">Fifteen moments, each told once by the person and once by an AI working from a five-line summary. Every point where the two part was marked and coded. These are the patterns that hold across all five people.</p></div>
-  <div class="stat-row">${stat(A.annotations.length, 'points compared, line by line')}${stat(div.length, 'divergences: places where the AI version departs from the person')}${stat(emo, 'of them about feeling: the largest single type')}${stat(fromExt, 'began in the researcher’s own summary, before the AI ran')}</div>
-  <p class="muted">${A.annotations.some(a => !isVisible(P, a)) ? 'Counts include material withheld from the public site.' : 'Counts cover only the material shown on this site; the report gives the full totals.'} Every figure below is computed from the annotation data as the page loads.</p>
-  ${typeof FIG !== 'undefined' ? FIG.render(P, A, nameOf) : ''}
-  <h2 style="margin-top:80px">Full counts</h2>
-  <table><thead><tr><th>Participant</th>${TYPES.map(t => `<th>${LABEL[t]}</th>`).join('')}<th>Matches</th><th>From the AI</th><th>From extraction</th><th>Both</th></tr></thead><tbody>
-  ${rows.map(r => `<tr><td>${esc(nameOf(r.p))}</td>${TYPES.map(t => `<td>${r.c[t]}</td>`).join('')}<td>${r.match}</td><td>${r.o.model}</td><td>${r.o.extraction}</td><td>${r.o.both}</td></tr>`).join('')}
-  </tbody></table>
-  <h2 style="margin-top:40px">Direction of each divergence</h2>${dirTable}
-  <h2 style="margin-top:48px">Patterns</h2><div class="prose">${P.findings_draft.map(x => `<p>${esc(x)}</p>`).join('')}</div>
-  <h2 style="margin-top:48px">Browse one type across all participants</h2>
-  <p><select id="bt">${[...TYPES, 'match'].map(t => `<option value="${t}">${LABEL[t]}</option>`).join('')}</select></p><div class="browse"><ul id="bl"></ul></div>`;
-  const sel = document.getElementById('bt'), list = document.getElementById('bl');
-  const draw = () => {
-    const items = A.annotations.filter(a => a.type === sel.value && isVisible(P, a));
-    list.innerHTML = items.length ? items.map(a => { const p = findP(P, a.participant); return `<li><p class="kicker">${esc(nameOf(p))} · Moment ${a.moment}</p>
-      ${a.ai_span !== 'none' ? `<p>AI: “${esc(a.ai_span)}”</p>` : ''}${a.transcript_span !== 'none' ? `<p class="muted">Transcript: “${esc(a.transcript_span)}”</p>` : ''}
-      <p>${esc(a.note)} <a href="participant.html?id=${esc(p.id)}#${esc(a.id)}">See it in context</a></p></li>`; }).join('')
+  const figs = typeof FIG !== 'undefined' ? FIG.render(P, A, nameOf) : '';
+  const list = typeof FIG !== 'undefined' ? FIG.drawn() : [];
+  app.innerHTML = `<header class="page-head"><p class="eyebrow">Findings</p><h1>The machine kept the facts and lost what they meant</h1>
+    <p class="lede">Each moment was told once by the person and once by an AI working from a five-line summary. Every point where the two part was marked and coded. These are the patterns that hold across all five people.</p></header>
+  <div class="stat-row">${stat(A.annotations.length, 'points compared, line by line')}${stat(div.length, 'divergences: places where the AI version departs from the person')}${stat(emo, 'of them about feeling, the largest single type')}${stat(fromExt, 'began in the researcher’s own summary, before the AI ran')}</div>
+  <p class="muted f-note">${A.annotations.some(a => !isVisible(P, a)) ? 'Counts include material withheld from the public site.' : 'Counts cover only the material shown on this site; the report gives the full totals.'} Every figure below is computed from the annotation data as the page loads.</p>
+  <div class="f-layout"><aside class="f-toc" aria-label="Contents"><p>Contents</p><ol>${list.map(f => `<li><a href="#${f.id}">${esc(f.short)}</a></li>`).join('')}
+    <li><a href="#patterns">Patterns</a></li><li><a href="#counts">Full counts</a></li><li><a href="#browse">Browse every note</a></li></ol></aside>
+  <div>${figs}
+  <section class="fig" id="patterns"><p class="fig-n">Patterns</p><h3>Five things the comparison shows</h3><ol class="patterns">${P.findings_draft.map(x => `<li><span>${withRefs(x, P, A)}</span></li>`).join('')}</ol></section>
+  <section class="fig" id="counts"><p class="fig-n">Full counts</p><h3>Every annotation, by participant</h3>
+  <div class="table-scroll"><table><thead><tr><th>Participant</th>${TYPES.map(t => `<th class="n">${LABEL[t]}</th>`).join('')}<th class="n">Matches</th><th class="n">From the AI</th><th class="n">From extraction</th><th class="n">Both</th></tr></thead><tbody>
+  ${rows.map(r => `<tr><td><a href="participant.html?id=${esc(r.p.id)}">${esc(nameOf(r.p))}</a></td>${TYPES.map(t => `<td class="n">${r.c[t]}</td>`).join('')}<td class="n">${r.match}</td><td class="n">${r.o.model}</td><td class="n">${r.o.extraction}</td><td class="n">${r.o.both}</td></tr>`).join('')}
+  </tbody></table></div>
+  <h3 style="margin-top:40px">Direction of each divergence</h3><div class="table-scroll">${dirTable}</div></section>
+  <section class="fig" id="browse"><p class="fig-n">Browse</p><h3>Every note of one type, across all five people</h3>
+  <div class="browse-bar" role="group" aria-label="Choose a type">${[...TYPES, 'match'].map(t => `<button class="chip" data-type="${t}" aria-pressed="false"><span class="sw sw-${t}"></span>${LABEL[t]}</button>`).join('')}</div><ul class="browse" id="bl"></ul></section>
+  </div></div>`;
+  /* Figure numbers in the patterns text link to these anchors. */
+  list.forEach((f, i) => { const el = document.getElementById(f.id); if (el) el.insertAdjacentHTML('afterbegin', `<span id="fig-${i + 1}"></span>`); });
+  const chips = app.querySelectorAll('.browse-bar .chip'), bl = document.getElementById('bl');
+  const draw = t => {
+    chips.forEach(c => c.setAttribute('aria-pressed', c.dataset.type === t));
+    const items = A.annotations.filter(a => a.type === t && isVisible(P, a));
+    bl.innerHTML = items.length ? items.map(a => { const p = findP(P, a.participant), m = findM(P, a); return `<li class="t-${a.type}"><p class="kicker">${esc(nameOf(p))} · ${esc(m ? m.title : 'Moment ' + a.moment)}</p>
+      ${a.ai_span !== 'none' ? `<p class="b-ai">AI: “${esc(a.ai_span)}”</p>` : ''}${a.transcript_span !== 'none' ? `<p class="b-tr">“${esc(a.transcript_span)}”</p>` : ''}
+      <p class="b-note">${esc(a.note)} <a href="participant.html?id=${esc(p.id)}#${esc(a.id)}">See it in context</a></p></li>`; }).join('')
       : '<li class="muted">None of this type are on the public site yet.</li>';
   };
-  if (qs.get('type')) sel.value = qs.get('type');
-  sel.onchange = draw; draw();
-  if (typeof FIG !== 'undefined') FIG.wireConnectors(A);
+  chips.forEach(c => c.onclick = () => draw(c.dataset.type));
+  draw(TYPES.includes(qs.get('type')) || qs.get('type') === 'match' ? qs.get('type') : 'emotional');
+  if (typeof FIG !== 'undefined') { window.__A = A; FIG.wireConnectors(A); }
+  try {
+    const links = [...app.querySelectorAll('.f-toc a')], io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id));
+    }), {rootMargin: '-30% 0px -60% 0px'});
+    app.querySelectorAll('.fig[id]').forEach(f => io.observe(f));
+  } catch {}
+  if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) setTimeout(() => t.scrollIntoView(), 50); }
 }
 
 function method({P, A}) {
-  const s = A.schemes;
-  const dl = obj => `<dl>${Object.entries(obj).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`;
-  app.innerHTML = `<h1>Method</h1><div class="prose">
-  <p>${esc(A.disclosure)}</p><p>${esc(P.project.method_summary)}</p>
-  ${(P.method_notes || []).length ? `<h2 style="margin-top:40px">Recorded deviations</h2><ul>${P.method_notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}
-  <h2 style="margin-top:40px">The fixed prompt</h2><pre>${esc(P.project.prompt)}</pre>
-  <h2 style="margin-top:40px">Run log</h2></div>
-  <table><thead><tr><th>Participant</th><th>Moment</th><th>Model</th><th>Date</th><th>Note</th></tr></thead><tbody>
-  ${P.run_log.map(r => `<tr><td>${esc(nameOf(findP(P, r.participant)))}</td><td>${r.moment}</td><td>${esc(r.model)}</td><td>${esc(r.date)}</td><td>${esc(r.note || '')}</td></tr>`).join('')}
-  </tbody></table><div class="prose">
-  <h2 style="margin-top:40px">Coding scheme</h2>
-  <h3>${esc(s.v1.label)}</h3>${dl(s.v1.types)}${dl(s.v1.direction)}
-  <h3>${esc(s.v2.label)}</h3><p>${esc(s.v2.summary)}</p>${dl(s.v2.origin)}
-  <h3>Why the scheme changed</h3><p>${esc(s.v2.rationale)}</p><p>${esc(s.applied)}</p><p class="muted">${esc(s.v2.not_adopted)}</p></div>`;
+  const s = A.schemes, c = C(), pr = P.project;
+  const prompt = esc(pr.prompt).replace(/\[([^\]]+)\]/g, '<span class="slot">[$1]</span>');
+  const usedP = new Set(P.participants.flatMap(p => p.moments.map(m => shortSection(m.section))));
+  app.innerHTML = `<header class="page-head"><p class="eyebrow">Method</p><h1>How each moment was told twice</h1>
+    <p class="lede">${esc(pr.method_summary)}</p><p class="muted">${esc(A.disclosure)}</p></header>
+
+  <section class="section"><div class="section-head"><p class="num">The design</p><div><h2>Ten steps, fixed in advance</h2>
+    <p>Where the work departed from the design, the step says so. The full list of deviations is <a href="#deviations">below</a>.</p></div></div>
+    <ol class="steps">${(c.steps || []).map((st, i) => `<li><span class="sn">${String(i + 1).padStart(2, '0')}</span><h3>${esc(st.name)}</h3><div><p>${esc(st.text)}</p>${st.as_done ? `<p class="as-done"><b>As carried out</b>${esc(st.as_done)}</p>` : ''}</div></li>`).join('')}</ol></section>
+
+  ${c.selection ? `<section class="section"><div class="section-head"><p class="num">Selecting the moments</p><div><h2>Which stories become moments</h2><p>${esc(c.selection.intro)}</p></div></div>
+    <div class="rules">${c.selection.rules.map(r => `<div><b>${esc(r.n)}</b><p>${esc(r.text)}</p></div>`).join('')}</div>
+    <p class="protect">${esc(c.selection.protected)}</p></section>` : ''}
+
+  ${c.script ? `<section class="section"><div class="section-head"><p class="num">The interview</p><div><h2>One script for every person</h2><p>${esc(c.script.intro)}</p></div></div>
+    <ul class="script">${c.script.sections.map(x => `<li${usedP.has(x) ? '' : ' class="x"'}>${esc(x)}</li>`).join('')}</ul>
+    <p class="muted" style="margin-top:12px">Solid outlines mark the sections that moments on this site come from.</p></section>` : ''}
+
+  <section class="section" id="prompt"><div class="section-head"><p class="num">The fixed prompt</p><div><h2>The same words, every time</h2>
+    <p>Only the five fact fields change between runs. Personal names are stripped from them; hospitals, organisations and places are kept where the person named them.</p></div></div>
+    <pre class="prompt-doc panel-machine">${prompt}</pre></section>
+
+  <section class="section"><div class="section-head"><p class="num">Coding</p><div><h2>${esc(s.v1.label)}</h2><p>Every point of comparison is coded by type and, for divergences, by direction.</p></div></div>
+    <div class="types">${Object.entries(s.v1.types).map(([k, v]) => `<div class="t-${k}"><h4><span class="sw sw-${k}"></span>${esc(LABEL[k] || k)}</h4><p>${esc(v)}</p></div>`).join('')}</div>
+    <div class="dirs">${Object.entries(s.v1.direction).map(([k, v]) => `<div><h4>${esc(k[0].toUpperCase() + k.slice(1))}</h4><p>${esc(v)}</p></div>`).join('')}</div></section>
+
+  <section class="section"><div class="section-head"><p class="num">The amendment</p><div><h2>${esc(s.v2.label)}</h2><p>${esc(s.v2.summary)}</p></div></div>
+    <div class="amend"><div><p class="kicker">Why the scheme changed</p><p>${esc(s.v2.rationale)}</p></div>
+    <div class="after"><p class="kicker">Origin, the added field</p>${Object.entries(s.v2.origin).map(([k, v]) => `<p><b>${esc(ORIGIN[k] || k)}.</b> ${esc(v)}</p>`).join('')}</div></div>
+    <div class="prose" style="margin-top:24px"><p class="small">${esc(s.applied)}</p><p class="muted">${esc(s.v2.not_adopted)}</p></div></section>
+
+  ${(P.method_notes || []).length ? `<section class="section" id="deviations"><div class="section-head"><p class="num">Recorded deviations</p><div><h2>Where the work departed from the design</h2>
+    <p>Kept as a record, so that every finding can be read against how it was actually produced.</p></div></div>
+    <ol class="ledger">${P.method_notes.map(n => `<li><span>${esc(n)}</span></li>`).join('')}</ol></section>` : ''}
+
+  <section class="section"><div class="section-head"><p class="num">Run log</p><div><h2>Every AI run</h2><p>One run per moment, the same prompt each time.</p></div></div>
+  <div class="table-scroll"><table><thead><tr><th>Participant</th><th class="n">Moment</th><th>Model</th><th>Date</th><th>Note</th></tr></thead><tbody>
+  ${P.run_log.map(r => { const rp = findP(P, r.participant); return `<tr><td>${esc(rp ? nameOf(rp) : r.participant)}</td><td class="n">${r.moment}</td><td>${esc(r.model)}</td><td>${esc(r.date)}</td><td>${esc(r.note || '')}</td></tr>`; }).join('')}
+  </tbody></table></div></section>`;
+  if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) setTimeout(() => t.scrollIntoView(), 50); }
+}
+
+function about({P}) {
+  const c = C(), pr = P.project;
+  app.innerHTML = `<header class="page-head"><p class="eyebrow">About</p><h1>${esc(pr.title)}</h1><p class="lede">${esc(pr.subtitle)}</p>
+    ${c.director ? `<div class="byline"><span class="mono">${esc(c.director[0])}</span><span><b>${esc(c.director)}</b>${esc(c.director_role)}</span></div>` : ''}</header>
+  <section class="section two-col"><div class="prose">${(c.overview || []).map(t => `<p class="lede" style="font-size:1.2rem">${esc(t)}</p>`).join('')}</div>
+    <div class="prose">${(c.lineage || []).map(t => `<p>${esc(t)}</p>`).join('')}</div></section>
+  <section class="section question"><p class="num">The question</p>
+    <div><blockquote>${esc(pr.core_question)}</blockquote></div></section>
+  ${(c.outputs || []).length ? `<section class="section"><div class="section-head"><p class="num">Outputs</p><div><h2>Three records of the same work</h2></div></div>
+    <div class="outputs">${c.outputs.map(o => `<div><h3>${esc(o.name)}</h3><p>${esc(o.text)}</p></div>`).join('')}</div></section>` : ''}
+  <section class="section"><div class="section-head"><p class="num">Consent and review</p><div><h2>Published in two stages</h2></div></div>
+    <div class="ethics">${(c.ethics || []).map((t, i) => `<div><span class="i">${String(i + 1).padStart(2, '0')}</span><p>${esc(t)}</p></div>`).join('')}</div>
+    <p class="cta"><a class="btn" href="index.html#story">Start with one moment ${arrow}</a><a class="btn ghost" href="method.html">Read the method</a></p></section>`;
 }
 
 /* Researcher-only. Do not publish review.html. */
 function review({P, A}) {
   const KEY = 'diasporagy-grades', g = JSON.parse(localStorage.getItem(KEY) || '{}');
   const save = () => localStorage.setItem(KEY, JSON.stringify(g));
-  app.innerHTML = `<h1>Review</h1><p class="placeholder">Researcher-only page. Never publish it. Grades are stored in this browser until exported.</p>
+  app.innerHTML = `<h1 style="margin-top:48px">Review</h1><p class="placeholder">Researcher-only page. Never publish it. Grades are stored in this browser until exported.</p>
   <p><select id="fp"><option value="">All participants</option>${P.participants.map(p => `<option value="${p.id}">${esc(p.full_name)}</option>`).join('')}</select>
   <select id="ft"><option value="">All types</option>${[...TYPES, 'match'].map(t => `<option value="${t}">${LABEL[t]}</option>`).join('')}</select>
   <button class="plain" id="chk">Check spans</button> <button class="plain" id="csv">Export grades (CSV)</button> <button class="plain" id="json">Export all annotations (JSON)</button> <button class="plain" id="pub">Export public-safe data files</button></p>
   <pre id="chkout" hidden></pre>
-  <table><thead><tr><th>ID</th><th>Verdict</th><th>AI span</th><th>Transcript span</th><th>Note</th><th>Grade</th></tr></thead><tbody id="rb"></tbody></table>`;
+  <div class="table-scroll"><table><thead><tr><th>ID</th><th>Verdict</th><th>AI span</th><th>Transcript span</th><th>Note</th><th>Grade</th></tr></thead><tbody id="rb"></tbody></table></div>`;
   const fp = document.getElementById('fp'), ft = document.getElementById('ft'), rb = document.getElementById('rb');
   const draw = () => {
     rb.innerHTML = A.annotations.filter(a => (!fp.value || a.participant === fp.value) && (!ft.value || a.type === ft.value)).map(a => {
@@ -276,11 +463,12 @@ function review({P, A}) {
   };
 }
 
-nav();
+applyStoredTheme();
+chrome();
 try {
   const d = load();
-  ({home, participants, participant:participantPage, findings, method, review})[page](d);
+  ({home, participants, participant:participantPage, findings, method, about, review})[page](d);
 } catch (e) {
-  app.innerHTML = `<p class="placeholder">Something went wrong: ${esc(e.message)}. Press F12 and open the Console tab for details.</p>`;
+  app.innerHTML = `<p class="placeholder" style="margin-top:48px">Something went wrong: ${esc(e.message)}. Press F12 and open the Console tab for details.</p>`;
   console.error(e);
 }

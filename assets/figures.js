@@ -20,9 +20,13 @@ const FIG = (() => {
     return {M, pById, label, div: A.annotations.filter(a => a.type !== 'match')};
   }
 
+  /* Figures are numbered in the order render() draws them; `drawn` feeds the Findings page's contents column. */
+  const SHORT = {'fig-pair':'One moment, told twice', 'fig-flow':'Where divergences begin', 'fig-kinds':'What the AI gets right', 'fig-strips':'Where in the account', 'fig-tone':'Tone', 'fig-voice':'Voice: “we” and hedges', 'fig-names':'Names'};
+  let drawn = [];
   function frame(id, title, sub, svg, table, source) {
-    return `<figure class="fig" id="${id}"><h3>${esc(title)}</h3>${sub ? `<p class="fig-sub">${sub}</p>` : ''}${svg}
-      <details class="fig-data"><summary>Show the data</summary>${table}</details>
+    drawn.push({id, short: SHORT[id] || title});
+    return `<figure class="fig" id="${id}"><p class="fig-n">Figure ${drawn.length}</p><h3>${esc(title)}</h3>${sub ? `<p class="fig-sub">${sub}</p>` : ''}<div class="fig-body">${svg}</div>
+      <details class="fig-data"><summary>Show the data</summary><div class="table-scroll">${table}</div></details>
       <figcaption>${esc(source)}</figcaption></figure>`;
   }
   const table = (head, rows) => `<table><thead><tr>${head.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
@@ -78,7 +82,7 @@ const FIG = (() => {
     const nm = anns.filter(a => a.type === 'match').length, nd = anns.length - nm;
     const title = `One moment, told twice: ${nd} divergences and ${nm} matches in “${m.title}”`;
     return frame('fig-pair', title, `Each line joins a passage in the AI version to the words it came from. Highlights with no line were invented by the AI (right) or left out of it (left). ${pairLegend()}`, pairBlock(p, m, anns),
-      table(['Id', 'Type', 'AI', 'Transcript'], anns.map(a => [a.id, TLAB[a.type], a.ai_span, a.transcript_span])), `${nameOf(p)}, Moment ${n}. ${counts}.`);
+      table(['Type', 'AI', 'Transcript'], anns.map(a => [TLAB[a.type], a.ai_span, a.transcript_span])), `${nameOf(p)}, Moment ${n}. ${counts}.`);
   }
   function drawConnectors(A) {
     for (const box of document.querySelectorAll('.conn')) {
@@ -108,7 +112,7 @@ const FIG = (() => {
       if (!mk) return; const ids = mk.dataset.ids.split(' ');
       box.querySelectorAll('mark.cn').forEach(m => { if (m.dataset.ids.split(' ').some(i => ids.includes(i))) m.classList.add('hot'); });
       box.querySelectorAll('path.cl').forEach(pth => { if (ids.includes(pth.dataset.id)) pth.classList.add('hot'); });
-      const a = byId[ids[0]]; box.nextElementSibling.innerHTML = `<b>${esc(a.id)} · ${TLAB[a.type]}${a.direction ? ' · ' + esc(a.direction) : ''}${a.origin ? ' · ' + esc(OLAB[a.origin]) : ''}</b><br>${esc(a.note)}`;
+      const a = byId[ids[0]]; box.nextElementSibling.innerHTML = `<b>${TLAB[a.type]}${a.direction ? ' · ' + esc(a.direction) : ''}${a.origin ? ' · ' + esc(OLAB[a.origin]) : ''}</b><br>${esc(a.note)}`;
     };
     if (!wireConnectors.done) { document.addEventListener('mouseover', on); document.addEventListener('click', on); wireConnectors.done = true; }
     let t; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => drawConnectors(A), 120); });
@@ -245,8 +249,8 @@ const FIG = (() => {
   }
 
   function render(P, A, nameFn) {
-    nameOf = nameFn; const C = ctx(P, A);
+    nameOf = nameFn; drawn = []; const C = ctx(P, A);
     return [fig2(P, A, C, 1, 1), fig1(P, A, C), fig7(P, A, C), fig3(P, A, C), fig5(P, A, C), fig4(P, A, C), fig6(P, A, C)].join('');
   }
-  return {render, wireConnectors, drawConnectors, pairBlock, pairLegend, figPair: (P, A, num, n) => fig2(P, A, ctx(P, A), num, n), setNameOf: fn => { nameOf = fn; }};
+  return {render, drawn: () => drawn, wireConnectors, drawConnectors, pairBlock, pairLegend, figPair: (P, A, num, n) => fig2(P, A, ctx(P, A), num, n), setNameOf: fn => { nameOf = fn; }};
 })();
