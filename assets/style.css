@@ -664,3 +664,9 @@ body[data-page="home"] main.wrap{max-width:none;padding:0}
 .tb{fill:var(--rule-2)}.tb.on{fill:var(--ink)}
 .tp-time{flex:none;font:500 12px var(--mono);color:var(--muted);min-width:5.5rem;text-align:right}
 @media(max-width:560px){.tp-time{min-width:0}}
+
+/* touch: accounts panel under the menu */
+.nd-sheet{position:absolute;left:0;right:0;top:100%;background:var(--card);border-bottom:1px solid var(--rule);box-shadow:var(--shadow);padding:8px 16px 14px;z-index:50}
+.nd-sheet a{display:block;padding:12px 4px;border-bottom:1px solid var(--rule);font:17px var(--serif);color:var(--ink);text-decoration:none}
+.nd-sheet a:last-child{border-bottom:0;font:14px var(--sans);color:var(--indigo)}
+@media(hover:none){.nd:hover .nd-menu,.nd:focus-within .nd-menu{display:none}}

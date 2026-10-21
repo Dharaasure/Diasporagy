@@ -51,6 +51,18 @@ function chrome() {
     NAV.map(([h, l, k]) => k === 'participants'
       ? `<span class="nd"><a class="nl" href="${h}"${k === here ? ' aria-current="page"' : ''} aria-haspopup="true">${l} <span aria-hidden="true">▾</span></a><span class="nd-menu">${(window.PARTICIPANT_LIST || []).slice().sort((a, b) => a.number - b.number).map(p => `<a href="participant.html?id=${esc(p.id)}">${esc(nameOf(p))}</a>`).join('')}<a class="nd-all" href="participants.html">All five accounts</a></span></span>`
       : `<a class="nl${k === 'report' ? ' nl-report' : ''}" href="${h}"${k === here ? ' aria-current="page"' : ''}>${l}</a>`).join('') ;
+  /* Touch screens can't hover: tapping "The accounts" opens a panel under the menu instead. */
+  const nd = nav.querySelector('.nd'), header = nav.closest('header');
+  if (nd && header) {
+    const sheet = document.createElement('div'); sheet.className = 'nd-sheet'; sheet.hidden = true;
+    sheet.innerHTML = nd.querySelector('.nd-menu').innerHTML; header.appendChild(sheet);
+    const trigger = nd.querySelector('a.nl');
+    trigger.addEventListener('click', e => {
+      if (!matchMedia('(hover: none), (max-width: 760px)').matches) return;
+      e.preventDefault(); sheet.hidden = !sheet.hidden; trigger.setAttribute('aria-expanded', !sheet.hidden);
+    });
+    document.addEventListener('click', e => { if (!sheet.hidden && !sheet.contains(e.target) && !nd.contains(e.target)) { sheet.hidden = true; trigger.setAttribute('aria-expanded', 'false'); } });
+  }
   const foot = document.getElementById('foot');
   if (foot) foot.innerHTML = `<div class="wrap"><div class="foot">
     <div><b><svg class="logo logo-foot" viewBox="0 0 48 48" aria-hidden="true"><path d="M11 8h12a16 16 0 0 1 0 32H11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 24c1.6-4.4 3.2-4.4 4.8 0s3.2 4.4 4.8 0" fill="none" stroke="#2b3f7a" stroke-width="2.2" stroke-linecap="round"/><path d="M28 20h5M28 24h6M28 28h5" stroke="#8a8f96" stroke-width="2.2" stroke-linecap="round"/></svg>Diasporagy</b>${esc(C().tagline || '')}${C().director ? `<p style="margin-top:14px">${esc(C().director)}, ${esc(C().director_role)}</p>` : ''}</div>
