@@ -208,7 +208,7 @@ mark.story-hi{background:var(--indigo-wash);color:inherit;padding:1px 2px;border
 @media(max-width:1060px){.people{grid-template-columns:repeat(2,minmax(0,1fr))}.person{border-right:0;border-bottom:1px solid var(--rule);padding:22px 20px 24px 0!important}.person:nth-child(odd){border-right:1px solid var(--rule)}.person:nth-child(even){padding-left:20px!important}}
 @media(max-width:560px){.people{grid-template-columns:1fr}.person{border-right:0!important;padding-left:0!important}}
 
-.ethics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.ethics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
 .ethics div{padding:22px 22px 24px;border:1px solid var(--rule);background:var(--card)}
 .ethics .i{font:500 11px/1 var(--mono);color:var(--indigo);letter-spacing:.1em}
 .ethics p{margin:12px 0 0;font:15px/1.6 var(--sans);color:var(--ink-2)}

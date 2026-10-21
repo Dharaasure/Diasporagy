@@ -81,8 +81,7 @@ window.CONTENT = {
   "sections": ["Background", "Getting Settled", "A Day You Won't Forget", "Daily Life", "Community", "Language", "Distance and Home", "What a summary would miss"]
  },
  "ethics": [
-  "All five participants consented to be named. At their request, only first names are used.",
-  "Each participant sees both versions of their own material, and everything written about them, before anything is public. Any of it can be flagged or withdrawn, for any reason.",
-  "Every participant reviewed their material before publication; nothing they asked to keep private appears here."
+  "All five consented to be named. Only first names are used.",
+  "Each person reviewed both versions of their material, and everything written about them, before publication, and could withdraw any of it."
  ]
 };

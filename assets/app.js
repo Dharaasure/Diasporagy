@@ -54,8 +54,8 @@ function chrome() {
   const foot = document.getElementById('foot');
   if (foot) foot.innerHTML = `<div class="wrap"><div class="foot">
     <div><b><svg class="logo logo-foot" viewBox="0 0 48 48" aria-hidden="true"><path d="M11 8h12a16 16 0 0 1 0 32H11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 24c1.6-4.4 3.2-4.4 4.8 0s3.2 4.4 4.8 0" fill="none" stroke="#2b3f7a" stroke-width="2.2" stroke-linecap="round"/><path d="M28 20h5M28 24h6M28 28h5" stroke="#8a8f96" stroke-width="2.2" stroke-linecap="round"/></svg>Diasporagy</b>${esc(C().tagline || '')}${C().director ? `<p style="margin-top:14px">${esc(C().director)}, ${esc(C().director_role)}</p>` : ''}</div>
-    <div><h4>Read</h4><ul><li><a href="index.html">One moment, told twice</a></li><li><a href="participants.html">The five accounts</a></li><li><a href="findings.html">Findings</a></li><li><a href="report.html">The report</a></li></ul></div>
-    <div><h4>Contact</h4><ul><li>${C().director ? esc(C().director) : ''}</li><li><a href="mailto:${esc(C().email || '')}">${esc(C().email || '')}</a></li><li style="margin-top:8px">For questions about the project, the method, or your own material.</li></ul></div>
+    <div><h4>Read</h4><ul><li><a href="index.html">Home</a></li><li><a href="participants.html">The five accounts</a></li><li><a href="findings.html">Findings</a></li><li><a href="report.html">The report</a></li></ul></div>
+    <div><h4>Contact</h4><ul><li>${C().director ? esc(C().director) : ''}</li><li><a href="mailto:${esc(C().email || '')}">${esc(C().email || '')}</a></li></ul></div>
     <div><h4>How it was made</h4><ul><li><a href="method.html">Method</a></li><li><a href="method.html#prompt">The fixed prompt</a></li><li><a href="method.html#deviations">Recorded deviations</a></li><li><a href="about.html">About the project</a></li></ul></div>
     </div><div class="foot-base"><span>Participants are named only with their confirmed consent.</span><span>Every count on this site is computed from the annotation data as the page loads.</span></div></div>`;
 }
@@ -206,30 +206,25 @@ function home({P, A}) {
   <section class="section question"><p class="num">The question</p>
     <div><blockquote>${esc(pr.core_question)}</blockquote>${(C().lineage || []).slice(0, 1).map(t => `<p class="q-body">${esc(t)}</p>`).join('')}</div></section>
 
-  <section class="section"><div class="section-head"><p class="num">The process</p><div><h2>How a life becomes five lines, and five lines become a story</h2>
-    <p>The same steps for every person, fixed before any interview took place, so that nothing could be chosen afterwards for how well it turned out.</p></div></div>
+  <section class="section"><div class="section-head"><p class="num">The process</p><div><h2>How each moment was made</h2>
+    <p>The same steps for every person, fixed before the first interview.</p></div></div>
     <ol class="pipeline">${steps.map(([b, d, c], i) => `<li${c ? ` class="${c}"` : ''}><span class="pn">${String(i + 1).padStart(2, '0')}</span><b>${b}</b><span class="d">${d}</span></li>`).join('')}</ol>
     <div class="compress" role="img" aria-label="Average words per moment: ${aT} in the person's words, ${aF} in the facts, ${aA} in the AI version">
       ${[['Their words', aT, 'b-h'], ['The five lines of facts', aF, 'b-f'], ['The AI version', aA, 'b-a']].map(([l, v, c]) => `<div class="row"><span class="lab">${l}</span><span class="bar ${c}" style="width:${100 * v / aMax}%"></span><span class="n">${v}</span></div>`).join('')}</div>
-    <p class="compress-note">Average words per moment across the ${pub.length} moments on this site. The person's words are the excerpt shown, already shortened. The machine wrote more than it was given: what it added did not come from the person.</p>
+    <p class="compress-note">Average words per moment. The AI wrote more than it was given.</p>
     <p class="cta"><a class="btn ghost" href="method.html">The full method ${arrow}</a></p></section>
 
   <section class="section"><div class="section-head"><p class="num">Across every moment</p><div><h2>The same patterns run through all five accounts</h2>
     <p>${div.length} places where the AI version departs from the person, each traced to where it began.</p></div></div>
     <div class="claims">
-      <div class="claim"><div class="v">${inv.filter(a => a.origin === 'model').length}<small>of ${inv.length}</small></div><h3>inventions came from the AI</h3><p>Relatives, speeches, fears and endings that no one described. The machine fills silence with plausible detail.</p></div>
-      <div class="claim"><div class="v">${om.filter(a => a.origin === 'extraction').length}<small>of ${om.length}</small></div><h3>omissions began in the summary</h3><p>What went missing was mostly gone before the AI ran. The five-line summary is itself a reconstruction.</p></div>
-      <div class="claim"><div class="v">${kindPct('F')}<small>%</small></div><h3>of feelings came through intact</h3><p>Against ${kindPct('N')}% of numbers, dates and times. The facts largely survive; what the person made of them does not.</p></div>
+      <div class="claim"><div class="v">${inv.filter(a => a.origin === 'model').length}<small>of ${inv.length}</small></div><h3>inventions came from the AI</h3><p>Relatives, speeches, fears and endings that no one described.</p></div>
+      <div class="claim"><div class="v">${om.filter(a => a.origin === 'extraction').length}<small>of ${om.length}</small></div><h3>omissions began in the summary</h3><p>What went missing was mostly gone before the AI ran.</p></div>
+      <div class="claim"><div class="v">${kindPct('F')}<small>%</small></div><h3>of feelings came through intact</h3><p>Against ${kindPct('N')}% of numbers, dates and times.</p></div>
     </div>
     <p class="cta"><a class="btn" href="findings.html">See all seven figures ${arrow}</a></p></section>
 
-  <section class="section"><div class="section-head"><p class="num">The accounts</p><div><h2>Five people, in their own words</h2>
-    <p>${esc(pr.participants_intro)}</p></div></div>
-    <div class="people">${people}</div></section>
-
-  <section class="section"><div class="section-head"><p class="num">Consent and review</p><div><h2>Published in two stages</h2>
-    <p>The people in this project see everything written about them first.</p></div></div>
-    <div class="ethics">${(C().ethics || []).map((t, i) => `<div><span class="i">${String(i + 1).padStart(2, '0')}</span><p>${esc(t)}</p></div>`).join('')}</div></section>`;
+  <section class="section"><div class="section-head"><p class="num">The accounts</p><div><h2>Five people, in their own words</h2></div></div>
+    <div class="people">${people}</div></section>`;
 
   startVoiceMark(P);
   if (typeof FIG !== 'undefined') { window.__A = A; FIG.wireConnectors(A); }
@@ -238,7 +233,7 @@ function home({P, A}) {
 
 function participants({P, A}) {
   app.innerHTML = `<header class="page-head"><p class="eyebrow">The accounts</p><h1>Five people, fifteen moments</h1>
-    <p class="lede">${esc(P.project.participants_intro)} Each moment appears twice: once in the person's words, once as the machine reconstructed it.</p></header>
+    <p class="lede">Each moment appears twice: in the person's words, and as an AI retold it. First names are used with each person's consent.</p></header>
   <div class="roster">${P.participants.map(p => {
     const n = A.annotations.filter(a => a.participant === p.id).length;
     return `<a class="entry" href="participant.html?id=${esc(p.id)}"><span class="e-num">${String(p.number).padStart(2, '0')}</span>
@@ -449,9 +444,9 @@ function about({P}) {
     <div class="prose">${(c.lineage || []).map(t => `<p>${esc(t)}</p>`).join('')}</div></section>
   <section class="section question"><p class="num">The question</p>
     <div><blockquote>${esc(pr.core_question)}</blockquote></div></section>
-  ${(c.outputs || []).length ? `<section class="section"><div class="section-head"><p class="num">Outputs</p><div><h2>Three records of the same work</h2></div></div>
+  ${(c.outputs || []).length ? `<section class="section"><div class="section-head"><p class="num">Outputs</p><div><h2>Outputs</h2></div></div>
     <div class="outputs">${c.outputs.map(o => `<div><h3>${esc(o.name)}</h3><p>${esc(o.text)}</p></div>`).join('')}</div></section>` : ''}
-  <section class="section"><div class="section-head"><p class="num">Consent and review</p><div><h2>Published in two stages</h2></div></div>
+  <section class="section"><div class="section-head"><p class="num">Consent and review</p><div><h2>Reviewed by the people in it</h2></div></div>
     <div class="ethics">${(c.ethics || []).map((t, i) => `<div><span class="i">${String(i + 1).padStart(2, '0')}</span><p>${esc(t)}</p></div>`).join('')}</div>
     <p class="cta"><a class="btn" href="participants.html">Read the accounts ${arrow}</a><a class="btn ghost" href="method.html">Read the method</a></p></section>
   ${c.email ? `<section class="section" id="contact"><div class="section-head"><p class="num">Contact</p><div><h2>Get in touch</h2><p>For questions about the project or its method, or if you appear in it and want to discuss your material, write to ${esc(c.director)} at <a href="mailto:${esc(c.email)}">${esc(c.email)}</a>.</p></div></div></section>` : ''}`;
