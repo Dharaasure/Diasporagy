@@ -591,3 +591,4 @@ nav .brand .logo{width:30px;height:30px;color:var(--ink);align-self:center;margi
  .legend{top:0}
 }
 @media(max-width:760px){nav#nav{-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent);padding-right:28px}}
+.fig-pick{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 14px;font:500 13px var(--sans);color:var(--ink)}.fig-pick select{font:14px var(--sans);padding:7px 10px;max-width:100%}

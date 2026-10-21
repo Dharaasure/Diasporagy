@@ -81,7 +81,9 @@ const FIG = (() => {
     const counts = TYPES.map(t => `${anns.filter(a => a.type === t).length} ${t}`).join(', ');
     const nm = anns.filter(a => a.type === 'match').length, nd = anns.length - nm;
     const title = `One moment, told twice: ${nd} divergences and ${nm} matches in “${m.title}”`;
-    return frame('fig-pair', title, `Each line joins a passage in the AI version to the words it came from. Highlights with no line were invented by the AI (right) or left out of it (left). ${pairLegend()}`, pairBlock(p, m, anns),
+    const opts = P.participants.flatMap(x => x.moments.filter(mm => mm.ai_output).map(mm => `<option value="${x.number}-${mm.n}"${x === p && mm.n === n ? ' selected' : ''}>${esc(nameOf(x))} · ${esc(mm.title)}</option>`)).join('');
+    const pick = `<label class="fig-pick">Show the moment <select>${opts}</select></label>`;
+    return frame('fig-pair', title, `${pick}Each line joins a passage in the AI version to the words it came from. Highlights with no line were invented by the AI (right) or left out of it (left). ${pairLegend()}`, pairBlock(p, m, anns),
       table(['Type', 'AI', 'Transcript'], anns.map(a => [TLAB[a.type], a.ai_span, a.transcript_span])), `${nameOf(p)}, Moment ${n}. ${counts}.`);
   }
   function drawConnectors(A) {
@@ -250,7 +252,10 @@ const FIG = (() => {
 
   function render(P, A, nameFn) {
     nameOf = nameFn; drawn = []; const C = ctx(P, A);
-    return [fig2(P, A, C, 1, 1), fig1(P, A, C), fig7(P, A, C), fig3(P, A, C), fig5(P, A, C), fig4(P, A, C), fig6(P, A, C)].join('');
+    /* The worked example opens on a random moment; a menu above it switches to any of the others. */
+    const all = P.participants.flatMap(p => p.moments.filter(m => m.ai_output).map(m => [p.number, m.n]));
+    const [pn, mn] = all[Math.floor(Math.random() * all.length)];
+    return [fig2(P, A, C, pn, mn), fig1(P, A, C), fig7(P, A, C), fig3(P, A, C), fig5(P, A, C), fig4(P, A, C), fig6(P, A, C)].join('');
   }
-  return {render, drawn: () => drawn, wireConnectors, drawConnectors, pairBlock, pairLegend, figPair: (P, A, num, n) => fig2(P, A, ctx(P, A), num, n), setNameOf: fn => { nameOf = fn; }};
+  return {render, drawn: () => drawn, wireConnectors, drawConnectors, pairBlock, pairLegend, figPair: (P, A, num, n) => { const d = drawn.length; drawn = []; const h = fig2(P, A, ctx(P, A), num, n); drawn = Array(d).fill(null); return h; }, setNameOf: fn => { nameOf = fn; }};
 })();

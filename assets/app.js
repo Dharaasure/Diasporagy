@@ -357,6 +357,15 @@ function findings({P, A}) {
   <section class="fig" id="browse"><p class="fig-n">Browse</p><h3>Every note of one type, across all five people</h3>
   <div class="browse-bar" role="group" aria-label="Choose a type">${[...TYPES, 'match'].map(t => `<button class="chip" data-type="${t}" aria-pressed="false"><span class="sw sw-${t}"></span>${LABEL[t]}</button>`).join('')}</div><ul class="browse" id="bl"></ul></section>
   </div></div>`;
+  /* Switching the worked example redraws only that figure. */
+  app.addEventListener('change', e => {
+    const sel = e.target.closest('.fig-pick select'); if (!sel || typeof FIG === 'undefined') return;
+    const [pn, mn] = sel.value.split('-').map(Number), old = document.getElementById('fig-pair');
+    const tmp = document.createElement('div'); tmp.innerHTML = FIG.figPair(P, A, pn, mn);
+    const fresh = tmp.firstElementChild; fresh.querySelector('.fig-n').textContent = old.querySelector('.fig-n').textContent;
+    old.replaceWith(fresh); fresh.insertAdjacentHTML('afterbegin', '<span id="fig-1"></span>'); FIG.drawConnectors(A);
+    fresh.querySelector('.fig-pick select').focus();
+  });
   /* Figure numbers in the patterns text link to these anchors. */
   list.forEach((f, i) => { const el = document.getElementById(f.id); if (el) el.insertAdjacentHTML('afterbegin', `<span id="fig-${i + 1}"></span>`); });
   const chips = app.querySelectorAll('.browse-bar .chip'), bl = document.getElementById('bl');
