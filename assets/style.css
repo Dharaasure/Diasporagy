@@ -575,21 +575,14 @@ nav a.nl-report:hover,nav a.nl-report[aria-current]{border-color:var(--indigo);c
 .paper .tbl figcaption{text-align:left}
 .paper a{color:var(--indigo)}
 
-/* opening graphic: voice into five lines */
-.vmark{margin:0;position:relative}
-.vmark svg{width:100%;max-width:520px;display:block;margin:0 auto;overflow:visible}
-.vm-orbit{fill:none;stroke:var(--rule-2);stroke-dasharray:2 6}
-.vm-node circle{fill:var(--paper);stroke:var(--rule-2);stroke-width:1.5;transition:fill .4s,stroke .4s;cursor:pointer}
-.vm-node text{font:500 11px var(--sans);letter-spacing:.12em;fill:var(--muted);transition:fill .4s;cursor:pointer}
-.vm-node.on circle{fill:var(--indigo);stroke:var(--indigo)}.vm-node.on text{fill:var(--ink)}
-.vm-wave{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round}
-.vm-wave2{stroke:var(--indigo);stroke-width:1.4;opacity:.55}
-.vm-gate line{stroke:var(--ink);stroke-width:3}.vm-gate text,.vm-lab{font:500 10px var(--mono);letter-spacing:.14em;fill:var(--muted)}
-.vm-flat line{stroke:var(--machine);stroke-width:2.4;stroke-linecap:round}
-.vmark figcaption{text-align:center;margin-top:-6px;min-height:5.2em}
-.vm-k{display:block;font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--indigo)}
-.vm-name{display:block;font:400 1.5rem/1.3 var(--serif);margin:4px 0}
-.vm-q{display:block;font:italic 1rem/1.5 var(--serif);color:var(--ink-2);max-width:28rem;margin:0 auto}
+/* opening graphic: a recorded voice above its flat AI version */
+.vh{margin:0}.vh svg{width:100%;display:block;overflow:visible}
+.vh-h{fill:var(--ink)}.vh-m{fill:var(--machine);opacity:.6}
+.vh-l{font:500 10.5px var(--mono);letter-spacing:.14em;fill:var(--muted)}
+.vh figcaption{margin-top:18px;font:14px/1.55 var(--sans);color:var(--muted);max-width:30rem}
+.js-anim .vh rect{transform-box:fill-box;transform-origin:center;animation:vh-in .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d)}
+@keyframes vh-in{from{transform:scaleY(.04);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.js-anim .vh rect{animation:none}}
 .exhibit-wrap{max-width:40rem;margin-left:auto;margin-right:auto}
 nav .brand .logo{width:30px;height:30px;color:var(--ink);align-self:center;margin-right:-2px}
 .logo-foot{width:34px;height:34px;color:var(--ink);vertical-align:middle;margin:-4px 6px 0 -4px}

@@ -47,13 +47,13 @@ const ICON_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 function chrome() {
   const here = page === 'participant' ? 'participants' : page;
   const nav = document.getElementById('nav');
-  nav.innerHTML = `<a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><path d="M11 8h12a16 16 0 0 1 0 32H11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 24c1.6-4.4 3.2-4.4 4.8 0s3.2 4.4 4.8 0" fill="none" stroke="#8a1538" stroke-width="2.2" stroke-linecap="round"/><path d="M28 20h5M28 24h6M28 28h5" stroke="#8a8f96" stroke-width="2.2" stroke-linecap="round"/></svg><b>Diasporagy</b><span>An oral history project</span></a>` +
+  nav.innerHTML = `<a class="brand" href="index.html"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><path d="M11 8h12a16 16 0 0 1 0 32H11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 24c1.6-4.4 3.2-4.4 4.8 0s3.2 4.4 4.8 0" fill="none" stroke="#2b3f7a" stroke-width="2.2" stroke-linecap="round"/><path d="M28 20h5M28 24h6M28 28h5" stroke="#8a8f96" stroke-width="2.2" stroke-linecap="round"/></svg><b>Diasporagy</b><span>An oral history project</span></a>` +
     NAV.map(([h, l, k]) => `<a class="nl${k === 'report' ? ' nl-report' : ''}" href="${h}"${k === here ? ' aria-current="page"' : ''}>${l}</a>`).join('') +
     `<button class="theme-btn" type="button" aria-label="Switch between light and dark">${isDark() ? ICON_SUN : ICON_MOON}</button>`;
   nav.querySelector('.theme-btn').onclick = e => { toggleTheme(); e.currentTarget.innerHTML = isDark() ? ICON_SUN : ICON_MOON; };
   const foot = document.getElementById('foot');
   if (foot) foot.innerHTML = `<div class="wrap"><div class="foot">
-    <div><b><svg class="logo logo-foot" viewBox="0 0 48 48" aria-hidden="true"><path d="M11 8h12a16 16 0 0 1 0 32H11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 24c1.6-4.4 3.2-4.4 4.8 0s3.2 4.4 4.8 0" fill="none" stroke="#8a1538" stroke-width="2.2" stroke-linecap="round"/><path d="M28 20h5M28 24h6M28 28h5" stroke="#8a8f96" stroke-width="2.2" stroke-linecap="round"/></svg>Diasporagy</b>${esc(C().tagline || '')}${C().director ? `<p style="margin-top:14px">${esc(C().director)}, ${esc(C().director_role)}</p>` : ''}</div>
+    <div><b><svg class="logo logo-foot" viewBox="0 0 48 48" aria-hidden="true"><path d="M11 8h12a16 16 0 0 1 0 32H11z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 24c1.6-4.4 3.2-4.4 4.8 0s3.2 4.4 4.8 0" fill="none" stroke="#2b3f7a" stroke-width="2.2" stroke-linecap="round"/><path d="M28 20h5M28 24h6M28 28h5" stroke="#8a8f96" stroke-width="2.2" stroke-linecap="round"/></svg>Diasporagy</b>${esc(C().tagline || '')}${C().director ? `<p style="margin-top:14px">${esc(C().director)}, ${esc(C().director_role)}</p>` : ''}</div>
     <div><h4>Read</h4><ul><li><a href="index.html">One moment, told twice</a></li><li><a href="participants.html">The five accounts</a></li><li><a href="findings.html">Findings</a></li><li><a href="report.html">The report</a></li></ul></div>
     <div><h4>How it was made</h4><ul><li><a href="method.html">Method</a></li><li><a href="method.html#prompt">The fixed prompt</a></li><li><a href="method.html#deviations">Recorded deviations</a></li><li><a href="about.html">About the project</a></li></ul></div>
     </div><div class="foot-base"><span>Participants are named only with their confirmed consent.</span><span>Every count on this site is computed from the annotation data as the page loads.</span></div></div>`;
@@ -119,42 +119,18 @@ function record(p) {
 }
 
 
-/* The opening graphic: a voice (a living waveform) passes through a narrow gate, the five-line summary,
-   and leaves as five flat, even lines, the machine's text. The five narrators orbit it; each takes a turn. */
-function voiceMark(P) {
-  const ppl = P.participants.map(p => ({name: nameOf(p), q: ((p.portrait || [])[0] || '').split(/(?<=[.?!])\s/)[0]}));
-  const W = 560, H = 560, cx = 280, cy = 280, R = 236;
-  const nodes = ppl.map((p, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / ppl.length, x = cx + R * Math.cos(a), y = cy + R * Math.sin(a);
-    const right = Math.cos(a) > 0.2, left = Math.cos(a) < -0.2, ax = right ? 'start' : left ? 'end' : 'middle', dx = right ? 16 : left ? -16 : 0, dy = Math.sin(a) < -0.5 ? -16 : Math.sin(a) > 0.5 ? 26 : 4;
-    return `<g class="vm-node" data-i="${i}"><circle cx="${x}" cy="${y}" r="7"/><text x="${x + dx}" y="${y + dy}" text-anchor="${ax}">${esc(p.name.toUpperCase())}</text></g>`; }).join('');
-  const flat = [0, 1, 2, 3, 4].map(k => `<line x1="330" x2="452" y1="${252 + k * 14}" y2="${252 + k * 14}"/>`).join('');
-  return `<figure class="vmark" aria-label="A voice passes through a five-line summary and comes out as flat lines of machine text">
-    <svg viewBox="0 0 ${W} ${H}" role="img"><circle class="vm-orbit" cx="${cx}" cy="${cy}" r="${R}"/>${nodes}
-      <path class="vm-wave" d=""/><path class="vm-wave vm-wave2" d=""/>
-      <g class="vm-gate"><line x1="280" x2="280" y1="190" y2="244"/><line x1="280" x2="280" y1="316" y2="370"/><text x="280" y="176" text-anchor="middle">FIVE LINES</text></g>
-      <g class="vm-flat">${flat}</g>
-      <text class="vm-lab" x="150" y="386" text-anchor="middle">THEIR VOICE</text><text class="vm-lab" x="392" y="386" text-anchor="middle">THE MACHINE</text>
-    </svg>
-    <figcaption><span class="vm-k">Listening</span><span class="vm-name"></span><span class="vm-q"></span></figcaption></figure>`;
+/* The opening graphic: the real loudness envelope of Subramanya's recorded moment (the birth at Sidra),
+   drawn as ink bars, above the AI version of the same moment drawn as flat, identical grey bars. */
+const VOICE_ENV = [0.54, 0.55, 0.66, 0.68, 0.36, 0.59, 0.6, 0.56, 0.6, 0.4, 0.39, 0.55, 0.64, 0.63, 0.51, 0.39, 0.44, 0.45, 0.62, 0.84, 0.64, 0.56, 0.7, 0.49, 0.66, 0.63, 0.31, 0.49, 0.78, 0.72, 0.7, 0.67, 0.49, 0.7, 0.69, 0.43, 0.62, 0.5, 0.66, 0.41, 0.82, 0.71, 0.4, 0.58, 0.91, 0.53, 0.58, 0.44, 0.64, 0.58, 0.66, 0.32, 0.69, 0.52, 0.7, 0.44, 0.59, 0.49, 0.34, 0.45, 0.72, 0.18, 0.47, 0.61, 0.24, 1.0, 0.74, 0.62, 0.49, 0.59, 0.3, 0.6, 0.52, 0.57, 0.4, 0.35, 0.7, 0.49, 0.79, 0.67, 0.5, 0.55, 0.51, 0.49, 0.66, 0.72, 0.7, 0.44, 0.48, 0.85, 0.72, 0.47, 0.58, 0.68, 0.45, 0.36];
+function voiceMark() {
+  const n = VOICE_ENV.length, W = 600, gap = W / n, bw = gap * 0.42;
+  const bars = (vals, y, h, cls) => vals.map((v, i) => { const bh = Math.max(2, v * h); return `<rect class="${cls}" x="${(i * gap).toFixed(1)}" y="${(y - bh / 2).toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${(bw / 2).toFixed(1)}" style="--d:${i * 8}ms"/>`; }).join('');
+  return `<figure class="vh"><svg viewBox="0 0 ${W} 300" role="img" aria-label="The shape of Subramanya's recorded voice, and the flat shape of the AI version of the same moment">
+      <text class="vh-l" x="0" y="14">IN HIS VOICE</text>${bars(VOICE_ENV, 104, 150, 'vh-h')}
+      <text class="vh-l" x="0" y="224">THE AI VERSION</text>${bars(VOICE_ENV.map(() => 0.16), 262, 150, 'vh-m')}</svg>
+    <figcaption>The same moment twice: Subramanya describing the birth of his daughter at Sidra, as recorded, and as an AI rewrote it from five lines of facts. <a href="participant.html?id=p1#moment-1">Listen and compare</a></figcaption></figure>`;
 }
-function startVoiceMark(P) {
-  const fig = document.querySelector('.vmark'); if (!fig) return;
-  const ppl = P.participants.map(p => ({name: nameOf(p), q: ((p.portrait || [])[0] || '').split(/(?<=[.?!])\s/)[0]}));
-  const w1 = fig.querySelector('.vm-wave'), w2 = fig.querySelector('.vm-wave2'), nodes = fig.querySelectorAll('.vm-node');
-  const nm = fig.querySelector('.vm-name'), qq = fig.querySelector('.vm-q');
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let who = 0, t = 0, seed = 1;
-  const show = i => { who = i; seed = 1 + i * 1.7; nodes.forEach((n, k) => n.classList.toggle('on', k === i)); nm.textContent = ppl[i].name; qq.textContent = '“' + ppl[i].q + '”'; };
-  /* x from 92 to 278: amplitude rich at the left, squeezed to nothing at the gate. */
-  const wave = (ph, amp) => { let d = ''; for (let x = 92; x <= 278; x += 2) { const u = (x - 92) / 186, env = Math.sin(Math.PI * Math.min(1, u * 1.15)) * (1 - u * u * 0.9),
-      y = 280 + amp * env * (Math.sin(x * 0.11 * seed + ph) * 0.6 + Math.sin(x * 0.047 + ph * 1.7) * 0.4) * (0.6 + 0.4 * Math.sin(x * 0.021 * seed - ph * 0.5));
-      d += (d ? 'L' : 'M') + x + ',' + y.toFixed(1); } return d; };
-  const frame = () => { t += 0.035; w1.setAttribute('d', wave(t, 70)); w2.setAttribute('d', wave(t * 1.3 + 2, 42)); if (!still) requestAnimationFrame(frame); };
-  show(0); frame();
-  if (!still) setInterval(() => show((who + 1) % ppl.length), 4200);
-  nodes.forEach((n, i) => n.addEventListener('click', () => show(i)));
-}
-
+function startVoiceMark() {}
 /* ---------- pages ---------- */
 
 /* The front page opens on one exchanged sentence, then walks a first-time visitor through that moment in four stages:
