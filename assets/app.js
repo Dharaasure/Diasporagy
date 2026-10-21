@@ -429,50 +429,10 @@ function about({P}) {
     <p class="cta"><a class="btn" href="index.html#story">Start with one moment ${arrow}</a><a class="btn ghost" href="method.html">Read the method</a></p></section>`;
 }
 
-/* The report as a research article: numbered sections, abstract, figures linked to their live versions. */
+/* The report, typeset as a paper (assets/report.js). */
 function report({P, A}) {
-  const R = window.REPORT || [], c = C(); let n1 = 0, n2 = 0, n3 = 0, appx = false, toc = '', body = '';
-  const div = A.annotations.filter(a => a.type !== 'match');
-  for (const [t, s] of R) {
-    if (t === 'h1') {
-      appx = s === 'Appendices'; n2 = 0;
-      if (appx) { body += `<h2 class="a-h1" id="appendices">Appendices</h2>`; toc += `<li><a href="#appendices">Appendices</a></li>`; continue; }
-      if (s === 'Opening') continue;
-      n1++; const id = 's' + n1; body += `<h2 class="a-h1" id="${id}"><span>${n1}</span>${esc(s)}</h2>`; toc += `<li><a href="#${id}"><span>${n1}</span>${esc(s)}</a></li>`;
-    } else if (t === 'h2') {
-      const lab = appx ? s.replace(/^([A-E])\. /, '$1 ') : `${n1 || 1}.${++n2}`; n3 = 0;
-      body += `<h3 class="a-h2" id="s${n1}-${n2}">${appx ? esc(s) : `<span>${lab}</span>${esc(s.replace(/^\d\. /, ''))}`}</h3>`;
-    } else if (t === 'h3') body += `<h4 class="a-h3">${esc(s)}</h4>`;
-    else if (t === 'fig') { const m = s.match(/^Figure (\d)\. (.*)$/); body += `<figure class="a-fig"><div><b>Figure ${m[1]}</b> ${esc(m[2])}</div><a class="btn ghost" href="findings.html#fig-${m[1]}">Open the interactive figure ${arrow}</a></figure>`; }
-    else if (s.startsWith('A. ') || /^You are writing/.test(s)) body += `<p><a href="method.html#prompt">The prompt, in full, is on the Method page.</a></p>`;
-    else body += `<p>${withRefs(s, P, A)}</p>`;
-  }
-  if (!n1) body = body.replace('', '');
-  /* The opening paragraphs sit under section 1 Introduction. */
-  const intro = '<h2 class="a-h1" id="s0"><span>1</span>Introduction</h2>';
-  body = body.replace(/<h2 class="a-h1" id="s(\d+)"><span>(\d+)<\/span>/g, (_, a, b) => `<h2 class="a-h1" id="s${a}"><span>${+b + 1}</span>`);
-  toc = `<li><a href="#s0"><span>1</span>Introduction</a></li>` + toc.replace(/<span>(\d+)<\/span>/g, (_, b) => `<span>${+b + 1}</span>`);
-  const [lead, ...rest] = R.filter(x => x[0] === 'p');
-  app.innerHTML = `<article class="article">
-  <header class="a-head"><p class="eyebrow">Research report · Draft 1 · 2026</p><h1>What gets lost when a machine tells your story</h1>
-    <p class="a-sub">An oral history comparison of five Indian migrants' accounts in Doha and their AI reconstructions</p>
-    <p class="a-auth"><b>${esc(c.director || '')}</b><br>${esc(c.director_role || '')}, Diasporagy</p></header>
-  <div class="a-grid"><aside class="a-toc"><p>Contents</p><ol>${toc}</ol>
-    <dl class="record"><dt>Type</dt><dd>Research report</dd><dt>Status</dt><dd>Draft, under participant review</dd><dt>Data</dt><dd>${P.participants.length} interviews, ${A.annotations.length} public annotations</dd></dl></aside>
-  <div class="a-body">
-    <section class="abstract"><h2>Abstract</h2>
-      <p><b>Background.</b> AI systems are increasingly asked to stand in for people's accounts of their own lives. The usual defence is that they get the facts right and only the voice a little wrong.</p>
-      <p><b>Method.</b> Five Indian migrants in Doha gave open-ended oral history interviews. Fifteen moments, chosen by a rule fixed in advance, were each reduced to five lines of checkable facts and given to an AI system through one fixed prompt. Every point where the AI account departs from the person's words was coded by type (factual, emotional, relational, cultural), direction (invented, omitted, altered) and origin (the model, the extracted facts, or both).</p>
-      <p><b>Results.</b> On the ${A.annotations.length} public points compared, ${div.length} are divergences. Inventions came mostly from the model; omissions came almost entirely from the five-line summary, before the model ran. Numbers, dates and times largely survived; feelings rarely did.</p>
-      <p><b>Conclusion.</b> ${esc(lead ? lead[1] : '')}</p>
-      <p class="kw"><b>Keywords</b> oral history · AI reconstruction · epistemic justice · Indian diaspora · Qatar · testimony · digital determinants of health</p></section>
-    ${intro}${body}
-    <section class="a-end"><h2 class="a-h1">Notes</h2>
-      <p>Some report totals may differ slightly from the live figures, which are recomputed from the current annotation data. Annotation references link to the passage they describe.</p>
-      <h3 class="a-h2">Ethics</h3><p>Informed consent was obtained from every participant. All five chose to be named and asked to be identified by first name only. Each reviews their material before publication and may withdraw any of it.</p>
-      <h3 class="a-h2">Suggested citation</h3><p class="cite">Suresha, D. (2026). <i>Diasporagy: What gets lost when a machine tells your story</i> [Research report, draft]. Diasporagy.</p></section>
-  </div></div></article>`;
-  if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) setTimeout(() => t.scrollIntoView(), 50); }
+  document.body.classList.add('paper-page');
+  app.innerHTML = `<article class="paper">${typeof renderReport === 'function' ? renderReport(P, A, esc, nameOf) : ''}</article>`;
 }
 
 /* Researcher-only. Do not publish review.html. */

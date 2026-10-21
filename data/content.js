@@ -44,11 +44,10 @@ window.CONTENT = {
   "Each account is reduced to its checkable facts and run through one fixed AI prompt. The resulting narrative is then compared line by line against what the person actually said."
  ],
  "lineage": [
-  "Oral historians have long asked of the archive whose knowledge counts as valid. This project asks it of a machine.",
-  "My earlier published research on the digital determinants of health asked this at the level of policy and infrastructure. This project asks it about one person at a time. The domain was deliberately chosen to have nothing to do with health, so the same mechanism can be tested on its own terms."
+  "Oral historians have long asked of the archive whose knowledge counts as valid. This project asks it of a machine."
  ],
  "outputs": [
-  {"name": "Report", "text": "Annotated moments across five participants, coded findings, and a conclusion linking back to the digital determinants of health framework."},
+  {"name": "Report", "text": "An academic oral history paper: method, coded findings across all fifteen moments, close readings and discussion."},
   {"name": "Field notebook", "text": "The handwritten, session-by-session record kept alongside each interview. Not published in full, but quoted in the report where it shapes a finding."},
   {"name": "This site", "text": "The transcript, the AI version and the annotations for each participant, released after private delivery."}
  ],
