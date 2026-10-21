@@ -543,3 +543,19 @@ code{font:12.5px var(--mono);background:var(--paper-2);padding:1px 5px}
 .paper-back{margin-top:40px;padding-top:8px;border-top:1px solid var(--rule);font-size:15px}
 .refs{padding-left:0;list-style:none;font-size:14.5px}.refs li{padding-left:1.6em;text-indent:-1.6em;margin-bottom:6px}
 @media print{.paper{box-shadow:none;border:0;margin:0;max-width:none}.paper .figref a{display:none}}
+
+/* menu: the report as the finished piece */
+nav a.nl-report{padding:7px 14px;border:1px solid var(--rule-2);border-radius:999px;color:var(--ink)}
+nav a.nl-report:hover,nav a.nl-report[aria-current]{border-color:var(--indigo);color:var(--indigo)}
+/* participant page */
+.p-guide{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:40px;font:14px/1.5 var(--sans);color:var(--ink-2)}
+.p-guide div{padding:12px 14px;border:1px dashed var(--rule-2);display:flex;gap:10px}
+.p-guide b{font:500 12px/1.6 var(--mono);color:var(--indigo)}
+@media(max-width:760px){.p-guide{grid-template-columns:1fr}}
+.legend .jump{display:inline-flex;align-items:center;gap:4px;margin-right:14px;padding-right:14px;border-right:1px solid var(--rule)}
+.legend .jump a{width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--rule-2);border-radius:50%;text-decoration:none;font:500 13px var(--mono);color:var(--ink)}
+.legend .jump a:hover{border-color:var(--indigo);color:var(--indigo)}
+.legend select.who{margin-left:auto}
+.lab-s{font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:-12px}
+@media(max-width:760px){.legend{position:sticky;top:0}.legend .jump{width:100%;border-right:0;margin:0 0 6px}.legend select.who{margin-left:0}}
+.m-dev{font:13px/1.5 var(--sans);color:var(--muted);margin:8px 0 0}

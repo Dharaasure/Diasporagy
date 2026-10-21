@@ -5,7 +5,7 @@ const TYPES = ['factual', 'emotional', 'relational', 'cultural'];
 const DIRS = ['invented', 'omitted', 'altered'];
 const LABEL = {factual:'Factual', emotional:'Emotional', relational:'Relational', cultural:'Cultural', match:'Match'};
 const ORIGIN = {model:'Introduced by the AI', extraction:'Came from the extracted facts', both:'Set up by the facts, elaborated by the AI'};
-const NAV = [['participants.html','The accounts','participants'],['report.html','Report','report'],['findings.html','Findings','findings'],['method.html','Method','method'],['about.html','About','about']];
+const NAV = [['participants.html','The accounts','participants'],['findings.html','Findings','findings'],['method.html','Method','method'],['about.html','About','about'],['report.html','Report','report']];
 const page = document.body.dataset.page;
 const app = document.getElementById('app');
 const qs = new URLSearchParams(location.search);
@@ -48,13 +48,13 @@ function chrome() {
   const here = page === 'participant' ? 'participants' : page;
   const nav = document.getElementById('nav');
   nav.innerHTML = `<a class="brand" href="index.html"><b>Diasporagy</b><span>An oral history project</span></a>` +
-    NAV.map(([h, l, k]) => `<a class="nl" href="${h}"${k === here ? ' aria-current="page"' : ''}>${l}</a>`).join('') +
+    NAV.map(([h, l, k]) => `<a class="nl${k === 'report' ? ' nl-report' : ''}" href="${h}"${k === here ? ' aria-current="page"' : ''}>${l}</a>`).join('') +
     `<button class="theme-btn" type="button" aria-label="Switch between light and dark">${isDark() ? ICON_SUN : ICON_MOON}</button>`;
   nav.querySelector('.theme-btn').onclick = e => { toggleTheme(); e.currentTarget.innerHTML = isDark() ? ICON_SUN : ICON_MOON; };
   const foot = document.getElementById('foot');
   if (foot) foot.innerHTML = `<div class="wrap"><div class="foot">
     <div><b>Diasporagy</b>${esc(C().tagline || '')}${C().director ? `<p style="margin-top:14px">${esc(C().director)}, ${esc(C().director_role)}</p>` : ''}</div>
-    <div><h4>Read</h4><ul><li><a href="index.html">One moment, told twice</a></li><li><a href="participants.html">The five accounts</a></li><li><a href="report.html">The report</a></li><li><a href="findings.html">Findings</a></li></ul></div>
+    <div><h4>Read</h4><ul><li><a href="index.html">One moment, told twice</a></li><li><a href="participants.html">The five accounts</a></li><li><a href="findings.html">Findings</a></li><li><a href="report.html">The report</a></li></ul></div>
     <div><h4>How it was made</h4><ul><li><a href="method.html">Method</a></li><li><a href="method.html#prompt">The fixed prompt</a></li><li><a href="method.html#deviations">Recorded deviations</a></li><li><a href="about.html">About the project</a></li></ul></div>
     </div><div class="foot-base"><span>Participants are named only with their confirmed consent.</span><span>Every count on this site is computed from the annotation data as the page loads.</span></div></div>`;
 }
@@ -249,13 +249,19 @@ function participantPage({P, A}) {
   let h = `<header class="p-head"><div><p class="p-crumb"><a href="participants.html">The accounts</a> / Participant ${p.number}</p><h1>${esc(nameOf(p))}</h1>
     ${p.card_line ? `<p class="e-meta" style="margin-top:14px">${esc(p.card_line)}</p>` : ''}${record(p)}</div>
     <div class="p-portrait">${(p.portrait || []).map(q => `<blockquote>${fmt(esc(q))}</blockquote>`).join('')}${p.portrait_source ? `<p class="source">${esc(p.portrait_source)}</p>` : ''}</div></header>
+  <div class="p-guide" aria-label="How to read this page">
+    <div><b>1</b> Listen to the recorded passage, or read it on the left.</div>
+    <div><b>2</b> Compare it with the AI version on the right.</div>
+    <div><b>3</b> Select any coloured highlight to see the note and the matching words.</div></div>
   <nav class="toc" aria-label="Moments">${p.moments.map(m => `<a href="#moment-${m.n}"${m.site_status !== 'public' ? ' class="held"' : ''}><div class="tn">Moment ${m.n}</div><div class="tt">${m.site_status === 'public' ? esc(m.title) : 'Withheld'}</div><div class="ts">${esc(shortSection(m.section))}</div></a>`).join('')}</nav>
-  <div class="legend" role="group" aria-label="Show or hide annotation types"><span class="lab">Show</span>` +
+  <div class="legend" role="group" aria-label="Jump to a moment, and choose which highlights to show">
+    <span class="jump"><span class="lab">Moment</span>${p.moments.map(m => `<a href="#moment-${m.n}" title="${esc(m.title)}">${m.n}</a>`).join('')}</span>
+    <span class="lab">Highlight</span>` +
     [...TYPES, 'match'].map(t => `<button class="chip" data-type="${t}" aria-pressed="${active.has(t)}"><span class="sw sw-${t}"></span>${LABEL[t]}</button>`).join('') +
-    `<span class="help">Select any highlight to see what the person actually said.</span></div>`;
+    `<select class="who" aria-label="Go to another person">${P.participants.map(x => `<option value="${esc(x.id)}"${x === p ? ' selected' : ''}>${esc(nameOf(x))}</option>`).join('')}</select></div>`;
 
   for (const m of p.moments) {
-    h += `<section class="moment" id="moment-${m.n}"><div class="m-head"><div><p class="m-tag"><b>Moment ${m.n}</b> · ${esc(m.section)}</p><h2>${m.site_status === 'public' ? esc(m.title) : 'Withheld'}</h2></div>`;
+    h += `<section class="moment" id="moment-${m.n}"><div class="m-head"><div><p class="m-tag"><b>Moment ${m.n}</b> · ${esc(shortSection(m.section))}</p><h2>${m.site_status === 'public' ? esc(m.title) : 'Withheld'}</h2>${/\(/.test(m.section) ? `<p class="m-dev">${esc(m.section.match(/\((.*)\)/)[1].replace(/^./, c => c.toUpperCase()))}. <a href="method.html#deviations">Recorded deviations</a></p>` : ''}</div>`;
     if (m.site_status === 'withheld') { h += '</div><p class="withheld">This moment is withheld from the public site while it is reviewed with the participant. It is not counted anywhere on this site.</p></section>'; continue; }
     if (!m.ai_output) { h += '</div><p class="withheld">This moment is not yet on the site.</p></section>'; continue; }
     const anns = A.annotations.filter(a => a.participant === p.id && String(a.moment) === String(m.n) && a.public !== false);
@@ -265,7 +271,7 @@ function participantPage({P, A}) {
     const counts = [...TYPES, 'match'].map(t => [t, anns.filter(a => a.type === t).length]).filter(x => x[1]);
     h += `<div class="m-count">${counts.map(([t, n]) => `<span><i class="sw sw-${t}"></i>${n} ${LABEL[t].toLowerCase()}</span>`).join('')}</div></div>
       ${(C().audio || []).includes(nameOf(p) + '_M' + m.n) ? `<div class="m-audio"><span class="kicker">Listen · the recorded passage</span><audio controls preload="none" src="assets/audio/${esc(nameOf(p))}_M${m.n}.mp3"></audio></div>` : ''}
-      <div class="m-tools"><div class="views" role="group" aria-label="How to show this moment"><button class="view" data-v="pair" aria-pressed="true">Annotated</button>${hasConn ? '<button class="view" data-v="conn" aria-pressed="false">Joined line by line</button>' : ''}</div>
+      <div class="m-tools"><span class="lab-s">View</span><div class="views" role="group" aria-label="How to show this moment"><button class="view" data-v="pair" aria-pressed="true">Annotated</button>${hasConn ? '<button class="view" data-v="conn" aria-pressed="false">Joined line by line</button>' : ''}</div>
       ${m.facts ? `<details class="facts"><summary>The five lines the AI was given</summary><div class="story-card facts panel-facts">${factsHTML(m.facts)}</div></details>` : ''}</div>
       <div class="v-pair"><div class="pair">
       <div class="col"><div class="text transcript panel-human voice-human"><span class="panel-label">In their words · ${words(m.transcript_excerpt)} words</span>${transcriptHTML(m.transcript_excerpt)}</div>
@@ -278,6 +284,7 @@ function participantPage({P, A}) {
   h += `<nav class="p-next" aria-label="Other participants">${prev ? `<a href="participant.html?id=${esc(prev.id)}"><div class="tn">← Previous</div><div class="tt">${esc(nameOf(prev))}</div></a>` : '<span></span>'}
     ${next ? `<a href="participant.html?id=${esc(next.id)}"><div class="tn">Next →</div><div class="tt">${esc(nameOf(next))}</div></a>` : `<a href="findings.html"><div class="tn">Next →</div><div class="tt">Findings across all five</div></a>`}</nav>`;
   app.innerHTML = h;
+  const sw = app.querySelector('select.who'); if (sw) sw.onchange = () => { location.href = 'participant.html?id=' + encodeURIComponent(sw.value); };
   if (typeof FIG !== 'undefined') { window.__A = A; FIG.wireConnectors(A); }
   app.querySelectorAll('.views').forEach(g => g.addEventListener('click', e => {
     const b = e.target.closest('button.view'); if (!b) return; const sec = g.closest('.moment');
