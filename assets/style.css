@@ -559,3 +559,18 @@ nav a.nl-report:hover,nav a.nl-report[aria-current]{border-color:var(--indigo);c
 .lab-s{font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:-12px}
 @media(max-width:760px){.legend{position:sticky;top:0}.legend .jump{width:100%;border-right:0;margin:0 0 6px}.legend select.who{margin-left:0}}
 .m-dev{font:13px/1.5 var(--sans);color:var(--muted);margin:8px 0 0}
+
+/* report: plain, standard paper layout */
+.paper-page body,.paper-page{background:var(--paper)}
+.paper{background:transparent;border:0;box-shadow:none;max-width:40rem;padding:24px 20px 48px;font-size:17.5px;line-height:1.65}
+.paper-head{text-align:center;padding-bottom:4px}
+.paper-head h1{font-weight:600;font-size:1.75rem}
+.paper-abstract{border:0;padding:0 2rem;font-size:15.5px}
+.paper-abstract h2{font:600 15px var(--serif);letter-spacing:0;text-transform:none}
+.paper h2{font-size:1.15rem;font-weight:600}
+.paper .figref{background:none;border:0;padding:0 2rem;font-size:14.5px;font-style:italic;color:var(--ink-2)}
+.paper .figref b{font-style:normal}
+.paper .exch{display:block;margin:16px 2rem;padding:0;font:15.5px/1.55 var(--serif);color:var(--ink-2)}
+.paper .exch p{text-indent:0;margin:0 0 6px;text-align:left}
+.paper .tbl figcaption{text-align:left}
+.paper a{color:var(--indigo)}
