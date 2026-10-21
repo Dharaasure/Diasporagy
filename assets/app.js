@@ -47,7 +47,7 @@ const ICON_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 function chrome() {
   const here = page === 'participant' ? 'participants' : page;
   const nav = document.getElementById('nav');
-  nav.innerHTML = `<a class="brand" href="index.html"><b>Diasporagy</b><span>An oral history project</span></a>` +
+  nav.innerHTML = `<a class="brand" href="index.html"><svg class="logo" viewBox="0 0 40 24" aria-hidden="true"><path d="M2 12 C5 2,7 22,10 12 S14 4,16 12 S19 18,20 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="21" y1="4" x2="21" y2="20" stroke="currentColor" stroke-width="1.2"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".55"><line x1="25" y1="6" x2="38" y2="6"/><line x1="25" y1="9" x2="38" y2="9"/><line x1="25" y1="12" x2="38" y2="12"/><line x1="25" y1="15" x2="38" y2="15"/><line x1="25" y1="18" x2="38" y2="18"/></g></svg><b>Diasporagy</b><span>An oral history project</span></a>` +
     NAV.map(([h, l, k]) => `<a class="nl${k === 'report' ? ' nl-report' : ''}" href="${h}"${k === here ? ' aria-current="page"' : ''}>${l}</a>`).join('') +
     `<button class="theme-btn" type="button" aria-label="Switch between light and dark">${isDark() ? ICON_SUN : ICON_MOON}</button>`;
   nav.querySelector('.theme-btn').onclick = e => { toggleTheme(); e.currentTarget.innerHTML = isDark() ? ICON_SUN : ICON_MOON; };
@@ -118,6 +118,43 @@ function record(p) {
   return `<dl class="record">${f.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`;
 }
 
+
+/* The opening graphic: a voice (a living waveform) passes through a narrow gate, the five-line summary,
+   and leaves as five flat, even lines, the machine's text. The five narrators orbit it; each takes a turn. */
+function voiceMark(P) {
+  const ppl = P.participants.map(p => ({name: nameOf(p), q: ((p.portrait || [])[0] || '').split(/(?<=[.?!])\s/)[0]}));
+  const W = 560, H = 560, cx = 280, cy = 280, R = 236;
+  const nodes = ppl.map((p, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / ppl.length, x = cx + R * Math.cos(a), y = cy + R * Math.sin(a);
+    const right = Math.cos(a) > 0.2, left = Math.cos(a) < -0.2, ax = right ? 'start' : left ? 'end' : 'middle', dx = right ? 16 : left ? -16 : 0, dy = Math.sin(a) < -0.5 ? -16 : Math.sin(a) > 0.5 ? 26 : 4;
+    return `<g class="vm-node" data-i="${i}"><circle cx="${x}" cy="${y}" r="7"/><text x="${x + dx}" y="${y + dy}" text-anchor="${ax}">${esc(p.name.toUpperCase())}</text></g>`; }).join('');
+  const flat = [0, 1, 2, 3, 4].map(k => `<line x1="330" x2="452" y1="${252 + k * 14}" y2="${252 + k * 14}"/>`).join('');
+  return `<figure class="vmark" aria-label="A voice passes through a five-line summary and comes out as flat lines of machine text">
+    <svg viewBox="0 0 ${W} ${H}" role="img"><circle class="vm-orbit" cx="${cx}" cy="${cy}" r="${R}"/>${nodes}
+      <path class="vm-wave" d=""/><path class="vm-wave vm-wave2" d=""/>
+      <g class="vm-gate"><line x1="280" x2="280" y1="190" y2="244"/><line x1="280" x2="280" y1="316" y2="370"/><text x="280" y="176" text-anchor="middle">FIVE LINES</text></g>
+      <g class="vm-flat">${flat}</g>
+      <text class="vm-lab" x="150" y="386" text-anchor="middle">THEIR VOICE</text><text class="vm-lab" x="392" y="386" text-anchor="middle">THE MACHINE</text>
+    </svg>
+    <figcaption><span class="vm-k">Listening</span><span class="vm-name"></span><span class="vm-q"></span></figcaption></figure>`;
+}
+function startVoiceMark(P) {
+  const fig = document.querySelector('.vmark'); if (!fig) return;
+  const ppl = P.participants.map(p => ({name: nameOf(p), q: ((p.portrait || [])[0] || '').split(/(?<=[.?!])\s/)[0]}));
+  const w1 = fig.querySelector('.vm-wave'), w2 = fig.querySelector('.vm-wave2'), nodes = fig.querySelectorAll('.vm-node');
+  const nm = fig.querySelector('.vm-name'), qq = fig.querySelector('.vm-q');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let who = 0, t = 0, seed = 1;
+  const show = i => { who = i; seed = 1 + i * 1.7; nodes.forEach((n, k) => n.classList.toggle('on', k === i)); nm.textContent = ppl[i].name; qq.textContent = '“' + ppl[i].q + '”'; };
+  /* x from 92 to 278: amplitude rich at the left, squeezed to nothing at the gate. */
+  const wave = (ph, amp) => { let d = ''; for (let x = 92; x <= 278; x += 2) { const u = (x - 92) / 186, env = Math.sin(Math.PI * Math.min(1, u * 1.15)) * (1 - u * u * 0.9),
+      y = 280 + amp * env * (Math.sin(x * 0.11 * seed + ph) * 0.6 + Math.sin(x * 0.047 + ph * 1.7) * 0.4) * (0.6 + 0.4 * Math.sin(x * 0.021 * seed - ph * 0.5));
+      d += (d ? 'L' : 'M') + x + ',' + y.toFixed(1); } return d; };
+  const frame = () => { t += 0.035; w1.setAttribute('d', wave(t, 70)); w2.setAttribute('d', wave(t * 1.3 + 2, 42)); if (!still) requestAnimationFrame(frame); };
+  show(0); frame();
+  if (!still) setInterval(() => show((who + 1) % ppl.length), 4200);
+  nodes.forEach((n, i) => n.addEventListener('click', () => show(i)));
+}
+
 /* ---------- pages ---------- */
 
 /* The front page opens on one exchanged sentence, then walks a first-time visitor through that moment in four stages:
@@ -186,8 +223,9 @@ function home({P, A}) {
       <h1>What gets lost when a machine <em>tells your story</em></h1>
       <p class="lede">${esc(pr.summary)}</p>
       <div class="hero-meta"><span>${P.participants.length} people</span><span>${pub.length} moments</span><span>1 fixed prompt</span><span>${A.annotations.length} points compared</span></div></div>
-    ${exhibit}
+    ${voiceMark(P)}
   </header>
+  <section class="section exhibit-wrap">${exhibit}</section>
 
   <section class="section question"><p class="num">The question</p>
     <div><blockquote>${esc(pr.core_question)}</blockquote>${(C().lineage || []).slice(0, 1).map(t => `<p class="q-body">${esc(t)}</p>`).join('')}</div></section>
@@ -221,6 +259,7 @@ function home({P, A}) {
     <p>The people in this project see everything written about them first.</p></div></div>
     <div class="ethics">${(C().ethics || []).map((t, i) => `<div><span class="i">${String(i + 1).padStart(2, '0')}</span><p>${esc(t)}</p></div>`).join('')}</div></section>`;
 
+  startVoiceMark(P);
   if (typeof FIG !== 'undefined') { window.__A = A; FIG.wireConnectors(A); }
   reveal('.step', s => { if (s.querySelector('.conn') && typeof FIG !== 'undefined') FIG.drawConnectors(A); });
 }
