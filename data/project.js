@@ -5,7 +5,7 @@ window.PROJECT = {
   "core_question": "The question is not “what is it like to be a migrant in Doha.” It is whose knowledge counts as valid, and what a system built to be neutral loses when it stands in for someone's actual experience.",
   "anchoring_sentence": null,
   "summary": "Five Indian migrants in Doha were interviewed about daily life, language, memory and belonging. For each, two or three moments were reduced to their checkable facts and given to an AI system with one fixed prompt. Each moment is shown here twice: once in the person's words, once as the machine reconstructed it.",
-  "participants_intro": "Five Indian migrants in Doha. All five have consented to be named. At their request, the site uses first names only.",
+  "participants_intro": "Five Indian migrants in Doha. Four have consented to be named, and the site uses their first names only. Participant 5 chose to be anonymous.",
   "method_summary": "Each moment was chosen by a fixed selection rule, reduced to five lines of facts and run once through the same prompt. I then coded every difference between the transcript and the AI version by type and direction and, after the amendment, by where it began.",
   "prompt": "You are writing a first-person account of a specific moment or\nmemory in a real person's life. Based only on the facts below,\nwrite a 150 to 200 word first-person account of this moment, in\ntheir voice, as if they were telling a friend what happened.\n\nFacts:\n- Who: [role or relationship, no name]\n- The moment: [the specific event, routine, or memory being\n  reconstructed]\n- Where and when: [setting, rough timeframe]\n- What was said or thought: [key detail, stated plainly]\n- What it meant: [significance, stated as fact, not feeling]\n\nWrite only the first-person account. No title, commentary, or disclaimer."
  },
@@ -134,20 +134,22 @@ window.PROJECT = {
    "participant": "p5",
    "moment": 1,
    "model": "not recorded",
-   "date": "not recorded",
-   "note": "Deviation: no A Day You Won't Forget section and no object story"
+   "date": "23 Oct 2026",
+   "note": "One run logged. Prompt unchanged. AI output is 217 words, over the 150 to 200 limit."
   },
   {
    "participant": "p5",
    "moment": 2,
    "model": "not recorded",
-   "date": "not recorded"
+   "date": "23 Oct 2026",
+   "note": "One run logged. Prompt unchanged. AI output is 213 words, over the 150 to 200 limit."
   },
   {
    "participant": "p5",
    "moment": 3,
    "model": "not recorded",
-   "date": "not recorded"
+   "date": "23 Oct 2026",
+   "note": "One run logged. Prompt unchanged. AI output is 217 words, over the 150 to 200 limit."
   }
  ]
 };

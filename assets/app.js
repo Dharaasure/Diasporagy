@@ -69,7 +69,7 @@ function chrome() {
     <div><h4>Read</h4><ul><li><a href="index.html">Home</a></li><li><a href="participants.html">The five accounts</a></li><li><a href="findings.html">Findings</a></li><li><a href="report.html">The report</a></li></ul></div>
     <div><h4>Contact</h4><ul><li>${C().director ? esc(C().director) : ''}</li><li><a href="mailto:${esc(C().email || '')}">${esc(C().email || '')}</a></li></ul></div>
     <div><h4>How it was made</h4><ul><li><a href="method.html">Method</a></li><li><a href="method.html#prompt">The fixed prompt</a></li><li><a href="method.html#deviations">Recorded deviations</a></li><li><a href="about.html">About the project</a></li></ul></div>
-    </div><div class="foot-base"><span>Participants are named only with their confirmed consent.</span><span>Every count on this site is computed from the annotation data as the page loads.</span></div></div>`;
+    </div><div class="foot-base"><span>Participants are named only with their confirmed consent; one is anonymous.</span><span>Every count on this site is computed from the annotation data as the page loads.</span></div></div>`;
 }
 
 /* Turns "(SUJ-1-09, SHR-2-05)" into links that name the participant by number and moment, and "(Figure 2)" into a link.
@@ -295,7 +295,7 @@ function home({P, A}) {
 
 function participants({P, A}) {
   app.innerHTML = `<header class="page-head"><p class="tc"><b>00</b> · The accounts</p><h1>Five people, fifteen moments</h1>
-    <p class="lede">Each moment appears twice: in the person's words, and as an AI retold it. First names are used with each person's consent.</p></header>
+    <p class="lede">Each moment appears twice: in the person's words, and as an AI retold it. First names are used with each person's consent; one participant is anonymous and identified by number.</p></header>
   <div class="roster">${P.participants.map(p => {
     const n = A.annotations.filter(a => a.participant === p.id).length;
     return `<a class="entry" href="participant.html?id=${esc(p.id)}"><span class="e-num">${String(p.number).padStart(2, '0')}</span>
