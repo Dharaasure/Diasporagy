@@ -41,7 +41,7 @@ window.PROJECT = {
  },
  "findings_draft": [
   "The machine adds and the summary removes. Most inventions began with the AI, and almost every omission began in the five-line summary it was given (Figure 2).",
-  "Feeling is supplied, and the person's own conclusion is replaced. The AI adds feelings no one voiced (SUJ-1-09, SHR-2-05, MIN-2-11), drops the ones they did (SUB-1-12, SHR-1-13), and closes on a line of its own (MIN-3-12, SUJ-2-13).",
+  "Feeling is supplied, and the person's own conclusion is replaced. The AI adds feelings no one voiced (SUJ-1-09, PFV-2-10, MIN-2-11), drops the ones they did (SUB-1-12, PFV-3-12), and closes on a line of its own (MIN-3-12, SUJ-2-13).",
   "Where people described comfort, trust or pride, the AI often wrote hardship (VAL-1-09, SUB-3-06, SUJ-2-01). I propose this as the next amendment to the coding scheme.",
   "People merge, split and shrink. A close friend becomes a crowd (MIN-2-06), and a friend whose presence was the help becomes a kitchen hand (VAL-3-09).",
   "Names are lost, mostly before the AI runs. Most of the missing names were never in the summary (Figure 7)."
@@ -49,7 +49,7 @@ window.PROJECT = {
  "method_notes": [
   "One AI run was made per moment. The method document asked for two to three runs; I reduced that to one.",
   "There was no return session with participants. Each participant reviews their own material privately, and can flag or withdraw any of it, before anything goes public.",
-  "Participant 5, Moment 1: the interview has neither an A Day You Won't Forget section nor an object story, so the Getting Settled question about first noticing something was used. The selection rule has no second fallback, so this is a deviation.",
+  "Participant 5, Moment 1: the interview has neither an A Day You Won't Forget section nor an object story, so a Getting Settled story (the job hunt) was used. The selection rule has no second fallback, so this is a deviation.",
   "Vailancelee, Moment 1: the interview has no A Day You Won't Forget section, so the object-story fallback was used, as the rule allows.",
   "Sujith, Moment 2 comes from a section headed “Work”, which is not one of the permitted sections. Sujith, Moment 1: the full story was told in the Background section, which is never extracted; the A Day You Won't Forget answer gives it a single line.",
   "Subramanya, Moment 3 is a shared belief rather than a scene, and Mini, Moment 3 is a routine rather than a single story. Whether either is a “fully formed story” is open.",

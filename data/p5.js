@@ -25,7 +25,7 @@
    "section": "Daily Life",
    "facts": "- Who: A woman of Kerala origin, raised in Bombay, working at a bank on the Corniche in Doha and living near Souq Waqif. She had a three-year-old son. Her husband travelled daily to Ras Laffan for work.\n- The moment: Her son's British play school called to say he had vomited and she needed to collect him. His dedicated driver was not available. She did not know where the school was and could not have given directions to a taxi. There were few taxis and no maps or shared locations. A colleague, an Indian man born and raised in Qatar, offered to take her and recognised the school as being in Al Hilal. It was quite close to the bank.\n- Where and when: Doha; around 2002.\n- What was said or thought: Her knowledge of Doha was limited to the Indian supermarket and the bank. The school seemed to her like the other end of the world.\n- What it meant: She decided she had better learn to drive.",
    "site_status": "public",
-   "transcript_excerpt": "My husband had to travel all the way to Ras Laffan daily for his job. As I said, there were not many taxis. Once I got a call from my son’s school saying he had vomited and I needed to come and pick him up. He was three, in a British play school. That’s when I realised I didn’t know where the school was. Even if I got a taxi, I couldn’t give directions. You couldn’t share a location, you had no maps. [name removed] had a dedicated driver who picked him up and dropped him at school, but that driver wasn’t available then. My knowledge of Doha was limited to the Indian supermarket and the bank.\n\n[Interviewer: “I think even when Google Maps came, when I was a kid, it was chaotic. You had to ask people on the road.”]\n\nExactly. It was very difficult in those days. And now at least you have Uber.\n\n[Interviewer: “Normally everybody had one dedicated driver.”]\n\nA dedicated driver, but that driver would probably be working for some other company and doing this part-time on the side. His primary responsibility was his sponsor.\n\n[Interviewer: “It was the same for my mom. She used my dad’s company driver occasionally, and otherwise relied on random people to pick up and drop.”]\n\nSo I was worried. There was a colleague of mine, an Indian guy born and brought up in Qatar itself. He said, don’t worry, I’ll take you. Which school is it? I said, it’s DESS. He said, oh yes, it’s in Al Hilal. It was quite close to the bank, but for me it seemed like the other end of the world.\n\nI used to stay on Kahraba Street, near Souq Waqif, and the bank was on the Corniche, a three-minute drive. I had a driver take me there every morning.\n\nIn those days, when The Mall opened on D Ring Road, everyone would say, let’s go and see The Mall, and we would say, no, forget it, it’s so far. You can imagine the mindset, because we were in the heart of the city, on B Ring Road. Everything was available there. The Indian supermarket was nearby. All life was around the Corniche. The other pocket was Al Sadd, which was considered a posh locality. So going to D Ring Road was like, we’ll have to plan it out, it’s so far.\n\nSo that’s how I learned. I decided I’d better learn driving. And I struggled.",
+   "transcript_excerpt": "My husband had to travel all the way to Ras Laffan daily for his job. As I said, there were not many taxis. Once I got a call from my son’s school saying he had vomited and I needed to come and pick him up. He was three, in a British play school. That’s when I realised I didn’t know where the school was. Even if I got a taxi, I couldn’t give directions. You couldn’t share a location, you had no maps. [name removed] had a dedicated driver who picked him up and dropped him at school, but that driver wasn’t available then. My knowledge of Doha was limited to the Indian supermarket and the bank.\n\n[Interviewer: “I think even when Google Maps came, when I was a kid, it was chaotic. You had to ask people on the road.”]\n\nExactly. It was very difficult in those days. And now at least you have Uber.\n\n[Interviewer: “Normally everybody had one dedicated driver.”]\n\nA dedicated driver, but that driver would probably be working for some other company and doing this part-time on the side. His primary responsibility was his sponsor.\n\n[Interviewer: “It was the same for my mom. She used my dad’s company driver occasionally, and otherwise relied on random people to pick up and drop.”]\n\nSo I was worried. There was a colleague of mine, an Indian guy born and brought up in Qatar itself. He said, don’t worry, I’ll take you. Which school is it? I said, it’s CESK. He said, oh yes, it’s in Al Hilal. It was quite close to the bank, but for me it seemed like the other end of the world.\n\nI used to stay on Kahraba Street, near Souq Waqif, and the bank was on the Corniche, a three-minute drive. I had a driver take me there every morning.\n\nIn those days, when The Mall opened on D Ring Road, everyone would say, let’s go and see The Mall, and we would say, no, forget it, it’s so far. You can imagine the mindset, because we were in the heart of the city, on B Ring Road. Everything was available there. The Indian supermarket was nearby. All life was around the Corniche. The other pocket was Al Sadd, which was considered a posh locality. So going to D Ring Road was like, we’ll have to plan it out, it’s so far.\n\nSo that’s how I learned. I decided I’d better learn driving. And I struggled.",
    "ai_output": "The call came mid-morning. The school said Arjun had been sick and I needed to come and get him. Right away, they said, in that polite British way that sounds calm but isn't asking.\n\nHis driver, the one who always took him, wasn't available. And my husband was somewhere out at Ras Laffan, an hour away at least. So it was me.\n\nHere's the thing: I had no idea where the school was. I'd never gone there myself. I couldn't have told a taxi anything, and in any case there were hardly any taxis then. No maps on a phone, no sharing your location, none of that. My Doha was the Indian supermarket and the bank. That was it. Everything else might as well have been another country.\n\nI think I was close to tears at my desk when a colleague, an Indian man who'd been born and brought up here, asked what was wrong. I told him. He said, \"I'll take you.\" He knew the school immediately. Al Hilal. And it was close, barely any distance from the bank.\n\nSitting in his car, I felt ridiculous. That was the other end of the world to me, and it had been ten minutes away. I decided then: I had to learn to drive."
   },
   {
@@ -38,5 +38,396 @@
    "ai_output": "It was 1997, and I was in Doha on a visit visa, miscarrying, with no idea what to do. Back in India, my parents would have taken me straight to a hospital where I knew the doctors. Here I knew nobody. My private gynaecologist gave me a letter for the government hospital, but they only told me to come back when the bleeding got heavy. No D&C, nothing, which is what they would have done at home. I felt so alone.\n\nThen I contacted a woman I knew, and she simply took me in. For fifteen days, maybe a month, her husband picked me up every morning and brought me to their home. I had breakfast and lunch there and played with their young children while she went to work. In the evening my husband collected me, and she would pack dinner for us to take home.\n\nWhat I still can't get over is that she had no maid. She worked at a Qatar government company, had to be in the office by 6:30, and got up at 4 to cook everything. Her family went back to India when the children reached the 10th grade. Recently she came to Doha to see her son, and she messaged asking if we could talk. We are still in touch."
   }
  ],
- "annotations": []
+ "annotations": [
+  {
+   "id": "PFV-1-01",
+   "moment": 1,
+   "ai_span": "My husband took a day off and went with me to every bank in town.",
+   "transcript_span": "My husband took one day off and came with me to all the banks.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-1-02",
+   "moment": 1,
+   "ai_span": "They wanted Arabic speakers",
+   "transcript_span": "saying they were looking for Arabic speakers",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-1-03",
+   "moment": 1,
+   "ai_span": "absolutely no idea how hard this would be",
+   "transcript_span": "none",
+   "type": "emotional",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented. She gives no feeling about arriving."
+  },
+  {
+   "id": "PFV-1-04",
+   "moment": 1,
+   "ai_span": "and I had Malayalam, Hindi and English",
+   "transcript_span": "none",
+   "type": "factual",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented. She never lists her languages in the clip."
+  },
+  {
+   "id": "PFV-1-05",
+   "moment": 1,
+   "ai_span": "Bombay had raised me, but that didn't count for much there.",
+   "transcript_span": "none",
+   "type": "cultural",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented. A reflection on her background she does not make."
+  },
+  {
+   "id": "PFV-1-06",
+   "moment": 1,
+   "ai_span": "At the British bank",
+   "transcript_span": "But when I gave it in at BBME",
+   "type": "cultural",
+   "direction": "altered",
+   "origin": "extraction",
+   "note": "The bank's name was left out of the facts, so the AI could only say 'British bank'. Her pull to it ('somehow I felt that’s one place I would like to work') is gone too."
+  },
+  {
+   "id": "PFV-1-07",
+   "moment": 1,
+   "ai_span": "He offered me a fifteen-day vacancy as a secretary.",
+   "transcript_span": "She liked our conversation and said, let me see your CV.",
+   "type": "factual",
+   "direction": "altered",
+   "origin": "model",
+   "note": "The head of HR is a woman. The facts gave no gender, and the AI made her a man."
+  },
+  {
+   "id": "PFV-1-08",
+   "moment": 1,
+   "ai_span": "none",
+   "transcript_span": "And I was like, oh my god, I’m offended. I’m a manager.",
+   "type": "emotional",
+   "direction": "omitted",
+   "origin": "extraction",
+   "note": "Not carried. Her offence at the offer, and that she saw herself as a manager."
+  },
+  {
+   "id": "PFV-1-09",
+   "moment": 1,
+   "ai_span": "I won't be a good secretary",
+   "transcript_span": "I will not be a good secretary",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-1-10",
+   "moment": 1,
+   "ai_span": "none",
+   "transcript_span": "And it was true. I was a bad secretary.",
+   "type": "emotional",
+   "direction": "omitted",
+   "origin": "extraction",
+   "note": "Not carried. Her humour at her own expense."
+  },
+  {
+   "id": "PFV-1-11",
+   "moment": 1,
+   "ai_span": "none",
+   "transcript_span": "he recognised that I was good, that I had far superior knowledge and awareness, and that I was not fit to be a secretary",
+   "type": "relational",
+   "direction": "omitted",
+   "origin": "extraction",
+   "note": "Not carried. Why the boss backed her."
+  },
+  {
+   "id": "PFV-1-12",
+   "moment": 1,
+   "ai_span": "He never raised his voice at me.",
+   "transcript_span": "But not once did he shout at me, even though I wouldn’t even hear the phone ring.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept, without the joke that she never heard the phone."
+  },
+  {
+   "id": "PFV-1-13",
+   "moment": 1,
+   "ai_span": "I sat the test and topped it.",
+   "transcript_span": "And I kind of topped the test.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept, with her hedge removed."
+  },
+  {
+   "id": "PFV-2-01",
+   "moment": 2,
+   "ai_span": "Arjun",
+   "transcript_span": "none",
+   "type": "factual",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented name. It is not her son's name, which was never in the facts."
+  },
+  {
+   "id": "PFV-2-02",
+   "moment": 2,
+   "ai_span": "in that polite British way that sounds calm but isn't asking",
+   "transcript_span": "none",
+   "type": "cultural",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented. She says nothing about how the school spoke."
+  },
+  {
+   "id": "PFV-2-03",
+   "moment": 2,
+   "ai_span": "an hour away at least",
+   "transcript_span": "none",
+   "type": "factual",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented distance. She gives no figure."
+  },
+  {
+   "id": "PFV-2-04",
+   "moment": 2,
+   "ai_span": "I'd never gone there myself.",
+   "transcript_span": "none",
+   "type": "factual",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented. The clip does not say this."
+  },
+  {
+   "id": "PFV-2-05",
+   "moment": 2,
+   "ai_span": "My Doha was the Indian supermarket and the bank.",
+   "transcript_span": "My knowledge of Doha was limited to the Indian supermarket and the bank.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-2-06",
+   "moment": 2,
+   "ai_span": "I think I was close to tears at my desk",
+   "transcript_span": "So I was worried.",
+   "type": "emotional",
+   "direction": "altered",
+   "origin": "model",
+   "note": "She was worried. 'Close to tears' raises it."
+  },
+  {
+   "id": "PFV-2-07",
+   "moment": 2,
+   "ai_span": "an Indian man who'd been born and brought up here",
+   "transcript_span": "an Indian guy born and brought up in Qatar itself",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-2-08",
+   "moment": 2,
+   "ai_span": "none",
+   "transcript_span": "I said, it’s CESK.",
+   "type": "cultural",
+   "direction": "omitted",
+   "origin": "extraction",
+   "note": "Not carried. The school's name was not in the facts."
+  },
+  {
+   "id": "PFV-2-09",
+   "moment": 2,
+   "ai_span": "He knew the school immediately. Al Hilal.",
+   "transcript_span": "He said, oh yes, it’s in Al Hilal.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-2-10",
+   "moment": 2,
+   "ai_span": "Sitting in his car, I felt ridiculous.",
+   "transcript_span": "none",
+   "type": "emotional",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented feeling."
+  },
+  {
+   "id": "PFV-2-11",
+   "moment": 2,
+   "ai_span": "it had been ten minutes away",
+   "transcript_span": "none",
+   "type": "factual",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented distance. She says only 'quite close to the bank'."
+  },
+  {
+   "id": "PFV-2-12",
+   "moment": 2,
+   "ai_span": "none",
+   "transcript_span": "we would say, no, forget it, it’s so far.",
+   "type": "cultural",
+   "direction": "omitted",
+   "origin": "extraction",
+   "note": "Not carried. The Mall on D Ring Road as 'so far', which explains the mindset."
+  },
+  {
+   "id": "PFV-2-13",
+   "moment": 2,
+   "ai_span": "I decided then: I had to learn to drive.",
+   "transcript_span": "I decided I’d better learn driving.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-2-14",
+   "moment": 2,
+   "ai_span": "none",
+   "transcript_span": "And I struggled.",
+   "type": "emotional",
+   "direction": "omitted",
+   "origin": "extraction",
+   "note": "Not carried. Her own ending."
+  },
+  {
+   "id": "PFV-3-01",
+   "moment": 3,
+   "ai_span": "Back in India, my parents would have taken me straight to a hospital where I knew the doctors.",
+   "transcript_span": "In India you’d have your parents to take you to the hospital, and you’d probably know the doctors already.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-3-02",
+   "moment": 3,
+   "ai_span": "Here I knew nobody.",
+   "transcript_span": "none",
+   "type": "factual",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented. She knew the woman she then contacted."
+  },
+  {
+   "id": "PFV-3-03",
+   "moment": 3,
+   "ai_span": "the government hospital",
+   "transcript_span": "gave me a letter for Hamad",
+   "type": "cultural",
+   "direction": "altered",
+   "origin": "extraction",
+   "note": "The facts said 'government hospital' and the AI kept that. She names Hamad."
+  },
+  {
+   "id": "PFV-3-04",
+   "moment": 3,
+   "ai_span": "they only told me to come back when the bleeding got heavy",
+   "transcript_span": "come back when the bleeding gets heavy",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-3-05",
+   "moment": 3,
+   "ai_span": "I felt so alone.",
+   "transcript_span": "none",
+   "type": "emotional",
+   "direction": "invented",
+   "origin": "model",
+   "note": "Invented feeling."
+  },
+  {
+   "id": "PFV-3-06",
+   "moment": 3,
+   "ai_span": "she simply took me in",
+   "transcript_span": "Anyway, this lady was a big support.",
+   "type": "relational",
+   "direction": "altered",
+   "origin": "model",
+   "note": "Weeks of daily care become one gesture."
+  },
+  {
+   "id": "PFV-3-07",
+   "moment": 3,
+   "ai_span": "her husband picked me up every morning and brought me to their home",
+   "transcript_span": "her husband would pick me up in the morning and take me to their home",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-3-08",
+   "moment": 3,
+   "ai_span": "she would pack dinner for us to take home",
+   "transcript_span": "she would pack dinner for us",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-3-09",
+   "moment": 3,
+   "ai_span": "What I still can't get over is that she had no maid.",
+   "transcript_span": "And I was kind of taking it for granted.",
+   "type": "emotional",
+   "direction": "altered",
+   "origin": "model",
+   "note": "Wonder replaces her guilt. Close to the opposite feeling."
+  },
+  {
+   "id": "PFV-3-10",
+   "moment": 3,
+   "ai_span": "had to be in the office by 6:30, and got up at 4 to cook everything",
+   "transcript_span": "she had to reach the office by 6:30",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-3-11",
+   "moment": 3,
+   "ai_span": "Her family went back to India when the children reached the 10th grade.",
+   "transcript_span": "They returned to India when the children reached the 10th grade and settled there.",
+   "type": "match",
+   "direction": null,
+   "origin": null,
+   "note": "Kept."
+  },
+  {
+   "id": "PFV-3-12",
+   "moment": 3,
+   "ai_span": "none",
+   "transcript_span": "So some friendships are for life.",
+   "type": "relational",
+   "direction": "omitted",
+   "origin": "model",
+   "note": "Not carried. Her conclusion. The AI ends on 'We are still in touch' instead."
+  }
+ ]
 });
