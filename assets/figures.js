@@ -120,7 +120,7 @@ const FIG = (() => {
     let t; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => drawConnectors(A), 120); });
     drawConnectors(A); if (document.fonts) document.fonts.ready.then(() => drawConnectors(A));
   }
-  let nameOf = p => p.full_name;
+  let nameOf = p => p.identification === 'full' && p.full_name ? p.full_name : `Participant ${p.number}`;
 
   /* 3. Where in each AI account the divergences fall */
   function fig3(P, A, C) {

@@ -560,7 +560,7 @@ window.MEASURES = {
   },
   {
    "n": 2,
-   "label": "linner",
+   "label": "dinch",
    "category": "Events and own words",
    "kept": true,
    "in_facts": true,

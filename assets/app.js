@@ -145,13 +145,14 @@ function voiceMark() {
 }
 function startVoiceMark() {}
 /* Voice-prints: the loudness envelope of each recorded moment (data/content.js), drawn as bars. */
+const fileKey = p => nameOf(p).replace(/\s+/g, '');
 const vp = key => (C().voiceprints || {})[key];
 function vpBars(vals, w, h, cls) {
   const g = w / vals.length, bw = Math.max(1, g * .5);
   return vals.map((v, i) => { const bh = Math.max(1.5, v * h); return `<rect class="${cls}" x="${(i * g).toFixed(1)}" y="${((h - bh) / 2).toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${(bw / 2).toFixed(1)}"/>`; }).join('');
 }
 function personPrint(p, h) {
-  const all = p.moments.flatMap(m => vp(nameOf(p) + '_M' + m.n) || []), k = Math.max(1, Math.ceil(all.length / (h > 40 ? 120 : 64)));
+  const all = p.moments.flatMap(m => vp(fileKey(p) + '_M' + m.n) || []), k = Math.max(1, Math.ceil(all.length / (h > 40 ? 120 : 64)));
   const vals = []; for (let i = 0; i < all.length; i += k) vals.push(Math.max(...all.slice(i, i + k)));
   return vals.length ? `<svg class="vprint" viewBox="0 0 600 ${h}" preserveAspectRatio="none" aria-hidden="true">${vpBars(vals, 600, h, 'vb')}</svg>` : '';
 }
@@ -337,7 +338,7 @@ function participantPage({P, A}) {
     const hasConn = typeof FIG !== 'undefined';
     const counts = [...TYPES, 'match'].map(t => [t, anns.filter(a => a.type === t).length]).filter(x => x[1]);
     h += `<div class="m-count">${counts.map(([t, n]) => `<span><i class="sw sw-${t}"></i>${n} ${LABEL[t].toLowerCase()}</span>`).join('')}</div></div>
-      ${(C().audio || []).includes(nameOf(p) + '_M' + m.n) ? `<div class="m-audio"><span class="kicker">Listen · the recorded passage</span>${tapePlayer(`assets/audio/${esc(nameOf(p))}_M${m.n}.mp3`, nameOf(p) + '_M' + m.n)}</div>` : ''}
+      ${(C().audio || []).includes(fileKey(p) + '_M' + m.n) ? `<div class="m-audio"><span class="kicker">Listen · the recorded passage</span>${tapePlayer(`assets/audio/${esc(fileKey(p))}_M${m.n}.mp3`, fileKey(p) + '_M' + m.n)}</div>` : ''}
       <div class="m-tools"><span class="lab-s">View</span><div class="views" role="group" aria-label="How to show this moment"><button class="view" data-v="pair" aria-pressed="true">Annotated</button>${hasConn ? '<button class="view" data-v="conn" aria-pressed="false">Joined line by line</button>' : ''}</div>
       ${m.facts ? `<details class="facts"><summary>The five lines the AI was given</summary><div class="story-card facts panel-facts">${factsHTML(m.facts)}</div></details>` : ''}</div>
       <div class="v-pair"><div class="pair">
@@ -525,7 +526,7 @@ function review({P, A}) {
   const KEY = 'diasporagy-grades', g = JSON.parse(localStorage.getItem(KEY) || '{}');
   const save = () => localStorage.setItem(KEY, JSON.stringify(g));
   app.innerHTML = `<h1 style="margin-top:48px">Review</h1><p class="placeholder">Researcher-only page. Never publish it. Grades are stored in this browser until exported.</p>
-  <p><select id="fp"><option value="">All participants</option>${P.participants.map(p => `<option value="${p.id}">${esc(p.full_name)}</option>`).join('')}</select>
+  <p><select id="fp"><option value="">All participants</option>${P.participants.map(p => `<option value="${p.id}">${esc(nameOf(p))}</option>`).join('')}</select>
   <select id="ft"><option value="">All types</option>${[...TYPES, 'match'].map(t => `<option value="${t}">${LABEL[t]}</option>`).join('')}</select>
   <button class="plain" id="chk">Check spans</button> <button class="plain" id="csv">Export grades (CSV)</button> <button class="plain" id="json">Export all annotations (JSON)</button> <button class="plain" id="pub">Export public-safe data files</button></p>
   <pre id="chkout" hidden></pre>

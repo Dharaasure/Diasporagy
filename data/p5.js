@@ -1,8 +1,8 @@
 (window.PARTICIPANT_LIST ||= []).push({
  "id": "p5",
  "number": 5,
- "full_name": "Shridevi",
- "identification": "full",
+ "full_name": "",
+ "identification": "number",
  "card_line": "From Bombay, of Kerala origin · in Doha since 1997 · banking",
  "portrait": [
   "I think it’s the freedom. For me it’s always been about the freedom to be myself, to go out anywhere at any time, meet people. And I like crowds.",
@@ -437,7 +437,7 @@
    "type": "relational",
    "direction": "altered",
    "origin": "extraction",
-   "note": "The friend asked to talk. Meeting up was Shridevi's suggestion."
+   "note": "The friend asked to talk. Meeting up was Participant 5's suggestion."
   },
   {
    "id": "SHR-3-11",
